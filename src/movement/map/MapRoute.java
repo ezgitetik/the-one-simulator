@@ -152,8 +152,11 @@ public class MapRoute {
 				if (mirror) {
 					c.setLocation(c.getX(), -c.getY());
 				}
+				//c.setLocation(2163514.99, -35236.004);
+				//c.setLocation(43445.461, 32079.736);
+			//	updateMap
+				//  xoffset : 2119242.773, yoffset: -439001.373
 				c.translate(xOffset, yOffset);
-
 				MapNode node = map.getNodeByCoord(c);
 				if (node == null) {
 					Coord orig = c.clone();
