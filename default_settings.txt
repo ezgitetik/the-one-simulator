@@ -63,18 +63,17 @@ Group.speed = 0.5, 1.5
 # Message TTL of 300 minutes (5 hours)
 Group.msgTtl = 300
 
-Group.nrofHosts = 2
-
+Group.nrofHosts = 20
 
 # group2 specific settings
 Group1.groupID = c
 # cars can drive only on roads
 Group1.okMaps = 1
 # 10-50 km/h
- Group1.speed = 6, 30
-Group1.movementModel = MapRouteMovement
-Group1.routeFile = data/custom/taxidata/Taxi_170.wkt
-Group1.routeType = 1
+Group1.speed = 6, 30
+#Group1.movementModel = MapRouteMovement
+#Group1.routeFile = data/custom/taxidata/Taxi_116.wkt
+#Group1.routeType = 1
 
 
 ## Message creation parameters
@@ -97,7 +96,7 @@ Events1.prefix = M
 # seed for movement models' pseudo random number generator (default = 0)
 MovementModel.rngSeed = 1
 # World's size for Movement Models without implicit size (width, height; meters)
-MovementModel.worldSize = 300000, 300000
+MovementModel.worldSize =1500000, 1500000
 # How long time to move hosts in the world before real simulation
 MovementModel.warmup = 1000
 

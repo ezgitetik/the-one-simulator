@@ -338,14 +338,21 @@ public class MapBasedMovement extends MovementModel implements SwitchableMovemen
 			}
 		}
 
+		//List<MapNode> unvisitedNodes = new ArrayList<>();
 		if (visited.size() != nodes.size()) { // some node couldn't be reached
 			MapNode disconnected = null;
 			for (MapNode n : nodes) { // find an example node
 				if (!visited.contains(n)) {
 					disconnected = n;
 					break;
+					//unvisitedNodes.add(n);
 				}
 			}
+//			nodes.removeAll(unvisitedNodes);
+//
+//			nodes.stream().forEach(node->{
+//				System.out.println(node.getLocation().getX() + " " + node.getLocation().getX());
+//			});
 			throw new SettingsError("SimMap is not fully connected. Only " +
 					visited.size() + " out of " + nodes.size() + " map nodes " +
 					"can be reached from " + firstNode + ". E.g. " +
