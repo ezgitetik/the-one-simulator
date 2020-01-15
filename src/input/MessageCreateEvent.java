@@ -40,10 +40,11 @@ public class MessageCreateEvent extends MessageEvent {
 	public void processEvent(World world) {
 		DTNHost to = world.getNodeByAddress(this.toAddr);
 		DTNHost from = world.getNodeByAddress(this.fromAddr);
+		System.out.println(from.toString() + " " + from.getLocation());
 
 		Message m = new Message(from, to, this.id, this.size);
 		m.setResponseSize(this.responseSize);
-		from.createNewMessage(m);
+		from.createNewMessage(m);   // TODO:: MESSAGES ARE CREATED HERE!
 	}
 
 	@Override
