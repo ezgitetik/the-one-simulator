@@ -156,6 +156,7 @@ public class MapRoute {
 				//c.setLocation(43445.461, 32079.736);
 			//	updateMap
 				//  xoffset : 2119242.773, yoffset: -439001.373
+				// bursa offset x : -3145.603, y: 43632.5
 				c.translate(xOffset, yOffset);
 				MapNode node = map.getNodeByCoord(c);
 				if (node == null) {

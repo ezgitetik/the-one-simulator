@@ -175,7 +175,7 @@ public abstract class ActiveRouter extends MessageRouter {
 	 * {@link Connection#startTransfer(DTNHost, Message)}
 	 */
 	protected int startTransfer(Message m, Connection con) {
-		int retVal;
+		int retVal = DENIED_OLD;
 
 		if (!con.isReadyForTransfer()) {
 			return TRY_LATER_BUSY;
@@ -186,16 +186,26 @@ public abstract class ActiveRouter extends MessageRouter {
 			return MessageRouter.DENIED_POLICY;
 		}
 
+//		System.out.println("transfer: " + getHost());  // TODO:: MESSAGE TRANSFER IS PERFORMED HERE!
+//
+//		if(getHost().toString().equals("c1")) {
+//			System.out.println("node 1 " + getHost());
+//			retVal = con.startTransfer(getHost(), m);
+//			if (retVal == RCV_OK) { // started transfer
+//				addToSendingConnections(con);
+//			}
+//			else if (deleteDelivered && retVal == DENIED_OLD &&
+//					m.getTo() == con.getOtherNode(this.getHost())) {
+//				/* final recipient has already received the msg -> delete it */
+//				this.deleteMessage(m.getId(), false);
+//			}
+//		}
+//		return retVal;
+
 		retVal = con.startTransfer(getHost(), m);
 		if (retVal == RCV_OK) { // started transfer
 			addToSendingConnections(con);
 		}
-		else if (deleteDelivered && retVal == DENIED_OLD &&
-				m.getTo() == con.getOtherNode(this.getHost())) {
-			/* final recipient has already received the msg -> delete it */
-			this.deleteMessage(m.getId(), false);
-		}
-
 		return retVal;
 	}
 

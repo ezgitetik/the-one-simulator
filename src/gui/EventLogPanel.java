@@ -260,8 +260,6 @@ public class EventLogPanel extends JPanel
 
 	// Implementations of ConnectionListener and MessageListener interfaces
 	public void hostsConnected(DTNHost host1, DTNHost host2) {
-
-		System.out.println("host1 process event" + host1.getLocation());
 		processEvent(conUpCheck, "Connection UP", host1, host2, null);
 	}
 

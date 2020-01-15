@@ -27,9 +27,6 @@ highspeedInterface.type = SimpleBroadcastInterface
 highspeedInterface.transmitSpeed = 10M
 highspeedInterface.transmitRange = 1000
 
-# Define 6 different node groups
-Scenario.nrofHostGroups = 1
-
 ## Group-specific settings:
 # groupID : Group's identifier. Used as the prefix of host names
 # nrofHosts: number of hosts in the group
@@ -49,6 +46,8 @@ Scenario.nrofHostGroups = 1
 # routeFile: route's file path - for MapRouteMovement
 # routeType: route's type - for MapRouteMovement
 
+# Define 6 different node groups
+Scenario.nrofHostGroups = 1
 
 # Common settings for all groups
 Group.movementModel = ShortestPathMapBasedMovement
@@ -63,18 +62,24 @@ Group.speed = 0.5, 1.5
 # Message TTL of 300 minutes (5 hours)
 Group.msgTtl = 300
 
-Group.nrofHosts = 20
-
-# group2 specific settings
+# group1 specific settings
 Group1.groupID = c
 # cars can drive only on roads
 Group1.okMaps = 1
 # 10-50 km/h
-Group1.speed = 6, 30
-#Group1.movementModel = MapRouteMovement
-#Group1.routeFile = data/custom/taxidata/Taxi_116.wkt
-#Group1.routeType = 1
+Group1.speed = 0.5, 1.5
+Group1.nrofHosts = 2
+Group1.movementModel = MapRouteMovement
+Group1.routeFile = data/custom/taxidata/taxi.wkt
+Group1.routeType = 1
 
+# group2 specific settings
+#Group2.groupID = d
+#Group2.nrofHosts = 1
+# cars can drive only on roads
+#Group2.okMaps = 1
+# 10-50 km/h
+#Group2.speed = 6, 30
 
 ## Message creation parameters
 # How many event generators
@@ -96,14 +101,14 @@ Events1.prefix = M
 # seed for movement models' pseudo random number generator (default = 0)
 MovementModel.rngSeed = 1
 # World's size for Movement Models without implicit size (width, height; meters)
-MovementModel.worldSize =1500000, 1500000
+MovementModel.worldSize = 100000, 100000
 # How long time to move hosts in the world before real simulation
 MovementModel.warmup = 1000
 
 ## Map based movement -movement model specific settings
 MapBasedMovement.nrofMapFiles = 1
 
-MapBasedMovement.mapFile1 = data/custom/map.osm.wkt
+MapBasedMovement.mapFile1 = data/custom/bursa-map.osm.wkt
 ##MapBasedMovement.mapFile2 = data/main_roads.wkt
 #MapBasedMovement.mapFile3 = data/pedestrian_paths.wkt
 #MapBasedMovement.mapFile4 = data/shops.wkt
