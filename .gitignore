@@ -17,6 +17,5 @@ doc/package-list
 .settings/org.eclipse.*
 
 /out/production/the-one/gui/buttonGraphics
-/lib
 .idea
 the-one.iml
