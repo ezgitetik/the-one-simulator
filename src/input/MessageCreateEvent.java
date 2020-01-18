@@ -40,7 +40,9 @@ public class MessageCreateEvent extends MessageEvent {
 	public void processEvent(World world) {
 		DTNHost to = world.getNodeByAddress(this.toAddr);
 		DTNHost from = world.getNodeByAddress(this.fromAddr);
-		System.out.println(from.toString() + " " + from.getLocation());
+		// ezgi
+		System.out.println("degisen degerler: " + from.toString() + " " + from.getLocation());
+		System.out.println("route degerler: " + from.toString() + " " + from.getLocation().getxRoute() + " " + from.getLocation().getyRoute());
 
 		Message m = new Message(from, to, this.id, this.size);
 		m.setResponseSize(this.responseSize);

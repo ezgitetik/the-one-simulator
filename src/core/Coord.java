@@ -12,6 +12,8 @@ public class Coord implements Cloneable, Comparable<Coord> {
 	private double x;
 	private double y;
 
+	private double xRoute;
+	private double yRoute;
 	/**
 	 * Constructor.
 	 * @param x Initial X-coordinate
@@ -19,6 +21,24 @@ public class Coord implements Cloneable, Comparable<Coord> {
 	 */
 	public Coord(double x, double y) {
 		setLocation(x,y);
+		this.xRoute = x;
+		this.yRoute = y;
+	}
+
+	public double getxRoute() {
+		return xRoute;
+	}
+
+	public void setxRoute(double xRoute) {
+		this.xRoute = xRoute;
+	}
+
+	public double getyRoute() {
+		return yRoute;
+	}
+
+	public void setyRoute(double yRoute) {
+		this.yRoute = yRoute;
 	}
 
 	/**
