@@ -1,0 +1,59 @@
+CREATE VIEW taxi_data_month1_view AS
+    SELECT *
+    FROM public.bursa_taxi_data btd
+    WHERE btd."date">'2019-01-01 00:00:00' and btd."date"<'2019-01-31 23:59:59';
+
+CREATE VIEW taxi_data_month2_view AS
+    SELECT *
+    FROM public.bursa_taxi_data btd
+    WHERE btd."date">'2019-02-01 00:00:00' and btd."date"<'2019-02-28 23:59:59';
+
+CREATE VIEW taxi_data_month3_view AS
+    SELECT *
+    FROM public.bursa_taxi_data btd
+    WHERE btd."date">'2019-03-01 00:00:00' and btd."date"<'2019-03-29 23:59:59';
+
+CREATE VIEW taxi_data_month4_view AS
+    SELECT *
+    FROM public.bursa_taxi_data btd
+    WHERE btd."date">'2019-04-01 00:00:00' and btd."date"<'2019-04-29 23:59:59';
+
+CREATE VIEW taxi_data_month5_view AS
+    SELECT *
+    FROM public.bursa_taxi_data btd
+    WHERE btd."date">'2019-05-01 00:00:00' and btd."date"<'2019-05-29 23:59:59';
+
+CREATE VIEW taxi_data_month6_view AS
+    SELECT *
+    FROM public.bursa_taxi_data btd
+    WHERE btd."date">'2019-06-01 00:00:00' and btd."date"<'2019-06-29 23:59:59';
+
+CREATE VIEW taxi_data_month7_view AS
+    SELECT *
+    FROM public.bursa_taxi_data btd
+    WHERE btd."date">'2019-07-01 00:00:00' and btd."date"<'2019-07-29 23:59:59';
+
+CREATE VIEW taxi_data_month8_view AS
+    SELECT *
+    FROM public.bursa_taxi_data btd
+    WHERE btd."date">'2019-08-01 00:00:00' and btd."date"<'2019-08-29 23:59:59';
+
+CREATE VIEW taxi_data_month9_view AS
+    SELECT *
+    FROM public.bursa_taxi_data btd
+    WHERE btd."date">'2019-09-01 00:00:00' and btd."date"<'2019-09-29 23:59:59';
+
+CREATE VIEW taxi_data_month10_view AS
+    SELECT *
+    FROM public.bursa_taxi_data btd
+    WHERE btd."date">'2019-10-01 00:00:00' and btd."date"<'2019-10-29 23:59:59';
+
+CREATE VIEW taxi_data_mont11_view AS
+    SELECT *
+    FROM public.bursa_taxi_data btd
+    WHERE btd."date">'2019-11-01 00:00:00' and btd."date"<'2019-11-29 23:59:59';
+
+CREATE VIEW taxi_data_month12_view AS
+    SELECT *
+    FROM public.bursa_taxi_data btd
+    WHERE btd."date">'2019-12-01 00:00:00' and btd."date"<'2019-12-29 23:59:59';
