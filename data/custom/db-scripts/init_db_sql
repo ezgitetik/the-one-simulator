@@ -1,0 +1,15 @@
+
+-- Drop table
+
+-- DROP TABLE public.bursa_taxi_data;
+
+CREATE TABLE public.bursa_taxi_data (
+	id int8 NULL,
+	taxi_id int8 NULL,
+	"date" timestamp NULL,
+	speed int8 NULL,
+	length numeric NULL,
+	direction varchar NULL,
+	"position" varchar NULL,
+	line varchar NULL
+);
