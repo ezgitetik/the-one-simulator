@@ -6,6 +6,7 @@ package gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.Vector;
 
@@ -55,6 +56,11 @@ public class InfoPanel extends JPanel implements ActionListener{
 		String text = (host.isMovementActive() ? "" : "INACTIVE ") + host +
 			" at " + host.getLocation();
 
+
+		DecimalFormat df = new DecimalFormat("#####.###");
+		// bursa offset x : -3145.603, y: 43632.5
+		String textWithOffset = "offset:(" + (df.format(host.getLocation().getX()+3145.603 ))+ " " + df.format((43632.5-host.getLocation().getY())) + ")";
+
 		msgChooser = new JComboBox(messages);
 		msgChooser.insertItemAt(messages.size() + " messages", 0);
 		msgChooser.setSelectedIndex(0);
@@ -64,6 +70,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 		routingInfoButton.addActionListener(this);
 
 		this.add(new JLabel(text));
+		this.add(new JLabel(textWithOffset));
 		this.add(msgChooser);
 		this.add(routingInfoButton);
 		this.revalidate();
