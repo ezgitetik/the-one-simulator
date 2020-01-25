@@ -10,3 +10,11 @@ The [wiki page](https://github.com/akeranen/the-one/wiki) has the latest informa
 
 
 Cloned from : https://github.com/akeranen/the-one
+
+Install Postgres: brew install postgresql
+
+Create/Upgrade a database: initdb /usr/local/var/postgres -E utf8
+
+start posgtres: pg_ctl -D /usr/local/var/postgres start
+
+stop postgres: pg_ctl -D /usr/local/var/postgres stop
