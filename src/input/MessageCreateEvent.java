@@ -41,11 +41,15 @@ public class MessageCreateEvent extends MessageEvent {
 		DTNHost to = world.getNodeByAddress(this.toAddr);
 		DTNHost from = world.getNodeByAddress(this.fromAddr);
 		// ezgi
-		System.out.println("degisen degerler: " + from.toString() + " " + from.getLocation());
-		System.out.println("route degerler: " + from.toString() + " " + from.getLocation().getxRoute() + " " + from.getLocation().getyRoute());
+		// System.out.println("message created: " + from.toString() + " " + from.getLocation());
 
 		Message m = new Message(from, to, this.id, this.size);
 		m.setResponseSize(this.responseSize);
+
+//		if(from.toString().equals("c0")){
+//			from.createNewMessage(m);
+//			System.out.println( from.toString() + " message location:" + from.getLocation());
+//		}
 		from.createNewMessage(m);   // TODO:: MESSAGES ARE CREATED HERE!
 	}
 
