@@ -18,7 +18,7 @@ public class ArffReader {
 
     public static List<ArffRegion> read() throws IOException {
         if (ARFF_REGIONS == null) {
-            InputStream stream = ArffReader.class.getClassLoader().getResourceAsStream("custom/taxidata/taxi-top10-0101-weka.arff");
+            InputStream stream = ArffReader.class.getClassLoader().getResourceAsStream("custom/taxidata/taxi-top10-all-0101-weka.arff");
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
             String line = reader.readLine();
             List<ArffRegion> arffRegions = new ArrayList<>();
