@@ -78,7 +78,7 @@ public class DTNHost implements Comparable<DTNHost> {
 		this.movement.setComBus(comBus);
 		this.movement.setHost(this);
 		setRouter(mRouterProto.replicate());
-
+        // (36345.90,16272.90)
 		this.location = movement.getInitialLocation();
 
 		this.nextTimeToMove = movement.nextPathAvailable();
