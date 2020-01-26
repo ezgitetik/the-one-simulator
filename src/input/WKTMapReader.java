@@ -8,8 +8,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.*;
-import java.util.concurrent.ForkJoinPool;
+import java.util.Collection;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 
 import movement.map.MapNode;
 import movement.map.SimMap;
@@ -23,17 +25,14 @@ import core.Coord;
  */
 public class WKTMapReader extends WKTReader {
     private Hashtable<Coord, MapNode> nodes;
-    /**
-     * are all paths bidirectional
-     */
+    /** are all paths bidirectional */
     private boolean bidirectionalPaths = true;
     private int nodeType = -1;
 
     /**
      * Constructor. Creates a new WKT reader ready for addPaths() calls.
-     *
      * @param bidi If true, all read paths are set bidirectional (i.e. if node A
-     *             is a neighbor of node B, node B is also a neighbor of node A).
+     * is a neighbor of node B, node B is also a neighbor of node A).
      */
     public WKTMapReader(boolean bidi) {
         this.bidirectionalPaths = bidi;
@@ -42,7 +41,6 @@ public class WKTMapReader extends WKTReader {
 
     /**
      * Sets bidirectional paths on/off.
-     *
      * @param bidi If true, all paths are set bidirectional (false -> not)
      */
     public void setBidirectional(boolean bidi) {
@@ -51,7 +49,6 @@ public class WKTMapReader extends WKTReader {
 
     /**
      * Returns the map nodes that were read in a collection
-     *
      * @return the map nodes that were read in a collection
      */
     public Collection<MapNode> getNodes() {
@@ -60,7 +57,6 @@ public class WKTMapReader extends WKTReader {
 
     /**
      * Returns the original Map object that was used to read the map
-     *
      * @return the original Map object that was used to read the map
      */
     public Map<Coord, MapNode> getNodesHash() {
@@ -69,7 +65,6 @@ public class WKTMapReader extends WKTReader {
 
     /**
      * Returns new a SimMap that is based on the read map
-     *
      * @return new a SimMap that is based on the read map
      */
     public SimMap getMap() {
@@ -78,7 +73,6 @@ public class WKTMapReader extends WKTReader {
 
     /**
      * Adds paths to the map and adds given type to all nodes' type.
-     *
      * @param file The file where the WKT data is read from
      * @param type The type to use (integer value, see class {@link MapNode}))
      * @throws IOException If something went wrong while reading the file
@@ -91,10 +85,9 @@ public class WKTMapReader extends WKTReader {
     /**
      * Add paths to current path set. Adding paths multiple times
      * has the same result as concatenating the data before adding it.
-     *
-     * @param input    Reader where the WKT data is read from
+     * @param input Reader where the WKT data is read from
      * @param nodeType The type to use (integer value, see class
-     *                 {@link MapNode}))
+     * {@link MapNode}))
      * @throws IOException if something went wrong with reading from the input
      */
     public void addPaths(Reader input, int nodeType) throws IOException {
@@ -104,36 +97,25 @@ public class WKTMapReader extends WKTReader {
 
         init(input);
 
-        List<String> lineContents = new ArrayList<>();
-        while ((type = nextType()) != null) {
+        while((type = nextType()) != null) {
             if (type.equals(LINESTRING)) {
                 contents = readNestedContents();
-                lineContents.add(contents);
-                //updateMap(parseLineString(contents));
+                updateMap(parseLineString(contents));
             }
-            /*else if (type.equals(MULTILINESTRING)) {
+            else if (type.equals(MULTILINESTRING)) {
                 for (List<Coord> list : parseMultilinestring()) {
                     updateMap(list);
                 }
-            } else {
+            }
+            else {
                 // known type but not interesting -> skip
                 readNestedContents();
-            }*/
+            }
         }
-
-		ForkJoinPool customThreadPool = new ForkJoinPool(Runtime.getRuntime().availableProcessors()*2);
-        customThreadPool.submit(()->{
-			lineContents.parallelStream().forEach(content -> {
-				updateMap(parseLineString(content));
-			});
-		}).join();
-
-
     }
 
     /**
      * Updates simulation map with coordinates in the list
-     *
      * @param coords The list of coordinates
      */
     private void updateMap(List<Coord> coords) {
@@ -146,17 +128,16 @@ public class WKTMapReader extends WKTReader {
     /**
      * Creates or updates a node that is in location c and next to
      * node previous
-     *
-     * @param c        The location coordinates of the node
+     * @param c The location coordinates of the node
      * @param previous Previous node whose neighbor node at c is
      * @return The created/updated node
      */
     private MapNode createOrUpdateNode(Coord c, MapNode previous) {
         MapNode n = null;
 
-        n = nodes.get(c);    // try to get the node at that location
+        n = nodes.get(c);	// try to get the node at that location
 
-        if (n == null) {    // no node in that location -> create new
+        if (n == null) { 	// no node in that location -> create new
             n = new MapNode(c);
             nodes.put(c, n);
         }
