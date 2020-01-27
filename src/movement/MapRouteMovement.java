@@ -128,11 +128,10 @@ public class MapRouteMovement extends MapBasedMovement implements
 	@Override
 	public Coord getInitialLocation() {
 		if (lastMapNode == null) {
-		//	lastMapNode = route.nextStop();
-			lastMapNode = route.getStops().get(0);
+			lastMapNode = route.nextStop();
 		}
-		System.out.println(lastMapNode);
-		System.out.println("x:" + (lastMapNode.getLocation().getX()+3145.603) + " y:" + (43632.5-lastMapNode.getLocation().getY()));
+		//System.out.println(lastMapNode);
+		//System.out.println("x:" + (lastMapNode.getLocation().getX()+3145.603) + " y:" + (43632.5-lastMapNode.getLocation().getY()));
 		return lastMapNode.getLocation().clone();
 	}
 
