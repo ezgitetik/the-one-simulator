@@ -296,6 +296,11 @@ public class WKTReader {
 		return contents.toString();*/
     }
 
+    public String readNestedContents(String line) throws IOException {
+        line = line.replace("LINESTRING", "").replace("(", "").replace(")", "");
+        return line;
+    }
+
     /**
      * Returns nested contents from the reader given at init
      *
@@ -307,10 +312,6 @@ public class WKTReader {
         return readNestedContents(reader);
     }
 
-	public String readNestedContents(String line) throws IOException {
-		line = line.replace("LINESTRING", "").replace("(", "").replace(")", "");
-		return line;
-	}
     /**
      * Parses coordinate tuples from "LINESTRING" lines
      *
