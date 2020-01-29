@@ -105,51 +105,38 @@ public class WKTMapReader extends WKTReader {
      */
     public void addPaths(Reader input, int nodeType) throws IOException {
         this.nodeType = nodeType;
-        String type;
-        AtomicReference<String> contents = null;
 
         init(input);
 
         BufferedReader inStream = new BufferedReader(input);
-        String inString;
 
-       /* ForkJoinPool pool=new ForkJoinPool(10);
-        pool.submit(()->{
+        String line = inStream.readLine();
+        List<String> allLines = new ArrayList<>();
+        while (line != null) {
+            line = inStream.readLine();
+            if (line != null) allLines.add(line);
+        }
 
-        }).join();*/
+        ForkJoinPool poolx = new ForkJoinPool(10);
 
-        createStreamReader(inStream).parallel().forEach(line -> {
+        poolx.submit(() ->
+                allLines.parallelStream().forEach(aLine -> {
+                    try {
+                        updateMap(parseLineString(readNestedContents(aLine)));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                })).join();
+
+        System.out.println("");
+        /*createStreamReader(inStream).parallel().forEach(line -> {
             try {
                 updateMap(parseLineString(readNestedContents(line)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-        });
-       /* while ((inString = inStream.readLine()) != null) {
-            contents = readNestedContents(inString);
-            updateMap(parseLineString(contents));
-        }
-        inStream.close();*/
-        /*contents = readNestedContents();
-        updateMap(parseLineString(contents));*/
-
-
-        /*while((type = nextType()) != null) {
-            if (type.equals(LINESTRING)) {
-                contents = readNestedContents();
-                updateMap(parseLineString(contents));
-            }
-            else if (type.equals(MULTILINESTRING)) {
-                for (List<Coord> list : parseMultilinestring()) {
-                    updateMap(list);
-                }
-            }
-            else {
-                // known type but not interesting -> skip
-                readNestedContents();
-            }
-        }*/
+        });*/
     }
 
     /**
@@ -159,6 +146,9 @@ public class WKTMapReader extends WKTReader {
      */
     private void updateMap(List<Coord> coords) {
         MapNode previousNode = null;
+
+        //ForkJoinPool poolx = new ForkJoinPool(10);
+
         for (Coord c : coords) {
             previousNode = createOrUpdateNode(c, previousNode);
         }
@@ -231,8 +221,8 @@ class LineReaderSpliterator implements Spliterator<String> {
         }
     }
 
-    @Override
     public Spliterator<String> trySplit() {
         return null;
     }
+
 }
