@@ -18,7 +18,7 @@ public class ArffReader {
 
     public static List<ArffRegion> read() throws IOException {
         if (ARFF_REGIONS == null) {
-            InputStream stream = ArffReader.class.getClassLoader().getResourceAsStream("custom/taxidata/taxi-top10-all-0101-weka.arff");
+            InputStream stream = ArffReader.class.getClassLoader().getResourceAsStream("custom/taxidata/all-top10-day1-weka-withoutmodulo.arff");
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
             String line = reader.readLine();
             List<ArffRegion> arffRegions = new ArrayList<>();
@@ -61,14 +61,14 @@ public class ArffReader {
     }
 
     public static List<List<String>> getRegionListForAllFiles() throws IOException {
-        String rootFolder = ArffReader.class.getClassLoader().getResource("custom/taxidata/bursa-0101").getPath();
+        String rootFolder = ArffReader.class.getClassLoader().getResource("custom/taxidata/bursa-0101-notmodulo/").getPath();
         List<String> files = Stream.of(new File(rootFolder).listFiles())
                 .filter(file -> !file.isDirectory())
                 .map(File::getName)
                 .collect(Collectors.toList());
         List<List<String>> regions = new ArrayList<>();
         files.forEach(file -> {
-            InputStream stream = ArffReader.class.getClassLoader().getResourceAsStream("custom/taxidata/bursa-0101/" + file);
+            InputStream stream = ArffReader.class.getClassLoader().getResourceAsStream("custom/taxidata/bursa-0101-notmodulo/" + file);
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
             String line = null;
             try {
@@ -227,8 +227,8 @@ public class ArffReader {
         //List<String> regions = ArffReader.getDistinctRegionListByFileName("taxi-528.wkt");
 
 
-        String start = "cluster20";
-        String finish = "cluster9";
+        String start = "cluster32";
+        String finish = "cluster10";
         List<String> path = ArffReader.getShortestPath(start, finish);
 
         Collections.reverse(path);
