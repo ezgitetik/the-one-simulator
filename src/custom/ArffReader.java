@@ -2,6 +2,8 @@ package custom;
 
 //import com.sun.deploy.util.StringUtils;
 
+import com.sun.deploy.util.StringUtils;
+
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -123,8 +125,7 @@ public class ArffReader {
                 .collect(Collectors.toList());
     }
 
-    public static <T> Predicate<T> distinctByKey(
-            Function<? super T, ?> keyExtractor) {
+    public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
 
         Map<Object, Boolean> seen = new ConcurrentHashMap<>();
         return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
@@ -139,22 +140,18 @@ public class ArffReader {
 
         return regionNames.stream().map(regionName -> {
             int weight = (int) ARFF_REGIONS.stream().filter(region -> region.getRegion().equalsIgnoreCase(regionName)).count();
-            return new Region(regionName, (100000 - weight));
+            return new Region(regionName, (1 / weight));
         }).collect(Collectors.toList());
     }
 
-    public static Map<String, List<Region>> getGraphMap(List<List<String>> regions) {
+    public static Map<String, List<Region>> getGraphMapByTrafficVolume(List<List<String>> regions) {
         List<Region> listOfRegions = ArffReader.getListOfRegions();
         Map<String, List<Region>> graphMap = new HashMap<>();
         final String[] controlRegion = {null};
-        regions.forEach(regionsx->{
+        regions.forEach(regionsx -> {
             controlRegion[0] = null;
             for (String region : regionsx) {
                 if (controlRegion[0] != null && !region.equalsIgnoreCase(controlRegion[0])) {
-                    if (controlRegion[0].equalsIgnoreCase("cluster32") && region.equalsIgnoreCase("cluster1")
-                            || controlRegion[0].equalsIgnoreCase("cluster1") && region.equalsIgnoreCase("cluster32")){
-                        String x="";
-                    }
                     if (graphMap.get(controlRegion[0]) == null) graphMap.put(controlRegion[0], new ArrayList<>());
                     List<Region> neighbors = graphMap.get(controlRegion[0]);
                     if (neighbors.stream().filter(neighbor -> neighbor.getName().equalsIgnoreCase(region)).count() <= 0) {
@@ -176,9 +173,39 @@ public class ArffReader {
         return graphMap;
     }
 
+    public static Map<String, List<Region>> getGraphMapByTrafficFlow(List<List<String>> regions) {
+        List<Region> listOfRegions = ArffReader.getListOfRegions();
+        Map<String, List<Region>> graphMap = new HashMap<>();
+        final String[] controlRegion = {null};
+        regions.forEach(regionsx -> {
+            controlRegion[0] = null;
+            for (String region : regionsx) {
+                if (controlRegion[0] != null && !region.equalsIgnoreCase(controlRegion[0])) {
+
+                    if (graphMap.get(controlRegion[0]) == null) graphMap.put(controlRegion[0], new ArrayList<>());
+                    List<Region> neighbors = graphMap.get(controlRegion[0]);
+
+                    if (neighbors.stream().filter(neighbor -> neighbor.getName().equalsIgnoreCase(region)).count() <= 0) {
+                        Region currentRegion = new Region(region, 0, 1);
+                        neighbors.add(currentRegion);
+                        graphMap.put(controlRegion[0], neighbors);
+                    } else {
+                        Region currentRegion = neighbors.stream().filter(neighbor -> neighbor.getName().equalsIgnoreCase(region)).findFirst().get();
+                        currentRegion.increaseFlowCount();
+                    }
+
+                }
+                controlRegion[0] = region;
+            }
+        });
+        graphMap.values().forEach(regionList -> regionList.stream().forEach(region -> region.setWeight(1 / region.getFlowCount())));
+        return graphMap;
+    }
+
     private static List<String> getShortestPath(String start, String finish) throws IOException {
         List<List<String>> regions = ArffReader.getRegionListForAllFiles();
-        Map<String, List<Region>> graphMap = ArffReader.getGraphMap(regions);
+        //Map<String, List<Region>> graphMap = ArffReader.getGraphMapByTrafficVolume(regions);
+        Map<String, List<Region>> graphMap = ArffReader.getGraphMapByTrafficFlow(regions);
 
         Graph graph = new Graph();
         graphMap.forEach((key, value) -> {
@@ -191,6 +218,8 @@ public class ArffReader {
     }
 
     public static void main(String[] args) throws IOException {
+
+
         List<ArffRegion> arffRegions = ArffReader.read();
 
         //System.out.println(ArffReader.getRegionByPoints(28183.048, 34760.223));
@@ -198,15 +227,13 @@ public class ArffReader {
         //List<String> regions = ArffReader.getDistinctRegionListByFileName("taxi-528.wkt");
 
 
-
-        String start = "cluster17";
-        String finish = "cluster4";
+        String start = "cluster20";
+        String finish = "cluster9";
         List<String> path = ArffReader.getShortestPath(start, finish);
 
         Collections.reverse(path);
-        //System.out.println(start + "->" + StringUtils.join(path, "->"));
+        System.out.println(start + "->" + StringUtils.join(path, "->"));
 
-        //System.out.println(StringUtils.join(regions, ","));
         //List<Region> regions=ArffReader.getListOfRegions();
     }
 
