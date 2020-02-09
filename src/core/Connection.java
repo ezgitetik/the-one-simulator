@@ -39,6 +39,13 @@ public abstract class Connection {
 		this.bytesTransferred = 0;
 	}
 
+	public DTNHost getToNode() {
+		return toNode;
+	}
+
+	public DTNHost getFromNode() {
+		return fromNode;
+	}
 
 	/**
 	 * Returns true if the connection is up

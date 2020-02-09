@@ -35,6 +35,14 @@ public class Message implements Comparable<Message> {
 	/** Initial TTL of the message */
 	private int initTtl;
 
+	public void setFrom(DTNHost from) {
+		this.from = from;
+	}
+
+	public void setTo(DTNHost to) {
+		this.to = to;
+	}
+
 	/** if a response to this message is required, this is the size of the
 	 * response message (or 0 if no response is requested) */
 	private int responseSize;
