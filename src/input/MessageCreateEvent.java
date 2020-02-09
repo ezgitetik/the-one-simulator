@@ -47,7 +47,7 @@ public class MessageCreateEvent extends MessageEvent {
 //		from.createNewMessage(m);   // TODO:: MESSAGES ARE CREATED HERE!
 //	}
 
-	//ezgi
+	// ezgi
 	public void processEvent(World world) {
 //		DTNHost to = world.getNodeByAddress(this.toAddr);
 //		DTNHost from = world.getNodeByAddress(this.fromAddr);
@@ -69,6 +69,7 @@ public class MessageCreateEvent extends MessageEvent {
 			Message m = new Message(from, to, this.id, this.size);
 			m.setResponseSize(this.responseSize);
 			message=m;
+			System.out.println( "new message created");
 		}
 		return message;
 	}
