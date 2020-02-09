@@ -117,7 +117,7 @@ public class WKTMapReader extends WKTReader {
             if (line != null) allLines.add(line);
         }
 
-        ForkJoinPool poolx = new ForkJoinPool(10);
+        ForkJoinPool poolx = new ForkJoinPool(5);
 
         poolx.submit(() ->
                 allLines.parallelStream().forEach(aLine -> {
@@ -147,7 +147,7 @@ public class WKTMapReader extends WKTReader {
     private void updateMap(List<Coord> coords) {
         MapNode previousNode = null;
 
-        //ForkJoinPool poolx = new ForkJoinPool(10);
+        //ForkJoinPool poolx = new ForkJoinPool(5);
 
         for (Coord c : coords) {
             previousNode = createOrUpdateNode(c, previousNode);

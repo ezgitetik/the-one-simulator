@@ -153,12 +153,12 @@ public class MapRoute {
                     fileName + " (cause: " + ioe.getMessage() + ")");
         }
 
-        ForkJoinPool poolx = new ForkJoinPool(10);
+        ForkJoinPool poolx = new ForkJoinPool(5);
         File finalRouteFile = routeFile;
         poolx.submit(() -> coords.parallelStream().forEach(l -> {
             List<MapNode> nodes = new ArrayList<MapNode>();
 
-            ForkJoinPool pooly = new ForkJoinPool(10);
+            ForkJoinPool pooly = new ForkJoinPool(5);
             pooly.submit(() -> l.parallelStream().forEach(c -> {
                 // make coordinates match sim map data
                 if (mirror) {
