@@ -19,3 +19,5 @@ doc/package-list
 /out/production/the-one/gui/buttonGraphics
 .idea
 the-one.iml
+/out
+*.DS_Store
