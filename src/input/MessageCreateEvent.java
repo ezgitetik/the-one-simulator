@@ -37,27 +37,23 @@ public class MessageCreateEvent extends MessageEvent {
 	/**
 	 * Creates the message this event represents.
 	 */
-	@Override
+//	@Override
 //	public void processEvent(World world) {
 //		DTNHost to = world.getNodeByAddress(this.toAddr);
 //		DTNHost from = world.getNodeByAddress(this.fromAddr);
 //
-//		Message m = new Message(from, to, this.id, this.size);
+//		Message m = new Message(from, null, this.id, this.size);
 //		m.setResponseSize(this.responseSize);
 //		from.createNewMessage(m);   // TODO:: MESSAGES ARE CREATED HERE!
+//		//System.out.println( from.toString() + " message location: " + from.getLocation());
 //	}
 
 	// ezgi
+	@Override
 	public void processEvent(World world) {
-//		DTNHost to = world.getNodeByAddress(this.toAddr);
-//		DTNHost from = world.getNodeByAddress(this.fromAddr);
-//
-//		Message m = new Message(from, to, this.id, this.size);
-//		m.setResponseSize(this.responseSize);
 		DTNHost from = world.getNodeByAddress(this.fromAddr);
 		if(from.toString().equals("c0")){
 			from.createNewMessage(buildNewMessage(world));
-			System.out.println( from.toString() + " message location: " + from.getLocation());
 		}
 	}
 
@@ -66,10 +62,9 @@ public class MessageCreateEvent extends MessageEvent {
 			DTNHost to = world.getNodeByAddress(this.toAddr);
 			DTNHost from = world.getNodeByAddress(this.fromAddr);
 
-			Message m = new Message(from, to, this.id, this.size);
+			Message m = new Message(from, null, this.id, this.size);
 			m.setResponseSize(this.responseSize);
 			message=m;
-			System.out.println( "new message created");
 		}
 		return message;
 	}

@@ -40,6 +40,11 @@ public class DTNHost implements Comparable<DTNHost> {
 		DTNSim.registerForReset(DTNHost.class.getCanonicalName());
 		reset();
 	}
+
+	public String getName() {
+		return name;
+	}
+
 	/**
 	 * Creates a new DTNHost.
 	 * @param msgLs Message listeners
