@@ -133,6 +133,10 @@ public abstract class ActiveRouter extends MessageRouter {
 			return recvCheck;
 		}
 
+		if(m.getTo() != null) {
+			System.out.println("Sending from: " + m.getFrom().toString() + " to: " + m.getTo().toString());
+		}
+
 		// seems OK, start receiving the message
 		return super.receiveMessage(m, from);
 	}
@@ -216,12 +220,29 @@ public abstract class ActiveRouter extends MessageRouter {
 			return TRY_LATER_BUSY;
 		}
 
+		//System.out.println("connection from: " + con.getFromNode().getName() + " to : " + con.getToNode().getName());
+
 		if (!policy.acceptSending(getHost(),
 				con.getOtherNode(getHost()), con, m)) {
 			return MessageRouter.DENIED_POLICY;
 		}
 
-		retVal = con.startTransfer(getHost(), m);
+		// TODO: we need to delete message after we send it
+		Message newMessage = m;
+		if((con.getFromNode().getName().equals("c0") && con.getToNode().getName().equals("c1"))
+				|| (con.getFromNode().getName().equals("c1") && con.getToNode().getName().equals("c2"))
+				|| (con.getFromNode().getName().equals("c2") && con.getToNode().getName().equals("c0"))){
+			if ((con.getFromNode().getName().equals("c2") && con.getToNode().getName().equals("c0"))){
+				//System.out.println("");
+			}
+			newMessage = m.replicate();
+			newMessage.setTo(con.getToNode());
+			//this.deleteMessage(newMessage.getId(),false);
+		} else {
+			return DENIED_POLICY;
+		}
+
+		retVal = con.startTransfer(getHost(), newMessage);
 		if (retVal == RCV_OK) { // started transfer
 			addToSendingConnections(con);
 		}
@@ -393,7 +414,7 @@ public abstract class ActiveRouter extends MessageRouter {
 		for (Message m : getMessageCollection()) {
 			for (Connection con : getConnections()) {
 				DTNHost to = con.getOtherNode(getHost());
-				if (m.getTo() == to) {
+				if (m.getTo() == to || m.getTo() == null) {
 					forTuples.add(new Tuple<Message, Connection>(m,con));
 				}
 			}

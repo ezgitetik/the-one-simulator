@@ -44,7 +44,7 @@ public class EpidemicRouter extends ActiveRouter {
 		}
 
 		// then try any/all message to any/all connection
-		this.tryAllMessagesToAllConnections();
+		//this.tryAllMessagesToAllConnections();
 	}
 
 
