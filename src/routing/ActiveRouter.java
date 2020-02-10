@@ -227,14 +227,16 @@ public abstract class ActiveRouter extends MessageRouter {
 			return MessageRouter.DENIED_POLICY;
 		}
 
+		if ((con.getFromNode().getName().equals("c2") && con.getToNode().getName().equals("c0")) ||
+				(con.getFromNode().getName().equals("c0") && con.getToNode().getName().equals("c2"))){
+			System.out.print("");
+		}
 		// TODO: we need to delete message after we send it
 		Message newMessage = m;
-		if((con.getFromNode().getName().equals("c0") && con.getToNode().getName().equals("c1"))
+	//	this.deleteMessage(m.getId(), false);
+		if(newMessage.getTo() == null && (con.getFromNode().getName().equals("c0") && con.getToNode().getName().equals("c1"))
 				|| (con.getFromNode().getName().equals("c1") && con.getToNode().getName().equals("c2"))
 				|| (con.getFromNode().getName().equals("c2") && con.getToNode().getName().equals("c0"))){
-			if ((con.getFromNode().getName().equals("c2") && con.getToNode().getName().equals("c0"))){
-				//System.out.println("");
-			}
 			newMessage = m.replicate();
 			newMessage.setTo(con.getToNode());
 			//this.deleteMessage(newMessage.getId(),false);
@@ -245,6 +247,7 @@ public abstract class ActiveRouter extends MessageRouter {
 		retVal = con.startTransfer(getHost(), newMessage);
 		if (retVal == RCV_OK) { // started transfer
 			addToSendingConnections(con);
+		//	this.deleteMessage(m.getId(), false);
 		}
 		else if (deleteDelivered && retVal == DENIED_OLD &&
 				m.getTo() == con.getOtherNode(this.getHost())) {
