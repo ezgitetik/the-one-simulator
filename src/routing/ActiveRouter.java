@@ -214,7 +214,8 @@ public abstract class ActiveRouter extends MessageRouter {
 
         if (con.getFromNode().getName().equals("c0") && con.getToNode().getName().equals("c1")
         || con.getFromNode().getName().equals("c1") && con.getToNode().getName().equals("c2")
-        || con.getFromNode().getName().equals("c2") && con.getToNode().getName().equals("c0")){
+        || con.getFromNode().getName().equals("c2") && con.getToNode().getName().equals("c3")
+        || con.getFromNode().getName().equals("c3") && con.getToNode().getName().equals("c0")){
 			if (m.isWatched() && m.getTo() == null) {
                 if(m.getFrom() != con.getToNode()){
                     m.setTo(con.getToNode());
@@ -224,9 +225,26 @@ public abstract class ActiveRouter extends MessageRouter {
 			}
 		}
 
-        if (con.getFromNode().getName().equals("c2") && con.getToNode().getName().equals("c0")){
-   //         System.out.println("connection for " + m.getId() +" from: " + con.getFromNode().getName() + " to : " + con.getToNode().getName() + " is watched: " + m.isWatched());
-        }
+//        boolean reverse = false;
+//        Message watchedMessage = null;
+//        if (con.getFromNode().getName().equals("c1") && con.getToNode().getName().equals("c0")
+//                || con.getFromNode().getName().equals("c2") && con.getToNode().getName().equals("c1")
+//                || con.getFromNode().getName().equals("c3") && con.getToNode().getName().equals("c2")
+//                || con.getFromNode().getName().equals("c0") && con.getToNode().getName().equals("c3")){
+//            watchedMessage = con.getToNode().getRouter().getMessage("M7");
+//            if (watchedMessage != null){
+//                watchedMessage.setTo(con.getFromNode());
+//                reverse=true;
+//            }
+//        }
+
+//        if (m.getTo() == null){
+//            retVal = DENIED_UNSPECIFIED;
+//        } else if (reverse){
+//            retVal = con.startTransfer(con.getToNode(), watchedMessage);
+//        } else {
+//            retVal = con.startTransfer(getHost(), m);
+//        }
 
         if (m.getTo() == null){
             retVal = DENIED_UNSPECIFIED;
