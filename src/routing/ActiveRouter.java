@@ -149,10 +149,10 @@ public abstract class ActiveRouter extends MessageRouter {
         }
 
         if (m.isWatched()) {
-            System.out.println("######## WATCHED from: " + m.getFrom().toString() + " to: " + m.getTo().toString());
+            System.out.println("watched message sending "+ m.getId() + " from: " + m.getFrom().toString() + " to: " + m.getTo().toString());
 
         } else {
-            System.out.println("******** Sending from: " + m.getFrom().toString() + " to: " + m.getTo().toString());
+        //    System.out.println("******** Sending "+ m.getId() + " from: " + m.getFrom().toString() + " to: " + m.getTo().toString());
 
         }
 
@@ -212,17 +212,28 @@ public abstract class ActiveRouter extends MessageRouter {
             return MessageRouter.DENIED_POLICY;
         }
 
-        if (con.getFromNode().getName().equals("c0") && con.getToNode().getName().equals("c1")){
-			if (m.isWatched()) {
-				System.out.println("|||||||| is watched from: " + con.getFromNode().getName());
-				//newMessage = m.replicate();
-				m.setTo(con.getToNode());
-				m.setWatched(false);
+        if (con.getFromNode().getName().equals("c0") && con.getToNode().getName().equals("c1")
+        || con.getFromNode().getName().equals("c1") && con.getToNode().getName().equals("c2")
+        || con.getFromNode().getName().equals("c2") && con.getToNode().getName().equals("c0")){
+			if (m.isWatched() && m.getTo() == null) {
+                if(m.getFrom() != con.getToNode()){
+                    m.setTo(con.getToNode());
+                    //System.out.println("|||||||| is watched from: " + con.getFromNode().getName() + " to: " + con.getToNode().getName());
+
+                }
 			}
 		}
 
-        System.out.println("connection from: " + con.getFromNode().getName() + " to : " + con.getToNode().getName() + " is watched: " + m.isWatched());
-        retVal = con.startTransfer(getHost(), m);
+        if (con.getFromNode().getName().equals("c2") && con.getToNode().getName().equals("c0")){
+   //         System.out.println("connection for " + m.getId() +" from: " + con.getFromNode().getName() + " to : " + con.getToNode().getName() + " is watched: " + m.isWatched());
+        }
+
+        if (m.getTo() == null){
+            retVal = DENIED_UNSPECIFIED;
+        } else {
+            retVal = con.startTransfer(getHost(), m);
+        }
+
         if (retVal == RCV_OK) { // started transfer
             addToSendingConnections(con);
         } else if (deleteDelivered && retVal == DENIED_OLD &&
@@ -687,6 +698,10 @@ public abstract class ActiveRouter extends MessageRouter {
             if (con.isMessageTransferred()) {
                 if (con.getMessage() != null) {
                     transferDone(con);
+                    if (con.getMsgOnFly().isWatched()){
+                        this.deleteMessage(con.getMsgOnFly().getId(), false);
+                      //  this.deliveredMessages.put(con.getMsgOnFly().getId(), con.getMsgOnFly());
+                    }
                     con.finalizeTransfer();
                 } /* else: some other entity aborted transfer */
                 removeCurrent = true;
