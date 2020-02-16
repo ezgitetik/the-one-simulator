@@ -164,6 +164,7 @@ public class World {
 			setNextEventQueue();
 		}
 
+		// world ezgi
 		moveHosts(this.updateInterval);
 		simClock.setTime(runUntil);
 

@@ -45,7 +45,8 @@ public class MessageCreateEvent extends MessageEvent {
         Message m = new Message(from, to, this.id, this.size);
 
         if (!world.isWatchedMessageCreated() && from.toString().equals("c0")) {
-            m.setTo(world.getNodeByAddress(1));
+         //   m.setTo(world.getNodeByAddress(1));
+            m.setTo(null);
             world.setWatchedMessageCreated(true);
             m.setWatched(true);
             System.out.println("name: " + m.getId());

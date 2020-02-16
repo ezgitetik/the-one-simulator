@@ -380,8 +380,11 @@ public abstract class MessageRouter {
 		}
 
 		Message aMessage = (outgoing==null)?(incoming):(outgoing);
-//		aMessage.setFrom(this.host);
-//		aMessage.setTo(null);
+		if (aMessage.isWatched()){
+			aMessage.setFrom(this.host);
+			aMessage.setTo(null);
+			aMessage.setTtl(-1);
+		}
 		// If the application re-targets the message (changes 'to')
 		// then the message is not considered as 'delivered' to this host.
 		isFinalRecipient = aMessage.getTo() == this.host;
@@ -394,7 +397,6 @@ public abstract class MessageRouter {
 			addToMessages(aMessage, false);
 		} else if (isFirstDelivery) {
 			this.deliveredMessages.put(id, aMessage);
-	//		addToMessages(aMessage, false);
 		} else if (outgoing == null) {
 			// Blacklist messages that an app wants to drop.
 			// Otherwise the peer will just try to send it back again.
