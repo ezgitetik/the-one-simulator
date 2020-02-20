@@ -106,7 +106,7 @@ MovementModel.warmup = 0
 ## Map based movement -movement model specific settings
 MapBasedMovement.nrofMapFiles = 1
 
-MapBasedMovement.mapFile1 = data/custom/bursa-map.osm.wkt
+MapBasedMovement.mapFile1 = data/custom/bursa-map-taxi528.osm.wkt
 ##MapBasedMovement.mapFile2 = data/main_roads.wkt
 #MapBasedMovement.mapFile3 = data/pedestrian_paths.wkt
 #MapBasedMovement.mapFile4 = data/shops.wkt
