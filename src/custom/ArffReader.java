@@ -18,7 +18,8 @@ public class ArffReader {
 
     public static List<ArffRegion> read() throws IOException {
         if (ARFF_REGIONS == null) {
-            InputStream stream = ArffReader.class.getClassLoader().getResourceAsStream("custom/taxidata/all-top10-day1-weka-withoutmodulo.arff");
+            //TODO should be change to get all arff without modulo
+            InputStream stream = ArffReader.class.getClassLoader().getResourceAsStream("custom/taxidata/taxi-top10-all-0101-weka.arff");
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
             String line = reader.readLine();
             List<ArffRegion> arffRegions = new ArrayList<>();
@@ -43,6 +44,30 @@ public class ArffReader {
                 .findFirst().orElse(new ArffRegion(0.0, 0.0, "")).getRegion();
     }
 
+    public static ArffRegion getArffRegionByPoints(Double xPoint, Double yPoint) {
+        return ARFF_REGIONS.stream()
+                .filter(arffRegion -> arffRegion.getxPoint().equals(xPoint) && arffRegion.getyPoint().equals(yPoint))
+                .findFirst().orElse(new ArffRegion(0.0, 0.0, ""));
+    }
+
+    public static String getMostClosestRegionByPoints(Double xPoint, Double yPoint) {
+        Map<Double, String> hypotenuseCluster = new HashMap<>();
+        ARFF_REGIONS.forEach(arffRegion -> {
+            hypotenuseCluster.put(Math.hypot(xPoint - arffRegion.getxPoint(), yPoint - arffRegion.getyPoint()), arffRegion.getRegion());
+        });
+        OptionalDouble key = hypotenuseCluster.keySet().stream().mapToDouble(v -> v).min();
+        return hypotenuseCluster.get(key.getAsDouble());
+    }
+
+    public static ArffRegion getMostClosestArffRegionByPointsAndList(Double xPoint, Double yPoint, List<ArffRegion> arffRegions) {
+        Map<Double, ArffRegion> hypotenuseCluster = new HashMap<>();
+        arffRegions.forEach(arffRegion -> {
+            hypotenuseCluster.put(Math.hypot(xPoint - arffRegion.getxPoint(), yPoint - arffRegion.getyPoint()), arffRegion);
+        });
+        OptionalDouble key = hypotenuseCluster.keySet().stream().mapToDouble(v -> v).min();
+        return hypotenuseCluster.get(key.getAsDouble());
+    }
+
     public static List<String> getRegionListByFileName(String fileName) throws IOException {
         InputStream stream = ArffReader.class.getClassLoader().getResourceAsStream("custom/taxidata/bursa-0101/" + fileName);
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
@@ -58,6 +83,23 @@ public class ArffReader {
         return lineStringReader.getLandmarks()
                 .stream()
                 .map(landmark -> ArffReader.getRegionByPoints(landmark.getX(), landmark.getY())).collect(Collectors.toList());
+    }
+
+    public static List<ArffRegion> getArffRegionListByFileName(String fileName) throws IOException {
+        InputStream stream = ArffReader.class.getClassLoader().getResourceAsStream("custom/taxidata/bursa-0101/" + fileName);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+        String line = reader.readLine();
+        String lineStringLine = "";
+        while (line != null) {
+            lineStringLine = line;
+            line = reader.readLine();
+        }
+        reader.close();
+        LineStringReader lineStringReader = new LineStringReader(lineStringLine);
+        lineStringReader.parse();
+        return lineStringReader.getLandmarks()
+                .stream()
+                .map(landmark -> ArffReader.getArffRegionByPoints(landmark.getX(), landmark.getY())).collect(Collectors.toList());
     }
 
     public static List<List<String>> getRegionListForAllFiles() throws IOException {
@@ -232,7 +274,7 @@ public class ArffReader {
         List<String> path = ArffReader.getShortestPath(start, finish);
 
         Collections.reverse(path);
-     //   System.out.println(start + "->" + StringUtils.join(path, "->"));
+        //   System.out.println(start + "->" + StringUtils.join(path, "->"));
 
         //List<Region> regions=ArffReader.getListOfRegions();
     }
