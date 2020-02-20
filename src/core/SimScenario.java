@@ -4,9 +4,12 @@
  */
 package core;
 
+import com.sun.deploy.util.StringUtils;
+import custom.ArffReader;
 import input.EventQueue;
 import input.EventQueueHandler;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -422,6 +425,12 @@ public class SimScenario implements Serializable {
      * Creates hosts for the scenario
      */
     protected void createHosts() {
+        try {
+            ArffReader.read();
+            System.out.println(StringUtils.join(ArffReader.getRegionListByFileName("taxi-528.wkt"),","));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         this.hosts = new ArrayList<DTNHost>();
         long startTime = System.currentTimeMillis();
         ForkJoinPool pool = new ForkJoinPool(5);
@@ -508,8 +517,6 @@ public class SimScenario implements Serializable {
                     }
                 })
         ).join();
-        long endTime = System.currentTimeMillis();
-        System.out.println("take " + (endTime - startTime));
     }
 
     /**

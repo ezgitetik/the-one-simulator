@@ -51,7 +51,7 @@ Scenario.nrofHostGroups = 1
 
 # Common settings for all groups
 Group.movementModel = ShortestPathMapBasedMovement
-Group.router = EpidemicRouter
+Group.router = FirstContactRouter
 Group.bufferSize = 5M
 Group.waitTime = 0, 120
 # All nodes have the bluetooth interface
