@@ -153,7 +153,7 @@ public class MapRoute {
                     fileName + " (cause: " + ioe.getMessage() + ")");
         }
 
-        ForkJoinPool poolx = new ForkJoinPool(5);
+       /* ForkJoinPool poolx = new ForkJoinPool(5);
         File finalRouteFile = routeFile;
         poolx.submit(() -> coords.parallelStream().forEach(l -> {
             List<MapNode> nodes = new ArrayList<MapNode>();
@@ -175,42 +175,20 @@ public class MapRoute {
                     orig.translate(-xOffset, -yOffset);
                     orig.setLocation(orig.getX(), -orig.getY());
 
-                    /*throw new SettingsError("MapRoute in file " + finalRouteFile +
+                    *//*throw new SettingsError("MapRoute in file " + finalRouteFile +
                             " contained invalid coordinate " + c + " orig: " +
-                            orig);*/
+                            orig);*//*
                 }
                 else{
                     nodes.add(node);
                 }
 
             })).join();
-			/*for (Coord c : l) {
-				// make coordinates match sim map data
-				if (mirror) {
-					c.setLocation(c.getX(), -c.getY());
-				}
-				//	updateMap
-
-				// ezgi
-				// bursa offset x : -3145.603, y: 43632.5
-				c.translate(xOffset, yOffset);
-				MapNode node = map.getNodeByCoord(c);
-				if (node == null) {
-					Coord orig = c.clone();
-					orig.translate(-xOffset, -yOffset);
-					orig.setLocation(orig.getX(), -orig.getY());
-
-					throw new SettingsError("MapRoute in file " + finalRouteFile +
-							" contained invalid coordinate " + c + " orig: " +
-							orig);
-				}
-				nodes.add(node);
-			}*/
 
             routes.add(new MapRoute(type, nodes));
-        })).join();
+        })).join();*/
 
-		/*for (List<Coord> l : coords) {
+		for (List<Coord> l : coords) {
 			List<MapNode> nodes = new ArrayList<MapNode>();
 			for (Coord c : l) {
 				// make coordinates match sim map data
@@ -236,7 +214,7 @@ public class MapRoute {
 			}
 
 			routes.add(new MapRoute(type, nodes));
-		}*/
+		}
 
         return routes;
     }
