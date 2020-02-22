@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.IntStream;
 
+import com.sun.tools.javac.util.StringUtils;
 import custom.ArffReader;
 import custom.ArffRegion;
 import movement.MovementModel;
@@ -28,8 +30,6 @@ public class DTNHost implements Comparable<DTNHost> {
     private Coord location;    // where is the host
     private Coord destination;    // where is it going
 
-    private String currentCluster;
-    private List<ArffRegion> futureRegions;
     private MessageRouter router;
     private MovementModel movement;
     private Path path;
@@ -40,6 +40,11 @@ public class DTNHost implements Comparable<DTNHost> {
     private List<MovementListener> movListeners;
     private List<NetworkInterface> net;
     private ModuleCommunicationBus comBus;
+
+
+    private String currentCluster;
+    private List<ArffRegion> allRegions;
+    private static final int windowSize = 5;
 
     static {
         DTNSim.registerForReset(DTNHost.class.getCanonicalName());
@@ -58,6 +63,20 @@ public class DTNHost implements Comparable<DTNHost> {
         this.currentCluster = currentCluster;
     }
 
+    private List<ArffRegion> getFutureRegions() {
+        int destinationPointIndex = IntStream.range(0, this.allRegions.size()).filter(index -> this.allRegions.get(index).getxPoint().equals(this.destination.getxRoute())
+                && this.allRegions.get(index).getyPoint().equals(this.destination.getyRoute())
+        ).findFirst().orElse(-1);
+
+        int cursor = 0;
+        if (destinationPointIndex + this.windowSize >= this.allRegions.size() - 1) {
+            cursor = this.allRegions.size() - 1;
+        } else {
+            cursor = destinationPointIndex + this.windowSize;
+        }
+        return this.allRegions.subList(destinationPointIndex, cursor);
+    }
+
     /**
      * Creates a new DTNHost.
      *
@@ -73,11 +92,13 @@ public class DTNHost implements Comparable<DTNHost> {
                    List<MovementListener> movLs,
                    String groupId, List<NetworkInterface> interf,
                    ModuleCommunicationBus comBus,
-                   MovementModel mmProto, MessageRouter mRouterProto) {
+                   MovementModel mmProto, MessageRouter mRouterProto, String hostName) {
         this.comBus = comBus;
         this.location = new Coord(0, 0);
         this.address = getNextAddress();
-        this.name = groupId + address;
+
+        this.name = hostName;
+
         this.net = new ArrayList<NetworkInterface>();
 
         for (NetworkInterface i : interf) {
@@ -109,9 +130,9 @@ public class DTNHost implements Comparable<DTNHost> {
             }
         }
 
-        if (this.name.equalsIgnoreCase("c1")) {
+        if (this.name.startsWith("taxi-")) {
             try {
-                this.futureRegions = ArffReader.getArffRegionListByFileName("taxi-528.wkt");
+                this.allRegions = ArffReader.getArffRegionListByFileName(this.name + ".wkt");
                 this.nextTimeToMove = 0;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -457,7 +478,7 @@ public class DTNHost implements Comparable<DTNHost> {
         // bursa offset x : -3145.603, y: ?
         // x= x_value + x_offset
         // y = -y_value + y_offset = y_offset-y_value
-        if (this.getName().equalsIgnoreCase("c1")) {
+        if (this.getName().startsWith("taxi-")) {
             this.setCurrentCluster(ArffReader.getMostClosestRegionByPoints(this.location.getxRoute(), this.location.getyRoute()));
             //ArffRegion currentArffRegion = ArffReader.getMostClosestArffRegionByPointsAndList(this.location.getxRoute(), this.location.getyRoute(), this.futureRegions);
            /* System.out.println(this.getCurrentCluster() + ", s: " + speed + "x: "
@@ -467,6 +488,8 @@ public class DTNHost implements Comparable<DTNHost> {
                     + this.getLocation().getxRoute() + ", y: " + this.getLocation().getyRoute()
                     + ", xDest: " + this.destination.getxRoute() + ", yDest: " + this.destination.getyRoute());
 
+            List<ArffRegion> futureRegions = this.getFutureRegions();
+            futureRegions.forEach(futureRegion -> System.out.println("x: " + futureRegion.getxPoint() + ", y: " + futureRegion.getyPoint()));
         }
     }
 
