@@ -64,6 +64,7 @@ Group.msgTtl = 300
 
 # group1 specific settings
 Group1.groupID = c
+Group1.hostName = taxi-528
 # cars can drive only on roads
 Group1.okMaps = 1
 # 30-80 km/h
@@ -75,6 +76,7 @@ Group1.routeType = 1
 Group1.routeFirstStop = 0
 
 Group2.groupID = d
+Group2.hostName = d
 Group2.nrofHosts = 1
 Group2.okMaps = 1
 Group2.speed = 6, 30

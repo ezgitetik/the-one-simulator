@@ -39,7 +39,7 @@ public class TestDTNHost extends DTNHost {
 				new StationaryMovement(new Coord(0,0)),
 				new PassiveRouter(
 						(testSettings == null ? new TestSettings() :
-							testSettings)));
+							testSettings)),"testHost");
 	}
 
 	@Override

@@ -209,6 +209,8 @@ public class SimScenario implements Serializable {
      */
     private List<ApplicationListener> appListeners;
 
+    public static final String HOST_NAME = "hostName";
+
     static {
         DTNSim.registerForReset(SimScenario.class.getCanonicalName());
         reset();
@@ -427,7 +429,7 @@ public class SimScenario implements Serializable {
     protected void createHosts() {
         try {
             ArffReader.read();
-            System.out.println(StringUtils.join(ArffReader.getRegionListByFileName("taxi-528.wkt"),","));
+            //System.out.println(StringUtils.join(ArffReader.getRegionListByFileName("taxi-528.wkt"),","));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -512,7 +514,7 @@ public class SimScenario implements Serializable {
                         // new instances of movement model and message router
                         DTNHost host = new DTNHost(this.messageListeners,
                                 this.movementListeners, gid, interfaces, comBus,
-                                mmProto, mRouterProto);
+                                mmProto, mRouterProto, s.getSetting(HOST_NAME));
                         hosts.add(host);
                     }
                 })
