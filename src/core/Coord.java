@@ -52,6 +52,8 @@ public class Coord implements Cloneable, Comparable<Coord> {
     public void setLocation(double x, double y) {
         this.x = x;
         this.y = y;
+        this.xRoute = this.x + 3145.603;
+        this.yRoute = 48120.294 - this.y;
     }
 
     /**
@@ -63,6 +65,8 @@ public class Coord implements Cloneable, Comparable<Coord> {
     public void setLocation(Coord c) {
         this.x = c.x;
         this.y = c.y;
+        this.xRoute = this.x + 3145.603;
+        this.yRoute = 48120.294 - this.y;
     }
 
     /**

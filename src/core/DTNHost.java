@@ -44,7 +44,7 @@ public class DTNHost implements Comparable<DTNHost> {
 
     private String currentCluster;
     private List<ArffRegion> allRegions;
-    private static final int windowSize = 5;
+    private static final int windowSize = 30;
 
     static {
         DTNSim.registerForReset(DTNHost.class.getCanonicalName());
@@ -63,9 +63,15 @@ public class DTNHost implements Comparable<DTNHost> {
         this.currentCluster = currentCluster;
     }
 
-    private List<ArffRegion> getFutureRegions() {
-        int destinationPointIndex = IntStream.range(0, this.allRegions.size()).filter(index -> this.allRegions.get(index).getxPoint().equals(this.destination.getxRoute())
-                && this.allRegions.get(index).getyPoint().equals(this.destination.getyRoute())
+    public List<ArffRegion> getFutureRegions() {
+        final Coord coord;
+        if (this.destination == null) {
+            coord = this.location;
+        } else {
+            coord = this.destination;
+        }
+        int destinationPointIndex = IntStream.range(0, this.allRegions.size()).filter(index -> this.allRegions.get(index).getxPoint().equals(coord.getxRoute())
+                && this.allRegions.get(index).getyPoint().equals(coord.getyRoute())
         ).findFirst().orElse(-1);
 
         int cursor = 0;
@@ -479,17 +485,13 @@ public class DTNHost implements Comparable<DTNHost> {
         // x= x_value + x_offset
         // y = -y_value + y_offset = y_offset-y_value
         if (this.getName().startsWith("taxi-")) {
-            this.setCurrentCluster(ArffReader.getMostClosestRegionByPoints(this.location.getxRoute(), this.location.getyRoute()));
-            //ArffRegion currentArffRegion = ArffReader.getMostClosestArffRegionByPointsAndList(this.location.getxRoute(), this.location.getyRoute(), this.futureRegions);
-           /* System.out.println(this.getCurrentCluster() + ", s: " + speed + "x: "
+            //this.setCurrentCluster(ArffReader.getMostClosestRegionByPoints(this.location.getxRoute(), this.location.getyRoute()));
+            /*System.out.println(this.getCurrentCluster() + ", s: " + speed + "x: "
                     + this.getLocation().getxRoute() + ", y: " + this.getLocation().getyRoute()
-                    + ", xinFuture: " + currentArffRegion.getxPoint() + ", yinFuture: " + currentArffRegion.getyPoint());*/
-            System.out.println(this.getCurrentCluster() + ", s: " + speed + "x: "
-                    + this.getLocation().getxRoute() + ", y: " + this.getLocation().getyRoute()
-                    + ", xDest: " + this.destination.getxRoute() + ", yDest: " + this.destination.getyRoute());
+                    + ", xDest: " + this.destination.getxRoute() + ", yDest: " + this.destination.getyRoute());*/
 
-            List<ArffRegion> futureRegions = this.getFutureRegions();
-            futureRegions.forEach(futureRegion -> System.out.println("x: " + futureRegion.getxPoint() + ", y: " + futureRegion.getyPoint()));
+            /*List<ArffRegion> futureRegions = this.getFutureRegions();
+            futureRegions.forEach(futureRegion -> System.out.println("x: " + futureRegion.getxPoint() + ", y: " + futureRegion.getyPoint()));*/
         }
     }
 

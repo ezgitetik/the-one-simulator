@@ -7,6 +7,7 @@ package input;
 import core.DTNHost;
 import core.Message;
 import core.World;
+import custom.ArffReader;
 
 /**
  * External event for creating a message.
@@ -44,11 +45,24 @@ public class MessageCreateEvent extends MessageEvent {
         DTNHost from = world.getNodeByAddress(this.fromAddr);
         Message m = new Message(from, to, this.id, this.size);
 
-        if (!world.isWatchedMessageCreated() && from.toString().equals("c0")) {
+        // TODO:: this must be updated dynamically
+        if (!world.isWatchedMessageCreated() && from.toString().equals("taxi-528")) {
          //   m.setTo(world.getNodeByAddress(1));
             m.setTo(null);
             world.setWatchedMessageCreated(true);
             m.setWatched(true);
+            m.addToGoRegions(ArffReader.getMostClosestRegionByPoints(from.getLocation().getxRoute(), from.getLocation().getyRoute()));
+            m.addToGoRegions("cluster10");
+            m.addToGoRegions("cluster23");
+            m.addToGoRegions("cluster24");
+            m.addToGoRegions("cluster7");
+            m.addToGoRegions("cluster13");
+            m.addToGoRegions("cluster39");
+            m.addToGoRegions("cluster18");
+            m.addToGoRegions("cluster14");
+            m.addToGoRegions("cluster27");
+            m.addToGoRegions("cluster1");
+            m.addToGoRegions("cluster8");
             System.out.println("name: " + m.getId());
         }
 

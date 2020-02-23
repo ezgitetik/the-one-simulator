@@ -199,6 +199,7 @@ public class MapRoute {
 
 				// ezgi
 				// bursa offset x : -3145.603, y: 43632.5
+                //TODO xOffset and yOffset
 				c.translate(xOffset, yOffset);
 				MapNode node = map.getNodeByCoord(c);
 				if (node == null) {
