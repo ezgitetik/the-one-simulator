@@ -2,11 +2,30 @@ package custom;
 
 public class Region {
     private String name;
-    private int weight;
+    private double weight;
+    private double flowCount;
 
-    public Region(String name, int weight) {
+    public double getFlowCount() {
+        return flowCount;
+    }
+
+    public void setFlowCount(double flowCount) {
+        this.flowCount = flowCount;
+    }
+
+    public void increaseFlowCount(){
+        this.flowCount++;
+    }
+
+    public Region(String name, double weight) {
         this.name = name;
         this.weight = weight;
+    }
+
+    public Region(String name, double weight, double flowCount) {
+        this.name = name;
+        this.weight = weight;
+        this.flowCount = flowCount;
     }
 
     public String getName() {
@@ -17,11 +36,11 @@ public class Region {
         this.name = name;
     }
 
-    public int getWeight() {
+    public double getWeight() {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 }

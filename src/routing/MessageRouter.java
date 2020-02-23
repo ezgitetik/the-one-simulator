@@ -380,6 +380,12 @@ public abstract class MessageRouter {
 		}
 
 		Message aMessage = (outgoing==null)?(incoming):(outgoing);
+		if (aMessage.isWatched()){
+			aMessage.setFrom(this.host);
+			aMessage.setTo(null);
+			aMessage.setTtl(-1);
+			System.out.println("message's current cluster: " + this.host.getCurrentCluster());
+		}
 		// If the application re-targets the message (changes 'to')
 		// then the message is not considered as 'delivered' to this host.
 		isFinalRecipient = aMessage.getTo() == this.host;
@@ -445,6 +451,13 @@ public abstract class MessageRouter {
 	 * message, if false, nothing is informed.
 	 */
 	protected void addToMessages(Message m, boolean newMessage) {
+//		Message msg = m;
+//		if(m.getTo() != null){
+//			msg = m.replicate();
+//			msg.setFrom(m.getTo());
+//			msg.setTo(null);
+//		}
+//		this.messages.put(msg.getId(), msg);
 		this.messages.put(m.getId(), m);
 
 		if (newMessage) {

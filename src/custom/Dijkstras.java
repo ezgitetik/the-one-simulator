@@ -30,9 +30,9 @@ public class Dijkstras {
 class Vertex implements Comparable<Vertex> {
 
     private String id;
-    private Integer distance;
+    private double distance;
 
-    public Vertex(String id, Integer distance) {
+    public Vertex(String id, double distance) {
         super();
         this.id = id;
         this.distance = distance;
@@ -42,7 +42,7 @@ class Vertex implements Comparable<Vertex> {
         return id;
     }
 
-    public Integer getDistance() {
+    public double getDistance() {
         return distance;
     }
 
@@ -50,40 +50,22 @@ class Vertex implements Comparable<Vertex> {
         this.id = id;
     }
 
-    public void setDistance(Integer distance) {
+    public void setDistance(double distance) {
         this.distance = distance;
     }
 
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result
-                + ((distance == null) ? 0 : distance.hashCode());
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        return result;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Vertex vertex = (Vertex) o;
+        return Double.compare(vertex.distance, distance) == 0 &&
+                Objects.equals(id, vertex.id);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Vertex other = (Vertex) obj;
-        if (distance == null) {
-            if (other.distance != null)
-                return false;
-        } else if (!distance.equals(other.distance))
-            return false;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        return true;
+    public int hashCode() {
+        return Objects.hash(id, distance);
     }
 
     @Override
@@ -116,18 +98,18 @@ class Graph {
     }
 
     public List<String> getShortestPath(String start, String finish) {
-        final Map<String, Integer> distances = new HashMap<>();
+        final Map<String, Double> distances = new HashMap<>();
         final Map<String, Vertex> previous = new HashMap<>();
         PriorityQueue<Vertex> nodes = new PriorityQueue<>();
 
-        distances.put(start, Integer.MAX_VALUE);
+        distances.put(start, (double) Integer.MAX_VALUE);
 
         for (String vertex : vertices.keySet()) {
             if (vertex.equalsIgnoreCase(start)) {
-                distances.put(vertex, 0);
+                distances.put(vertex, (double) 0);
                 nodes.add(new Vertex(vertex, 0));
             } else {
-                distances.put(vertex, Integer.MAX_VALUE);
+                distances.put(vertex, (double) Integer.MAX_VALUE);
                 nodes.add(new Vertex(vertex, Integer.MAX_VALUE));
             }
             previous.put(vertex, null);
@@ -149,7 +131,7 @@ class Graph {
             }
 
             for (Vertex neighbor : vertices.get(smallest.getId())) {
-                Integer alt = distances.get(smallest.getId()) + neighbor.getDistance();
+                double alt = distances.get(smallest.getId()) + neighbor.getDistance();
                 if (alt < distances.get(neighbor.getId())) {
                     distances.put(neighbor.getId(), alt);
                     previous.put(neighbor.getId(), smallest);
