@@ -7,75 +7,94 @@ package input;
 import core.DTNHost;
 import core.Message;
 import core.World;
+import custom.ArffReader;
 
 /**
  * External event for creating a message.
  */
 public class MessageCreateEvent extends MessageEvent {
-	private int size;
-	private int responseSize;
-	private static Message message = null;
+    private int size;
+    private int responseSize;
+    private static Message message = null;
 
-	/**
-	 * Creates a message creation event with a optional response request
-	 * @param from The creator of the message
-	 * @param to Where the message is destined to
-	 * @param id ID of the message
-	 * @param size Size of the message
-	 * @param responseSize Size of the requested response message or 0 if
-	 * no response is requested
-	 * @param time Time, when the message is created
-	 */
-	public MessageCreateEvent(int from, int to, String id, int size,
-			int responseSize, double time) {
-		super(from,to, id, time);
-		this.size = size;
-		this.responseSize = responseSize;
-	}
+    /**
+     * Creates a message creation event with a optional response request
+     *
+     * @param from         The creator of the message
+     * @param to           Where the message is destined to
+     * @param id           ID of the message
+     * @param size         Size of the message
+     * @param responseSize Size of the requested response message or 0 if
+     *                     no response is requested
+     * @param time         Time, when the message is created
+     */
+    public MessageCreateEvent(int from, int to, String id, int size,
+                              int responseSize, double time) {
+        super(from, to, id, time);
+        this.size = size;
+        this.responseSize = responseSize;
+    }
 
 
-	/**
-	 * Creates the message this event represents.
-	 */
-	@Override
-//	public void processEvent(World world) {
-//		DTNHost to = world.getNodeByAddress(this.toAddr);
-//		DTNHost from = world.getNodeByAddress(this.fromAddr);
-//
-//		Message m = new Message(from, to, this.id, this.size);
-//		m.setResponseSize(this.responseSize);
-//		from.createNewMessage(m);   // TODO:: MESSAGES ARE CREATED HERE!
-//	}
+    /**
+     * Creates the message this event represents.
+     */
+    @Override
+    public void processEvent(World world) {
+        DTNHost to = world.getNodeByAddress(this.toAddr);
+        DTNHost from = world.getNodeByAddress(this.fromAddr);
+        Message m = new Message(from, to, this.id, this.size);
 
-	//ezgi
-	public void processEvent(World world) {
-//		DTNHost to = world.getNodeByAddress(this.toAddr);
-//		DTNHost from = world.getNodeByAddress(this.fromAddr);
-//
-//		Message m = new Message(from, to, this.id, this.size);
-//		m.setResponseSize(this.responseSize);
-		DTNHost from = world.getNodeByAddress(this.fromAddr);
-		if(from.toString().equals("c0")){
-			from.createNewMessage(buildNewMessage(world));
-			System.out.println( from.toString() + " message location: " + from.getLocation());
-		}
-	}
+        // TODO:: this must be updated dynamically
+        if (!world.isWatchedMessageCreated() && from.toString().equals("taxi-528")) {
+         //   m.setTo(world.getNodeByAddress(1));
+            m.setTo(null);
+            world.setWatchedMessageCreated(true);
+            m.setWatched(true);
+            m.addToGoRegions(ArffReader.getMostClosestRegionByPoints(from.getLocation().getxRoute(), from.getLocation().getyRoute()));
+            m.addToGoRegions("cluster10");
+            m.addToGoRegions("cluster23");
+            m.addToGoRegions("cluster24");
+            m.addToGoRegions("cluster7");
+            m.addToGoRegions("cluster13");
+            m.addToGoRegions("cluster39");
+            m.addToGoRegions("cluster18");
+            m.addToGoRegions("cluster14");
+            m.addToGoRegions("cluster27");
+            m.addToGoRegions("cluster1");
+            m.addToGoRegions("cluster8");
+            System.out.println("name: " + m.getId());
+        }
 
-	private Message buildNewMessage(World world) {
-		if (message == null){
-			DTNHost to = world.getNodeByAddress(this.toAddr);
-			DTNHost from = world.getNodeByAddress(this.fromAddr);
+        m.setResponseSize(this.responseSize);
+        from.createNewMessage(m);   // TODO:: MESSAGES ARE CREATED HERE!
+        //System.out.println( from.toString() + " message location: " + from.getLocation());
+    }
 
-			Message m = new Message(from, to, this.id, this.size);
-			m.setResponseSize(this.responseSize);
-			message=m;
-		}
-		return message;
-	}
+    // ezgi
+ /*   @Override
+    public void processEvent(World world) {
+        DTNHost from = world.getNodeByAddress(this.fromAddr);
+        if (from.toString().equals("c0")) {
+            if (message == null) from.createNewMessage(buildNewMessage(world));
+        }
+    }*/
 
-	@Override
-	public String toString() {
-		return super.toString() + " [" + fromAddr + "->" + toAddr + "] " +
-		"size:" + size + " CREATE";
-	}
+    private Message buildNewMessage(World world) {
+        if (message == null) {
+            DTNHost to = world.getNodeByAddress(this.toAddr);
+            DTNHost from = world.getNodeByAddress(this.fromAddr);
+
+            Message m = new Message(from, null, this.id, this.size);
+            m.setResponseSize(this.responseSize);
+            message = m;
+        }
+        return message;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " [" + fromAddr + "->" + toAddr + "] " +
+                "size:" + size + " CREATE";
+    }
 }

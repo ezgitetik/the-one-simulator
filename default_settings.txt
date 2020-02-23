@@ -7,7 +7,7 @@ Scenario.name = default_scenario
 Scenario.simulateConnections = true
 Scenario.updateInterval = 1
 # 43200s == 12h
-Scenario.endTime = 6000
+Scenario.endTime = 86400
 
 ## Interface-specific settings:
 # type : which interface class the interface belongs to
@@ -47,7 +47,7 @@ highspeedInterface.transmitRange = 1000
 # routeType: route's type - for MapRouteMovement
 
 # Define 6 different node groups
-Scenario.nrofHostGroups = 1
+Scenario.nrofHostGroups = 5
 
 # Common settings for all groups
 Group.movementModel = ShortestPathMapBasedMovement
@@ -64,17 +64,59 @@ Group.msgTtl = 300
 
 # group1 specific settings
 Group1.groupID = c
+Group1.hostName = taxi-528
 # cars can drive only on roads
 Group1.okMaps = 1
-# 10-50 km/h
-Group1.speed = 0.5, 1.5
-Group1.nrofHosts = 2
+# 30-80 km/h
+Group1.speed = 8.3, 25
+Group1.nrofHosts = 1
 Group1.movementModel = MapRouteMovement
 Group1.routeFile = data/custom/taxidata/bursa-0101/taxi-528.wkt
 Group1.routeType = 1
 Group1.routeFirstStop = 0
 
-#Group2.groupID = d
+Group2.groupID = d
+Group2.hostName = taxi-531
+Group2.okMaps = 1
+Group2.speed = 8.3, 25
+Group2.nrofHosts = 1
+Group2.movementModel = MapRouteMovement
+Group2.routeFile = data/custom/taxidata/bursa-0101/taxi-531.wkt
+Group2.routeType = 1
+Group2.routeFirstStop = 0
+
+Group3.groupID = e
+Group3.hostName = taxi-815
+Group3.okMaps = 1
+Group3.speed = 8.3, 25
+Group3.nrofHosts = 1
+Group3.movementModel = MapRouteMovement
+Group3.routeFile = data/custom/taxidata/bursa-0101/taxi-815.wkt
+Group3.routeType = 1
+Group3.routeFirstStop = 0
+
+Group4.groupID = f
+Group4.hostName = taxi-816
+Group4.okMaps = 1
+Group4.speed = 8.3, 25
+Group4.nrofHosts = 1
+Group4.movementModel = MapRouteMovement
+Group4.routeFile = data/custom/taxidata/bursa-0101/taxi-816.wkt
+Group4.routeType = 1
+Group4.routeFirstStop = 0
+
+Group5.groupID = g
+Group5.hostName = taxi-817
+Group5.okMaps = 1
+Group5.speed = 8.3, 25
+Group5.nrofHosts = 1
+Group5.movementModel = MapRouteMovement
+Group5.routeFile = data/custom/taxidata/bursa-0101/taxi-817.wkt
+Group5.routeType = 1
+Group5.routeFirstStop = 0
+
+# Group2.groupID = d
+#Group2.hostName = d
 #Group2.nrofHosts = 1
 #Group2.okMaps = 1
 #Group2.speed = 6, 30
@@ -97,16 +139,16 @@ Events1.prefix = M
 
 ## Movement model settings
 # seed for movement models' pseudo random number generator (default = 0)
-MovementModel.rngSeed = 1
+MovementModel.rngSeed = 0
 # World's size for Movement Models without implicit size (width, height; meters)
 MovementModel.worldSize = 100000, 100000
 # How long time to move hosts in the world before real simulation
-MovementModel.warmup = 1000
+MovementModel.warmup = 0
 
 ## Map based movement -movement model specific settings
 MapBasedMovement.nrofMapFiles = 1
 
-MapBasedMovement.mapFile1 = data/custom/bursa-map.osm.wkt
+MapBasedMovement.mapFile1 = data/custom/bursa-map-taxi528.osm.wkt
 ##MapBasedMovement.mapFile2 = data/main_roads.wkt
 #MapBasedMovement.mapFile3 = data/pedestrian_paths.wkt
 #MapBasedMovement.mapFile4 = data/shops.wkt
