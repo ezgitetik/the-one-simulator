@@ -114,7 +114,7 @@ public class TestUtils {
 		List<NetworkInterface> li = new ArrayList<NetworkInterface>();
 		li.add(ni);
 		DTNHost host = new DTNHost(msgListeners, null, groupId,
-				li, comBus, mmProto, mr);
+				li, comBus, mmProto, mr, "testHost");
 		if (name != null) {
 			host.setName(name);
 		}

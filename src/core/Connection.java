@@ -39,6 +39,21 @@ public abstract class Connection {
 		this.bytesTransferred = 0;
 	}
 
+	public Message getMsgOnFly() {
+		return msgOnFly;
+	}
+
+	public void setMsgOnFly(Message msgOnFly) {
+		this.msgOnFly = msgOnFly;
+	}
+
+	public DTNHost getToNode() {
+		return toNode;
+	}
+
+	public DTNHost getFromNode() {
+		return fromNode;
+	}
 
 	/**
 	 * Returns true if the connection is up

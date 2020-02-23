@@ -57,6 +57,9 @@ public class World {
 	private ScheduledUpdatesQueue scheduledUpdates;
 	private boolean simulateConOnce;
 
+	private boolean watchedMessageCreated = false;
+
+
 	/**
 	 * Constructor.
 	 */
@@ -161,6 +164,7 @@ public class World {
 			setNextEventQueue();
 		}
 
+		// world ezgi
 		moveHosts(this.updateInterval);
 		simClock.setTime(runUntil);
 
@@ -271,5 +275,13 @@ public class World {
 	 */
 	public void scheduleUpdate(double simTime) {
 		scheduledUpdates.addUpdate(simTime);
+	}
+
+	public boolean isWatchedMessageCreated() {
+		return watchedMessageCreated;
+	}
+
+	public void setWatchedMessageCreated(boolean watchedMessageCreated) {
+		this.watchedMessageCreated = watchedMessageCreated;
 	}
 }

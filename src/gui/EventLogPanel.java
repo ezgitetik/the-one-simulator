@@ -272,7 +272,7 @@ public class EventLogPanel extends JPanel
 			processEvent(msgRemoveCheck, "Message removed", where, null, m);
 		}
 		else {
-			processEvent(msgDropCheck, "Message dropped", where, null, m);
+			//processEvent(msgDropCheck, "Message dropped", where, null, m);
 		}
 	}
 
@@ -291,7 +291,7 @@ public class EventLogPanel extends JPanel
 	}
 
 	public void newMessage(Message m) {
-		processEvent(msgCreateCheck, "Message created", m.getFrom(), null, m);
+		//processEvent(msgCreateCheck, "Message created", m.getFrom(), null, m);
 	}
 
 	public void messageTransferAborted(Message m, DTNHost from, DTNHost to) {
