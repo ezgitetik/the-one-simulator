@@ -427,18 +427,28 @@ public class SimScenario implements Serializable {
      * Creates hosts for the scenario
      */
     protected void createHosts() {
-
         try {
             ArffReader.read();
-            } catch (IOException e) {
+            System.out.println("taxi-528 all regions: " + StringUtils.join(ArffReader.getRegionListByFileName("taxi-528.wkt"),","));
+            System.out.println("taxi-531 all regions: " + StringUtils.join(ArffReader.getRegionListByFileName("taxi-531.wkt"),","));
+            System.out.println("taxi-815 all regions: " + StringUtils.join(ArffReader.getRegionListByFileName("taxi-815.wkt"),","));
+            System.out.println("taxi-816 all regions: " + StringUtils.join(ArffReader.getRegionListByFileName("taxi-816.wkt"),","));
+            System.out.println("taxi-817 all regions: " + StringUtils.join(ArffReader.getRegionListByFileName("taxi-817.wkt"),","));
+            System.out.println("taxi-818 all regions: " + StringUtils.join(ArffReader.getRegionListByFileName("taxi-818.wkt"),","));
+            System.out.println("taxi-822 all regions: " + StringUtils.join(ArffReader.getRegionListByFileName("taxi-822.wkt"),","));
+            System.out.println("taxi-823 all regions: " + StringUtils.join(ArffReader.getRegionListByFileName("taxi-823.wkt"),","));
+            System.out.println("taxi-824 all regions: " + StringUtils.join(ArffReader.getRegionListByFileName("taxi-824.wkt"),","));
+            System.out.println("taxi-825 all regions: " + StringUtils.join(ArffReader.getRegionListByFileName("taxi-825.wkt"),","));
+        } catch (IOException e) {
             e.printStackTrace();
         }
-
-        this.hosts = new ArrayList<>();
+        this.hosts = new ArrayList<DTNHost>();
         long startTime = System.currentTimeMillis();
         ForkJoinPool pool = new ForkJoinPool(5);
         pool.submit(() ->
                 IntStream.range(1, nrofGroups + 1).parallel().forEach(index -> {
+
+                    System.out.println("index; " + index);
 
                     List<NetworkInterface> interfaces =
                             new ArrayList<NetworkInterface>();
