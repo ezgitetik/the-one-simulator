@@ -427,18 +427,19 @@ public class SimScenario implements Serializable {
      * Creates hosts for the scenario
      */
     protected void createHosts() {
+
         try {
             ArffReader.read();
-            //System.out.println(StringUtils.join(ArffReader.getRegionListByFileName("taxi-528.wkt"),","));
-        } catch (IOException e) {
+            } catch (IOException e) {
             e.printStackTrace();
         }
-        this.hosts = new ArrayList<DTNHost>();
+
+        this.hosts = new ArrayList<>();
         long startTime = System.currentTimeMillis();
         ForkJoinPool pool = new ForkJoinPool(5);
         pool.submit(() ->
                 IntStream.range(1, nrofGroups + 1).parallel().forEach(index -> {
-                    System.out.println("index; " + index);
+
                     List<NetworkInterface> interfaces =
                             new ArrayList<NetworkInterface>();
                     Settings s = new Settings(GROUP_NS + index);
