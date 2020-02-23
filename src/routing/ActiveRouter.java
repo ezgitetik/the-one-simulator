@@ -9,7 +9,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
+import custom.ArffRegion;
 import routing.util.EnergyModel;
 import routing.util.MessageTransferAcceptPolicy;
 import routing.util.RoutingInfo;
@@ -149,10 +153,10 @@ public abstract class ActiveRouter extends MessageRouter {
         }
 
         if (m.isWatched()) {
-            System.out.println("watched message sending "+ m.getId() + " from: " + m.getFrom().toString() + " to: " + m.getTo().toString());
+            System.out.println("watched message sending " + m.getId() + " from: " + m.getFrom().toString() + " to: " + m.getTo().toString());
 
         } else {
-        //    System.out.println("******** Sending "+ m.getId() + " from: " + m.getFrom().toString() + " to: " + m.getTo().toString());
+            //    System.out.println("******** Sending "+ m.getId() + " from: " + m.getFrom().toString() + " to: " + m.getTo().toString());
 
         }
 
@@ -212,19 +216,28 @@ public abstract class ActiveRouter extends MessageRouter {
             return MessageRouter.DENIED_POLICY;
         }
 
-        if (con.getFromNode().getName().equals("c0") && con.getToNode().getName().equals("c1")
+        if (m.isWatched() && m.getTo() == null) {
+            Double fromLikelihood = likelihoodMobUpdate(con.getFromNode(), m);
+            Double toLikelihood = likelihoodMobUpdate(con.getToNode(), m);
+            if (toLikelihood > fromLikelihood) {
+                m.setTo(con.getToNode());
+                System.out.println("message transfer started, from: " + m.getFrom().getName() + ", to: " + m.getTo
+                        ().getName());
+            }
+        }
+
+        /*if (con.getFromNode().getName().equals("c0") && con.getToNode().getName().equals("c1")
         || con.getFromNode().getName().equals("c1") && con.getToNode().getName().equals("c2")
         || con.getFromNode().getName().equals("c2") && con.getToNode().getName().equals("c3")
         || con.getFromNode().getName().equals("c3") && con.getToNode().getName().equals("c0")){
 			if (m.isWatched() && m.getTo() == null) {
                 if(m.getFrom() != con.getToNode()){
                     m.setTo(con.getToNode());
-                    //System.out.println("|||||||| is watched from: " + con.getFromNode().getName() + " to: " + con.getToNode().getName());
-
                 }
 			}
-		}
+		}*/
 
+        //***********************************
 //        boolean reverse = false;
 //        Message watchedMessage = null;
 //        if (con.getFromNode().getName().equals("c1") && con.getToNode().getName().equals("c0")
@@ -246,7 +259,7 @@ public abstract class ActiveRouter extends MessageRouter {
 //            retVal = con.startTransfer(getHost(), m);
 //        }
 
-        if (m.getTo() == null){
+        if (m.getTo() == null) {
             retVal = DENIED_UNSPECIFIED;
         } else {
             retVal = con.startTransfer(getHost(), m);
@@ -263,52 +276,19 @@ public abstract class ActiveRouter extends MessageRouter {
         return retVal;
     }
 
-//	protected int startTransfer(Message m, Connection con) {
-//		int retVal;
-//
-//		if (!con.isReadyForTransfer()) {
-//			return TRY_LATER_BUSY;
-//		}
-//
-//		//System.out.println("connection from: " + con.getFromNode().getName() + " to : " + con.getToNode().getName());
-//
-//		if (!policy.acceptSending(getHost(),
-//				con.getOtherNode(getHost()), con, m)) {
-//			return MessageRouter.DENIED_POLICY;
-//		}
-//
-//
-////		if ((con.getFromNode().getName().equals("c2") && con.getToNode().getName().equals("c0")) ||
-////				(con.getFromNode().getName().equals("c0") && con.getToNode().getName().equals("c2"))){
-////			System.out.println("From: " + (con.getFromNode()) + " to: " + con.getToNode());
-////		}
-//		// TODO: we need to delete message after we send it
-//		Message newMessage = m;
-//	//	this.deleteMessage(m.getId(), false);
-//		if(newMessage.getTo() == null && (con.getFromNode().getName().equals("c0") && con.getToNode().getName().equals("c1"))
-//				|| (con.getFromNode().getName().equals("c1") && con.getToNode().getName().equals("c2"))
-//				|| (con.getFromNode().getName().equals("c2") && con.getToNode().getName().equals("c0"))){
-//			newMessage = m.replicate();
-//			newMessage.setTo(con.getToNode());
-//			//this.deleteMessage(newMessage.getId(),false);
-//		} else {
-//			System.out.println("Connection Denied: From: " + (con.getFromNode()) + " to: " + con.getToNode());
-//			return DENIED_POLICY;
-//		}
-//
-//		retVal = con.startTransfer(getHost(), newMessage);
-//		if (retVal == RCV_OK) { // started transfer
-//			addToSendingConnections(con);
-//		//	this.deleteMessage(m.getId(), false);
-//		}
-//		else if (deleteDelivered && retVal == DENIED_OLD &&
-//				m.getTo() == con.getOtherNode(this.getHost())) {
-//			/* final recipient has already received the msg -> delete it */
-//			this.deleteMessage(m.getId(), false);
-//		}
-//
-//		return retVal;
-//	}
+    private Double likelihoodMobUpdate(DTNHost node, Message message) {
+        AtomicReference<Double> likelihood = new AtomicReference<>();
+        likelihood.set(-1.0);
+        IntStream.range(0, message.getToGoRegions().size()).forEach(index -> {
+            if (node.getFutureRegions()
+                    .stream()
+                    .map(ArffRegion::getRegion)
+                    .collect(Collectors.toList()).contains(message.getToGoRegions().get(index))) {
+                likelihood.set((1 + ((double) index / (double) message.getToGoRegions().size())));
+            }
+        });
+        return likelihood.get();
+    }
 
     /**
      * Makes rudimentary checks (that we have at least one message and one
@@ -716,9 +696,9 @@ public abstract class ActiveRouter extends MessageRouter {
             if (con.isMessageTransferred()) {
                 if (con.getMessage() != null) {
                     transferDone(con);
-                    if (con.getMsgOnFly().isWatched()){
+                    if (con.getMsgOnFly().isWatched()) {
                         this.deleteMessage(con.getMsgOnFly().getId(), false);
-                      //  this.deliveredMessages.put(con.getMsgOnFly().getId(), con.getMsgOnFly());
+                        //  this.deliveredMessages.put(con.getMsgOnFly().getId(), con.getMsgOnFly());
                     }
                     con.finalizeTransfer();
                 } /* else: some other entity aborted transfer */

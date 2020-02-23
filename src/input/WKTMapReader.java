@@ -127,8 +127,6 @@ public class WKTMapReader extends WKTReader {
                         e.printStackTrace();
                     }
                 })).join();
-
-        System.out.println("");
         /*createStreamReader(inStream).parallel().forEach(line -> {
             try {
                 updateMap(parseLineString(readNestedContents(line)));

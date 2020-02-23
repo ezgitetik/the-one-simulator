@@ -4,11 +4,7 @@
  */
 package core;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A message that is created at a node or passed between nodes.
@@ -69,6 +65,16 @@ public class Message implements Comparable<Message> {
 
     public void setTo(DTNHost to) {
         this.to = to;
+    }
+
+    private List<String> toGoRegions = new ArrayList<>();
+
+    public List<String> getToGoRegions() {
+        return toGoRegions;
+    }
+
+    public void addToGoRegions(String toGoRegion) {
+        this.toGoRegions.add(toGoRegion);
     }
 
     /**
