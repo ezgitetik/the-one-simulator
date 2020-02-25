@@ -52,17 +52,10 @@ public class MessageCreateEvent extends MessageEvent {
             world.setWatchedMessageCreated(true);
             m.setWatched(true);
             m.addToGoRegions(ArffReader.getMostClosestRegionByPoints(from.getLocation().getxRoute(), from.getLocation().getyRoute()));
-            m.addToGoRegions("cluster10");
-            m.addToGoRegions("cluster23");
-            m.addToGoRegions("cluster24");
-            m.addToGoRegions("cluster7");
-            m.addToGoRegions("cluster13");
-            m.addToGoRegions("cluster39");
-            m.addToGoRegions("cluster18");
-            m.addToGoRegions("cluster14");
-            m.addToGoRegions("cluster27");
-            m.addToGoRegions("cluster1");
-            m.addToGoRegions("cluster8");
+            m.addToGoRegions("cluster17");
+            m.addToGoRegions("cluster32");
+            m.addToGoRegions("cluster26");
+            m.addToGoRegions("cluster4");
             System.out.println("name: " + m.getId());
         }
 

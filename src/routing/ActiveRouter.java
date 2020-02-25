@@ -217,12 +217,22 @@ public abstract class ActiveRouter extends MessageRouter {
         }
 
         if (m.isWatched() && m.getTo() == null) {
-            Double fromLikelihood = likelihoodMobUpdate(con.getFromNode(), m);
-            Double toLikelihood = likelihoodMobUpdate(con.getToNode(), m);
-            if (toLikelihood > fromLikelihood) {
-                m.setTo(con.getToNode());
-                System.out.println("message transfer started, from: " + m.getFrom().getName() + ", to: " + m.getTo
-                        ().getName());
+            if(m.getFrom() == con.getFromNode()){
+                Double fromLikelihood = likelihoodMobUpdate(con.getFromNode(), m);
+                Double toLikelihood = likelihoodMobUpdate(con.getToNode(), m);
+                if (toLikelihood > fromLikelihood) {
+                    m.setTo(con.getToNode());
+                    System.out.println("message transfer started, from: " + m.getFrom().getName() + ", to: " + m.getTo
+                            ().getName());
+                }
+            } else if (m.getFrom() == con.getToNode()){
+                Double fromLikelihood = likelihoodMobUpdate(con.getToNode(), m);
+                Double toLikelihood = likelihoodMobUpdate(con.getFromNode(), m);
+                if (toLikelihood > fromLikelihood) {
+                    m.setTo(con.getFromNode());
+                    System.out.println("message transfer started, from: " + m.getFrom().getName() + ", to: " + m.getTo
+                            ().getName());
+                }
             }
         }
 
