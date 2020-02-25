@@ -2,10 +2,6 @@ package custom;
 
 //import com.sun.deploy.util.StringUtils;
 
-//import com.sun.deploy.util.StringUtils;
-
-import com.sun.deploy.util.StringUtils;
-
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -283,7 +279,7 @@ public class ArffReader {
         List<String> path = ArffReader.getShortestPath(start, finish);
 
         Collections.reverse(path);
-        System.out.println(start + "->" + StringUtils.join(path, "->"));
+        //System.out.println(start + "->" + StringUtils.join(path, "->"));
 
         //List<Region> regions=ArffReader.getListOfRegions();
     }
