@@ -279,7 +279,7 @@ public class ArffReader {
 
 
         String start = "cluster38";
-        String finish = "cluster8";
+        String finish = "cluster4";
         List<String> path = ArffReader.getShortestPath(start, finish);
 
         Collections.reverse(path);
