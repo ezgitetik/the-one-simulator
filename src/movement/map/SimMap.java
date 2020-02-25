@@ -68,13 +68,13 @@ public class SimMap implements Serializable {
 
         if (needsRehash) { // some coordinates have changed after creating hash
             nodesMap.clear();
-            ForkJoinPool pooly = new ForkJoinPool(5);
+            /*ForkJoinPool pooly = new ForkJoinPool();
             pooly.submit(() -> getNodes().parallelStream().forEach(node -> {
                 nodesMap.put(node.getLocation(), node); // re-hash
-            })).join();
-			/*for (MapNode node : getNodes()) {
+            })).join();*/
+			for (MapNode node : getNodes()) {
 				nodesMap.put(node.getLocation(), node); // re-hash
-			}*/
+			}
         }
 
         return nodesMap.get(c);
