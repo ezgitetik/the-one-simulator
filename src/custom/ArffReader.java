@@ -18,7 +18,7 @@ public class ArffReader {
     private static final String ARFF_WITHOUT_MOD = "custom/taxidata/all-top10-day1-weka-withoutmodulo.arff";
     private static final String ARFF_PATH = ARFF_WITHOUT_MOD;
 
-    private static final String TAXI_WITH_MOD = "custom/taxidata/bursa-0101/";
+    private static final String TAXI_WITH_MOD = "custom/taxidata/bursa-0101_old/";
     private static final String TAXI_WITHOUT_MOD = "custom/taxidata/bursa-0101-notmodulo/";
     private static final String TAXI_PATH = TAXI_WITH_MOD;
 
