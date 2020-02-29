@@ -87,10 +87,10 @@ public abstract class DTNSimUI {
 	 */
 	private void initModel() {
 		Settings settings = null;
-
+		long startTime = System.currentTimeMillis();
 		try {
 			settings = new Settings();
-			
+
 			// set time before instantiate scenario
 			double warmupTime = 0;
 			if (settings.contains(MM_WARMUP_S)) {
@@ -100,7 +100,7 @@ public abstract class DTNSimUI {
 					c.setTime(-warmupTime);
 				}
 			}
-			
+
 			this.scen = SimScenario.getInstance();
 
 			// add reports
@@ -112,6 +112,9 @@ public abstract class DTNSimUI {
 
 			this.world = this.scen.getWorld();
 			world.warmupMovementModel(warmupTime);
+
+			long endTime = System.currentTimeMillis();
+			System.out.println("started in: "+(endTime-startTime)/1000+" seconds.");
 		}
 		catch (SettingsError se) {
 			System.err.println("Can't start: error in configuration file(s)");

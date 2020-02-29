@@ -16,9 +16,12 @@ import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.IntStream;
 
+import interfaces.SimpleBroadcastInterface;
 import movement.MapBasedMovement;
+import movement.MapRouteMovement;
 import movement.MovementModel;
 import movement.map.SimMap;
+import routing.EpidemicRouter;
 import routing.MessageRouter;
 
 /**
@@ -439,8 +442,9 @@ public class SimScenario implements Serializable {
         pool.submit(() ->
                 IntStream.range(1, nrofGroups + 1).parallel().forEach(index -> {
 
-                    List<NetworkInterface> interfaces =
-                            new ArrayList<NetworkInterface>();
+                    System.out.println(index+" has started.");
+
+                    List<NetworkInterface> interfaces = new ArrayList<>();
                     Settings s = new Settings(GROUP_NS + index);
                     s.setSecondaryNamespace(GROUP_NS);
                     String gid = s.getSetting(GROUP_ID_S);
@@ -449,12 +453,11 @@ public class SimScenario implements Serializable {
                     int appCount;
 
                     // creates prototypes of MessageRouter and MovementModel
-                    MovementModel mmProto =
-                            (MovementModel) s.createIntializedObject(MM_PACKAGE +
-                                    s.getSetting(MOVEMENT_MODEL_S));
-                    MessageRouter mRouterProto =
-                            (MessageRouter) s.createIntializedObject(ROUTING_PACKAGE +
-                                    s.getSetting(ROUTER_S));
+                    //MovementModel mmProto = (MovementModel) s.createIntializedObject(MM_PACKAGE + s.getSetting(MOVEMENT_MODEL_S));
+                    MovementModel mmProto = new MapRouteMovement(s);
+
+                    //MessageRouter mRouterProto = (MessageRouter) s.createIntializedObject(ROUTING_PACKAGE + s.getSetting(ROUTER_S));
+                    MessageRouter mRouterProto = new EpidemicRouter(s);
 
                     /* checks that these values are positive (throws Error if not) */
                     s.ensurePositiveValue(nrofHosts, NROF_HOSTS_S);
@@ -464,9 +467,10 @@ public class SimScenario implements Serializable {
                     for (int j = 1; j <= nrofInterfaces; j++) {
                         String intName = s.getSetting(INTERFACENAME_S + j);
                         Settings intSettings = new Settings(intName);
-                        NetworkInterface iface =
-                                (NetworkInterface) intSettings.createIntializedObject(
-                                        INTTYPE_PACKAGE + intSettings.getSetting(INTTYPE_S));
+
+                        //NetworkInterface iface = (NetworkInterface) intSettings.createIntializedObject(INTTYPE_PACKAGE + intSettings.getSetting(INTTYPE_S));
+                        NetworkInterface iface = new SimpleBroadcastInterface(intSettings);
+
                         iface.setClisteners(connectionListeners);
                         iface.setGroupSettings(s);
                         interfaces.add(iface);
@@ -478,6 +482,7 @@ public class SimScenario implements Serializable {
                     } else {
                         appCount = 0;
                     }
+
                     for (int j = 1; j <= appCount; j++) {
                         String appname = null;
                         Application protoApp = null;
@@ -487,8 +492,8 @@ public class SimScenario implements Serializable {
                             // Get settings for the given application
                             Settings t = new Settings(appname);
                             // Load an instance of the application
-                            protoApp = (Application) t.createIntializedObject(
-                                    APP_PACKAGE + t.getSetting(APPTYPE_S));
+                            //protoApp = (Application) t.createIntializedObject(APP_PACKAGE + t.getSetting(APPTYPE_S));
+                            protoApp = (Application) t.createIntializedObject(APP_PACKAGE + t.getSetting(APPTYPE_S));
                             // Set application listeners
                             protoApp.setAppListeners(this.appListeners);
                             // Set the proto application in proto router
@@ -512,9 +517,7 @@ public class SimScenario implements Serializable {
 
                         // prototypes are given to new DTNHost which replicates
                         // new instances of movement model and message router
-                        DTNHost host = new DTNHost(this.messageListeners,
-                                this.movementListeners, gid, interfaces, comBus,
-                                mmProto, mRouterProto, s.getSetting(HOST_NAME));
+                        DTNHost host = new DTNHost(this.messageListeners, this.movementListeners, gid, interfaces, comBus, mmProto, mRouterProto, s.getSetting(HOST_NAME));
                         hosts.add(host);
                     }
                 })
