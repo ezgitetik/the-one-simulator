@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.atomic.AtomicReference;
 
 import core.Coord;
 
@@ -40,6 +41,10 @@ public class SimMap implements Serializable {
      */
     private boolean needsRehash = false;
 
+    public Map<Coord, MapNode> getNodesMap() {
+        return nodesMap;
+    }
+
     public SimMap(Map<Coord, MapNode> nodes) {
         this.offset = new Coord(0, 0);
         this.nodes = new ArrayList<MapNode>(nodes.values());
@@ -68,13 +73,13 @@ public class SimMap implements Serializable {
 
         if (needsRehash) { // some coordinates have changed after creating hash
             nodesMap.clear();
-            ForkJoinPool pooly = new ForkJoinPool(5);
+            /*ForkJoinPool pooly = new ForkJoinPool(5);
             pooly.submit(() -> getNodes().parallelStream().forEach(node -> {
                 nodesMap.put(node.getLocation(), node); // re-hash
-            })).join();
-			/*for (MapNode node : getNodes()) {
+            })).join();*/
+			for (MapNode node : getNodes()) {
 				nodesMap.put(node.getLocation(), node); // re-hash
-			}*/
+			}
         }
 
         return nodesMap.get(c);
@@ -125,9 +130,15 @@ public class SimMap implements Serializable {
      * @param dy the amount to translate Y coordinates
      */
     public void translate(double dx, double dy) {
-        for (MapNode n : nodes) {
+
+        /*for (MapNode n : nodes) {
             n.getLocation().translate(dx, dy);
-        }
+        }*/
+
+        ForkJoinPool forkJoinPool = new ForkJoinPool(5);
+        forkJoinPool.submit(() -> nodes.parallelStream().forEach(node -> {
+            node.getLocation().translate(dx, dy);
+        })).join();
 
         minBound.translate(dx, dy);
         maxBound.translate(dx, dy);
@@ -143,7 +154,7 @@ public class SimMap implements Serializable {
         assert !isMirrored : "Map data already mirrored";
 
         Coord c;
-        for (MapNode n : nodes) {
+       for (MapNode n : nodes) {
             c = n.getLocation();
             c.setLocation(c.getX(), -c.getY());
         }

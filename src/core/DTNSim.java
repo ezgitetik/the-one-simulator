@@ -88,6 +88,7 @@ public class DTNSim {
 			print("---\nAll done in " + String.format("%.2f", duration) + "s");
 		}
 		else {
+
 			Settings.setRunIndex(guiIndex);
 			new DTNSimGUI().start();
 		}

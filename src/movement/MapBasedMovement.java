@@ -303,7 +303,9 @@ public class MapBasedMovement extends MovementModel implements SwitchableMovemen
 		simMap.mirror();
 		Coord offset = simMap.getMinBound().clone();
 		simMap.translate(-offset.getX(), -offset.getY());
-		checkCoordValidity(simMap.getNodes());
+
+		//TODO removed below because it seems not important
+		//checkCoordValidity(simMap.getNodes());
 
 		cachedMap = simMap;
 		return simMap;
