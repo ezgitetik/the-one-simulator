@@ -277,11 +277,11 @@ public class ArffReader {
 
 
         String start = "cluster38";
-        String finish = "cluster4";
+        String finish = "cluster8";
         List<String> path = ArffReader.getShortestPath(start, finish);
 
         Collections.reverse(path);
-       // System.out.println(start + "->" + StringUtils.join(path, "->"));
+        //System.out.println(start + "->" + StringUtils.join(path, "->"));
 
         //List<Region> regions=ArffReader.getListOfRegions();
     }

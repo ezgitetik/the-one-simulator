@@ -178,7 +178,7 @@ Events1.interval = 25,35
 # Message sizes (500kB - 1MB)
 Events1.size = 500k,1M
 # range of message source/destination addresses
-Events1.hosts = 0,2
+Events1.hosts = 0,10
 # Message ID prefix
 Events1.prefix = M
 
@@ -194,7 +194,7 @@ MovementModel.warmup = 0
 ## Map based movement -movement model specific settings
 MapBasedMovement.nrofMapFiles = 1
 
-MapBasedMovement.mapFile1 = data/custom/bursa-map-taxi528.osm.wkt
+MapBasedMovement.mapFile1 = data/custom/bursa-map.osm.wkt
 ##MapBasedMovement.mapFile2 = data/main_roads.wkt
 #MapBasedMovement.mapFile3 = data/pedestrian_paths.wkt
 #MapBasedMovement.mapFile4 = data/shops.wkt
