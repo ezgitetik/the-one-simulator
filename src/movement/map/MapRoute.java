@@ -123,6 +123,8 @@ public class MapRoute {
                 getNrofStops() + " stops";
     }
 
+
+    //TODO should be refactores it takes to much time to execute below.
     /**
      * Reads routes from files defined in Settings
      *
@@ -153,41 +155,6 @@ public class MapRoute {
                     fileName + " (cause: " + ioe.getMessage() + ")");
         }
 
-       /* ForkJoinPool poolx = new ForkJoinPool(5);
-        File finalRouteFile = routeFile;
-        poolx.submit(() -> coords.parallelStream().forEach(l -> {
-            List<MapNode> nodes = new ArrayList<MapNode>();
-
-            ForkJoinPool pooly = new ForkJoinPool(5);
-            pooly.submit(() -> l.parallelStream().forEach(c -> {
-                // make coordinates match sim map data
-                if (mirror) {
-                    c.setLocation(c.getX(), -c.getY());
-                }
-                //	updateMap
-
-                // ezgi
-                // bursa offset x : -3145.603, y: 43632.5
-                c.translate(xOffset, yOffset);
-                MapNode node = map.getNodeByCoord(c);
-                if (node == null) {
-                    Coord orig = c.clone();
-                    orig.translate(-xOffset, -yOffset);
-                    orig.setLocation(orig.getX(), -orig.getY());
-
-                    *//*throw new SettingsError("MapRoute in file " + finalRouteFile +
-                            " contained invalid coordinate " + c + " orig: " +
-                            orig);*//*
-                }
-                else{
-                    nodes.add(node);
-                }
-
-            })).join();
-
-            routes.add(new MapRoute(type, nodes));
-        })).join();*/
-
 		for (List<Coord> l : coords) {
 			List<MapNode> nodes = new ArrayList<MapNode>();
 			for (Coord c : l) {
@@ -201,7 +168,9 @@ public class MapRoute {
 				// bursa offset x : -3145.603, y: 43632.5
                 //TODO xOffset and yOffset
 				c.translate(xOffset, yOffset);
-				MapNode node = map.getNodeByCoord(c);
+				//MapNode node = map.getNodeByCoord(c);
+
+				MapNode node = map.getNodes().stream().filter(nodex->nodex.getLocation().getX()==c.getX() && nodex.getLocation().getY()==c.getY()).findFirst().get();
 				if (node == null) {
 					Coord orig = c.clone();
 					orig.translate(-xOffset, -yOffset);
