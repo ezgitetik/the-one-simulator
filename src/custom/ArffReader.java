@@ -15,16 +15,15 @@ import java.util.stream.Stream;
 public class ArffReader {
 
     private static final String ARFF_WITH_MOD = "custom/taxidata/taxi-top10-all-0101-weka.arff";
-    private static final String ARFF_WITHOUT_MOD = "custom/taxidata/all-top10-day1-weka-withoutmodulo.arff";
+    private static final String ARFF_WITHOUT_MOD = "custom/taxidata/20taxi-day1-weka.arff";
     private static final String ARFF_PATH = ARFF_WITHOUT_MOD;
 
-    private static final String TAXI_WITH_MOD = "custom/taxidata/bursa-0101_old/";
+    private static final String TAXI_WITH_MOD = "custom/taxidata/bursa-0101/";
     private static final String TAXI_WITHOUT_MOD = "custom/taxidata/bursa-0101-notmodulo/";
     private static final String TAXI_PATH = TAXI_WITH_MOD;
 
 
     private static List<ArffRegion> ARFF_REGIONS = null;
-
 
 
     public static List<ArffRegion> read() throws IOException {
