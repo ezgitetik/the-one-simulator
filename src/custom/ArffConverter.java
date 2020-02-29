@@ -8,14 +8,14 @@ import java.util.stream.Stream;
 public class ArffConverter {
 
     public static void convert() throws IOException {
-        String rootFolder = ArffReader.class.getClassLoader().getResource("custom/taxidata/bursa-0101").getPath();
+        String rootFolder = ArffReader.class.getClassLoader().getResource("custom/taxidata/bursa-0101_old").getPath();
         List<String> files = Stream.of(new File(rootFolder).listFiles())
                 .filter(file -> !file.isDirectory())
                 .map(File::getName)
                 .collect(Collectors.toList());
 
         files.stream().forEach(file -> {
-            InputStream stream = ArffReader.class.getClassLoader().getResourceAsStream("custom/taxidata/bursa-0101/" + file);
+            InputStream stream = ArffReader.class.getClassLoader().getResourceAsStream("custom/taxidata/bursa-0101_old/" + file);
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
             String line = null;
             try {
