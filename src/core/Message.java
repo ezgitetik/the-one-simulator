@@ -48,6 +48,24 @@ public class Message implements Comparable<Message> {
      * Initial TTL of the message
      */
     private int initTtl;
+    private double createdTime;
+    private double deliveredTime;
+
+    public double getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(double createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public double getDeliveredTime() {
+        return deliveredTime;
+    }
+
+    public void setDeliveredTime(double deliveredTime) {
+        this.deliveredTime = deliveredTime;
+    }
 
     private boolean onTheRoad=false;
 
@@ -83,8 +101,8 @@ public class Message implements Comparable<Message> {
         return toGoRegions;
     }
 
-    public void addToGoRegions(String toGoRegion) {
-        this.toGoRegions.add(toGoRegion);
+    public void addToGoRegions(List<String> toGoRegions) {
+        this.toGoRegions.addAll(toGoRegions);
     }
 
     /**
@@ -344,6 +362,8 @@ public class Message implements Comparable<Message> {
         this.appID = m.appID;
         this.isWatched = m.isWatched;
         this.toGoRegions = m.toGoRegions;
+        this.createdTime = m.createdTime;
+        this.deliveredTime = m.deliveredTime;
         if (m.properties != null) {
             Set<String> keys = m.properties.keySet();
             for (String key : keys) {

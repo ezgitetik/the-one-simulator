@@ -6,8 +6,14 @@ package input;
 
 import core.DTNHost;
 import core.Message;
+import core.SimClock;
 import core.World;
 import custom.ArffReader;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * External event for creating a message.
@@ -44,19 +50,31 @@ public class MessageCreateEvent extends MessageEvent {
         DTNHost to = world.getNodeByAddress(this.toAddr);
         DTNHost from = world.getNodeByAddress(this.fromAddr);
         Message m = new Message(from, to, this.id, this.size);
+        String watchedTaxi = "taxi-528";
 
         // TODO:: this must be updated dynamically
-        if (!world.isWatchedMessageCreated() && from.toString().equals("taxi-528")) {
-         //   m.setTo(world.getNodeByAddress(1));
+        if (!world.isWatchedMessageCreated() && from.toString().equals(watchedTaxi)) {
+            String sourceCluster = ArffReader.getMostClosestRegionByPoints(from.getLocation().getxRoute(), from.getLocation().getyRoute());
+            String destinationCluster = "cluster35";
+
+            List<String> toGoRegions = null;
+            try {
+                toGoRegions = ArffReader.getShortestPath(sourceCluster, destinationCluster);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Collections.reverse(toGoRegions);
+            List<String> shortestPath = new ArrayList<>();
+            shortestPath.add(sourceCluster);
+            shortestPath.addAll(toGoRegions);
+
+            shortestPath.forEach(path -> System.out.print(path + ", "));
+            m.addToGoRegions(shortestPath);
             m.setTo(null);
             world.setWatchedMessageCreated(true);
             m.setWatched(true);
-            m.addToGoRegions(ArffReader.getMostClosestRegionByPoints(from.getLocation().getxRoute(), from.getLocation().getyRoute()));
-            m.addToGoRegions("cluster17");
-            m.addToGoRegions("cluster32");
-            m.addToGoRegions("cluster26");
-            m.addToGoRegions("cluster4");
-            System.out.println("name: " + m.getId());
+            m.setCreatedTime(SimClock.getTime());
+            System.out.println("name: " + m.getId() + ", time: " + SimClock.getTime());
         }
 
         m.setResponseSize(this.responseSize);
