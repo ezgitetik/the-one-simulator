@@ -13,6 +13,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import custom.ArffReader;
 import custom.ArffRegion;
 import routing.util.EnergyModel;
 import routing.util.MessageTransferAcceptPolicy;
@@ -151,15 +152,6 @@ public abstract class ActiveRouter extends MessageRouter {
         if (recvCheck != RCV_OK) {
             return recvCheck;
         }
-
-        if (m.isWatched()) {
-            System.out.println("watched message sending " + m.getId() + " from: " + m.getFrom().toString() + " to: " + m.getTo().toString());
-
-        } else {
-            //    System.out.println("******** Sending "+ m.getId() + " from: " + m.getFrom().toString() + " to: " + m.getTo().toString());
-
-        }
-
         // seems OK, start receiving the message
         return super.receiveMessage(m, from);
     }
@@ -223,8 +215,9 @@ public abstract class ActiveRouter extends MessageRouter {
                 if (toLikelihood > fromLikelihood) {
                     m.setTo(con.getToNode());
                     m.setOnTheRoad(true);
-                    System.out.println("message transfer started, from: " + m.getFrom().getName() + ", to: " + m.getTo
-                            ().getName());
+                    System.out.println("message transfer started, from: " + m.getFrom().getName() + ", to: " + m.getTo().getName()
+                            + ", message's current cluster: "
+                            + ArffReader.getMostClosestRegionByPoints(m.getTo().getLocation().getxRoute(), m.getTo().getLocation().getyRoute()));
                 }
             } else if (m.getFrom() == con.getToNode()){
                 Double fromLikelihood = likelihoodMobUpdate(con.getToNode(), m);
@@ -232,8 +225,10 @@ public abstract class ActiveRouter extends MessageRouter {
                 if (toLikelihood > fromLikelihood) {
                     m.setTo(con.getFromNode());
                     m.setOnTheRoad(true);
-                    System.out.println("message transfer started, from: " + m.getFrom().getName() + ", to: " + m.getTo
-                            ().getName());
+                    System.out.println("message transfer started, from: " + m.getFrom().getName() + ", to: " + m.getTo().getName()
+                            + ", message's current cluster: "
+                            + ArffReader.getMostClosestRegionByPoints(m.getTo().getLocation().getxRoute(), m.getTo().getLocation().getyRoute()));
+
                 }
             }
         }

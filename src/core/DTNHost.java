@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 //import com.sun.tools.javac.util.StringUtils;
@@ -480,18 +481,14 @@ public class DTNHost implements Comparable<DTNHost> {
                 this.location.getY());
         this.location.translate(dx, dy);
 
-
-        // bursa offset x : -3145.603, y: ?
-        // x= x_value + x_offset
-        // y = -y_value + y_offset = y_offset-y_value
-        if (this.getName().startsWith("taxi-")) {
-            //this.setCurrentCluster(ArffReader.getMostClosestRegionByPoints(this.location.getxRoute(), this.location.getyRoute()));
-            /*System.out.println(this.getCurrentCluster() + ", s: " + speed + "x: "
-                    + this.getLocation().getxRoute() + ", y: " + this.getLocation().getyRoute()
-                    + ", xDest: " + this.destination.getxRoute() + ", yDest: " + this.destination.getyRoute());*/
-
-            /*List<ArffRegion> futureRegions = this.getFutureRegions();
-            futureRegions.forEach(futureRegion -> System.out.println("x: " + futureRegion.getxPoint() + ", y: " + futureRegion.getyPoint()));*/
+        if(this.getMessageCollection().stream().map(Message::isWatched).collect(Collectors.toList()).contains(true)){
+            String cluster = ArffReader.getMostClosestRegionByPoints(this.location.getxRoute(), this.location.getyRoute());
+            List<String> toGoRegions = this.getMessageCollection().stream().filter(Message::isWatched).findFirst().get().getToGoRegions();
+            if(toGoRegions.get(toGoRegions.size()-1).equalsIgnoreCase(cluster)){
+                Message watchedMessage = this.getMessageCollection().stream().filter(Message::isWatched).findFirst().get();
+                watchedMessage.setDeliveredTime(SimClock.getTime());
+                System.out.println("** Message is arrived to final destination : " + cluster + " Time: " + (watchedMessage.getDeliveredTime()-watchedMessage.getCreatedTime())/60);
+            }
         }
     }
 
