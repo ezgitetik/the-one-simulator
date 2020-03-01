@@ -7,6 +7,7 @@ package custom;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ForkJoinPool;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -25,6 +26,7 @@ public class ArffReader {
 
     private static List<ArffRegion> ARFF_REGIONS = null;
 
+    private static List<List<String>> regions = new ArrayList<>();
 
     public static List<ArffRegion> read() throws IOException {
         if (ARFF_REGIONS == null) {
@@ -44,6 +46,7 @@ public class ArffReader {
             }
             reader.close();
             ARFF_REGIONS = arffRegions;
+            regions = ArffReader.getRegionListForAllFiles();
         }
         return ARFF_REGIONS;
     }
@@ -62,6 +65,11 @@ public class ArffReader {
 
     public static String getMostClosestRegionByPoints(Double xPoint, Double yPoint) {
         Map<Double, String> hypotenuseCluster = new HashMap<>();
+        // TODO: calculate arff regions by taxi
+//        ForkJoinPool forkJoinPool=new ForkJoinPool(20);
+//        forkJoinPool.submit(()->ARFF_REGIONS.parallelStream().forEach(arffRegion -> {
+//            hypotenuseCluster.put(Math.hypot(xPoint - arffRegion.getxPoint(), yPoint - arffRegion.getyPoint()), arffRegion.getRegion());
+//        })).join();
         ARFF_REGIONS.forEach(arffRegion -> {
             hypotenuseCluster.put(Math.hypot(xPoint - arffRegion.getxPoint(), yPoint - arffRegion.getyPoint()), arffRegion.getRegion());
         });
@@ -118,8 +126,36 @@ public class ArffReader {
                 .filter(file -> !file.isDirectory())
                 .map(File::getName)
                 .collect(Collectors.toList());
-        List<List<String>> regions = new ArrayList<>();
-        files.forEach(file -> {
+
+        List<List<String>> regionList = new ArrayList<>();
+
+        ForkJoinPool forkJoinPool=new ForkJoinPool(20);
+        forkJoinPool.submit(()->files.parallelStream().forEach(file -> {
+            InputStream stream = ArffReader.class.getClassLoader().getResourceAsStream(TAXI_PATH + file);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+            String line = null;
+            try {
+                line = reader.readLine();
+                String lineStringLine = "";
+                while (line != null) {
+                    lineStringLine = line;
+                    line = reader.readLine();
+                }
+                reader.close();
+                LineStringReader lineStringReader = new LineStringReader(lineStringLine);
+                lineStringReader.parse();
+
+                List<String> region = lineStringReader.getLandmarks()
+                        .stream()
+                        .map(landmark -> ArffReader.getRegionByPoints(landmark.getX(), landmark.getY())).collect(Collectors.toList());
+                regionList.add(region);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        })).join();
+
+        /*files.forEach(file -> {
             InputStream stream = ArffReader.class.getClassLoader().getResourceAsStream(TAXI_PATH + file);
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
             String line = null;
@@ -142,8 +178,8 @@ public class ArffReader {
                 e.printStackTrace();
             }
 
-        });
-        return regions;
+        });*/
+        return regionList;
 
     }
 
@@ -250,8 +286,8 @@ public class ArffReader {
         return graphMap;
     }
 
-    private static List<String> getShortestPath(String start, String finish) throws IOException {
-        List<List<String>> regions = ArffReader.getRegionListForAllFiles();
+    public static List<String> getShortestPath(String start, String finish) throws IOException {
+        //List<List<String>> regions = ArffReader.getRegionListForAllFiles();
         //Map<String, List<Region>> graphMap = ArffReader.getGraphMapByTrafficVolume(regions);
         Map<String, List<Region>> graphMap = ArffReader.getGraphMapByTrafficFlow(regions);
 
@@ -275,8 +311,8 @@ public class ArffReader {
         //List<String> regions = ArffReader.getDistinctRegionListByFileName("taxi-528.wkt");
 
 
-        String start = "cluster38";
-        String finish = "cluster8";
+        String start = "cluster34";
+        String finish = "cluster35";
         List<String> path = ArffReader.getShortestPath(start, finish);
 
         Collections.reverse(path);
