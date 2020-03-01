@@ -5,6 +5,7 @@ public class ArffRegion {
     private Double xPoint;
     private Double yPoint;
     private String region;
+    private String taxiName;
 
     public ArffRegion(Double xPoint, Double yPoint, String region) {
         this.xPoint = xPoint;
@@ -34,5 +35,13 @@ public class ArffRegion {
 
     public void setRegion(String region) {
         this.region = region;
+    }
+
+    public String getTaxiName() {
+        return taxiName;
+    }
+
+    public void setTaxiName(String taxiName) {
+        this.taxiName = taxiName;
     }
 }
