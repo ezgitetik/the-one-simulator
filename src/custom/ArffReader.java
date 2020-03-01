@@ -301,24 +301,90 @@ public class ArffReader {
         return graph.getShortestPath(start, finish);
     }
 
+    public static List<ArffRegion> createWekaArffWithTaxiName() throws IOException {
+        InputStream stream = ArffReader.class.getClassLoader().getResourceAsStream(ARFF_PATH);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+        String line = reader.readLine();
+        List<ArffRegion> arffRegions = new ArrayList<>();
+        while (line != null) {
+            String[] regionString = line.split(",");
+            if (regionString.length == 4) {
+                ArffRegion arffRegion = new ArffRegion(Double.parseDouble(regionString[1]), Double.parseDouble(regionString[2]), regionString[3]);
+
+                String rootFolder = ArffReader.class.getClassLoader().getResource(TAXI_PATH).getPath();
+                List<String> files = Stream.of(new File(rootFolder).listFiles())
+                        .filter(file -> !file.isDirectory())
+                        .map(File::getName)
+                        .collect(Collectors.toList());
+
+                files.forEach(file -> {
+                    InputStream taxiFileStream = ArffReader.class.getClassLoader().getResourceAsStream(TAXI_PATH + file);
+                    BufferedReader taxiReader = new BufferedReader(new InputStreamReader(taxiFileStream));
+                    String taxiLine = null;
+                    try {
+                        taxiLine = taxiReader.readLine();
+                        String lineStringLine = "";
+                        while (taxiLine != null) {
+                            lineStringLine = taxiLine;
+                            taxiLine = taxiReader.readLine();
+                        }
+                        taxiReader.close();
+                        LineStringReader lineStringReader = new LineStringReader(lineStringLine);
+                        lineStringReader.parse();
+
+                        List<Landmark> landmarks = lineStringReader.getLandmarks();
+                        if (landmarks.stream().filter(landmark -> landmark.getX()==arffRegion.getxPoint() && landmark.getY()==arffRegion.getyPoint()).findFirst().orElse(null)!=null){
+                            arffRegion.setTaxiName(file);
+                            return;
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                });
+//                ForkJoinPool forkJoinPool=new ForkJoinPool(1);
+//                forkJoinPool.submit(()->files.parallelStream().forEach(file -> {
+//                    InputStream taxiFileStream = ArffReader.class.getClassLoader().getResourceAsStream(TAXI_PATH + file);
+//                    BufferedReader taxiReader = new BufferedReader(new InputStreamReader(taxiFileStream));
+//                    String taxiLine = null;
+//                    try {
+//                        taxiLine = taxiReader.readLine();
+//                        String lineStringLine = "";
+//                        while (taxiLine != null) {
+//                            lineStringLine = taxiLine;
+//                            taxiLine = taxiReader.readLine();
+//                        }
+//                        taxiReader.close();
+//                        LineStringReader lineStringReader = new LineStringReader(lineStringLine);
+//                        lineStringReader.parse();
+//
+//                        List<Landmark> landmarks = lineStringReader.getLandmarks();
+//                        if (landmarks.stream().filter(landmark -> landmark.getX()==arffRegion.getxPoint() && landmark.getY()==arffRegion.getyPoint()).findFirst().orElse(null)!=null){
+//                            arffRegion.setTaxiName(file);
+//                            return;
+//                        }
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                })).join();
+
+                arffRegions.add(arffRegion);
+            }
+            line = reader.readLine();
+        }
+        reader.close();
+        return arffRegions;
+    }
+
     public static void main(String[] args) throws IOException {
-
-
+//        ArffReader.read();
+//        String start = "cluster34";
+//        String finish = "cluster35";
+//        List<String> path = ArffReader.getShortestPath(start, finish);
+//        Collections.reverse(path);
         ArffReader.read();
-
-        //System.out.println(ArffReader.getRegionByPoints(28183.048, 34760.223));
-
-        //List<String> regions = ArffReader.getDistinctRegionListByFileName("taxi-528.wkt");
-
-
-        String start = "cluster34";
-        String finish = "cluster35";
-        List<String> path = ArffReader.getShortestPath(start, finish);
-
-        Collections.reverse(path);
-        //System.out.println(start + "->" + StringUtils.join(path, "->"));
-
-        //List<Region> regions=ArffReader.getListOfRegions();
+        List<ArffRegion> arffRegions=createWekaArffWithTaxiName();
     }
 
 }
