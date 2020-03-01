@@ -384,6 +384,7 @@ public abstract class MessageRouter {
 			aMessage.setFrom(this.host);
 			aMessage.setTo(null);
 			aMessage.setTtl(-1);
+			aMessage.setOnTheRoad(false);
 			System.out.println("message's current cluster: " + this.host.getCurrentCluster());
 		}
 		// If the application re-targets the message (changes 'to')

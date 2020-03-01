@@ -216,12 +216,13 @@ public abstract class ActiveRouter extends MessageRouter {
             return MessageRouter.DENIED_POLICY;
         }
 
-        if (m.isWatched() && m.getTo() == null) {
+        if (m.isWatched() && m.getTo() == null && !m.isOnTheRoad()) {
             if(m.getFrom() == con.getFromNode()){
                 Double fromLikelihood = likelihoodMobUpdate(con.getFromNode(), m);
                 Double toLikelihood = likelihoodMobUpdate(con.getToNode(), m);
                 if (toLikelihood > fromLikelihood) {
                     m.setTo(con.getToNode());
+                    m.setOnTheRoad(true);
                     System.out.println("message transfer started, from: " + m.getFrom().getName() + ", to: " + m.getTo
                             ().getName());
                 }
@@ -230,6 +231,7 @@ public abstract class ActiveRouter extends MessageRouter {
                 Double toLikelihood = likelihoodMobUpdate(con.getFromNode(), m);
                 if (toLikelihood > fromLikelihood) {
                     m.setTo(con.getFromNode());
+                    m.setOnTheRoad(true);
                     System.out.println("message transfer started, from: " + m.getFrom().getName() + ", to: " + m.getTo
                             ().getName());
                 }
@@ -271,7 +273,10 @@ public abstract class ActiveRouter extends MessageRouter {
 
         if (m.getTo() == null) {
             retVal = DENIED_UNSPECIFIED;
-        } else {
+        } else if (!m.isOnTheRoad() && m.isWatched()){
+            retVal = DENIED_UNSPECIFIED;
+        }
+        else {
             retVal = con.startTransfer(getHost(), m);
         }
 
@@ -706,11 +711,15 @@ public abstract class ActiveRouter extends MessageRouter {
             if (con.isMessageTransferred()) {
                 if (con.getMessage() != null) {
                     transferDone(con);
-                    if (con.getMsgOnFly().isWatched()) {
-                        this.deleteMessage(con.getMsgOnFly().getId(), false);
-                        //  this.deliveredMessages.put(con.getMsgOnFly().getId(), con.getMsgOnFly());
+                    if (con.getMsgOnFly().isWatched()){
+                        if((con.getMsgOnFly().getFrom() == con.getFromNode() && con.getMsgOnFly().getTo() == con.getToNode() ||
+                                con.getMsgOnFly().getTo() == con.getFromNode() && con.getMsgOnFly().getFrom() == con.getToNode())){
+                            this.deleteMessage(con.getMsgOnFly().getId(), false);
+                            con.finalizeTransfer();
+                        }
+                    } else {
+                        con.finalizeTransfer();
                     }
-                    con.finalizeTransfer();
                 } /* else: some other entity aborted transfer */
                 removeCurrent = true;
             }
