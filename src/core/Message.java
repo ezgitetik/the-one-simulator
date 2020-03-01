@@ -49,6 +49,16 @@ public class Message implements Comparable<Message> {
      */
     private int initTtl;
 
+    private boolean onTheRoad=false;
+
+    public boolean isOnTheRoad() {
+        return onTheRoad;
+    }
+
+    public void setOnTheRoad(boolean onTheRoad) {
+        this.onTheRoad = onTheRoad;
+    }
+
     public boolean isWatched() {
         return isWatched;
     }
@@ -333,6 +343,7 @@ public class Message implements Comparable<Message> {
         this.initTtl = m.initTtl;
         this.appID = m.appID;
         this.isWatched = m.isWatched;
+        this.toGoRegions = m.toGoRegions;
         if (m.properties != null) {
             Set<String> keys = m.properties.keySet();
             for (String key : keys) {
