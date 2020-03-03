@@ -384,7 +384,8 @@ public abstract class MessageRouter {
 			aMessage.setFrom(this.host);
 			aMessage.setTo(null);
 			aMessage.setTtl(-1);
-			System.out.println("message's current cluster: " + this.host.getCurrentCluster());
+			aMessage.setOnTheRoad(false);
+			System.out.println("Message transfer completed to: " + aMessage.getFrom().getName());
 		}
 		// If the application re-targets the message (changes 'to')
 		// then the message is not considered as 'delivered' to this host.
