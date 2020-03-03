@@ -217,7 +217,7 @@ public abstract class ActiveRouter extends MessageRouter {
                     m.setOnTheRoad(true);
                     System.out.println("message transfer started, from: " + m.getFrom().getName() + ", to: " + m.getTo().getName()
                             + ", message's current cluster: "
-                            + ArffReader.getMostClosestRegionByPoints(m.getTo().getLocation().getxRoute(), m.getTo().getLocation().getyRoute()));
+                            + ArffReader.getMostClosestArffRegionByPointsAndList(m.getTo().getLocation().getxRoute(), m.getTo().getLocation().getyRoute(), m.getTo().getAllRegions()).getRegion());
                 }
             } else if (m.getFrom() == con.getToNode()){
                 Double fromLikelihood = likelihoodMobUpdate(con.getToNode(), m);
@@ -227,7 +227,7 @@ public abstract class ActiveRouter extends MessageRouter {
                     m.setOnTheRoad(true);
                     System.out.println("message transfer started, from: " + m.getFrom().getName() + ", to: " + m.getTo().getName()
                             + ", message's current cluster: "
-                            + ArffReader.getMostClosestRegionByPoints(m.getTo().getLocation().getxRoute(), m.getTo().getLocation().getyRoute()));
+                            + ArffReader.getMostClosestArffRegionByPointsAndList(m.getTo().getLocation().getxRoute(), m.getTo().getLocation().getyRoute(), m.getTo().getAllRegions()).getRegion());
 
                 }
             }
