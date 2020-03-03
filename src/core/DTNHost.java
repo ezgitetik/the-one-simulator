@@ -493,7 +493,7 @@ public class DTNHost implements Comparable<DTNHost> {
             if (toGoRegions.get(toGoRegions.size() - 1).equalsIgnoreCase(cluster)) {
                 Message watchedMessage = this.getMessageCollection().stream().filter(Message::isWatched).findFirst().get();
                 watchedMessage.setDeliveredTime(SimClock.getTime());
-                System.out.println("** Message is arrived to final destination : " + cluster + " Time: " + (watchedMessage.getDeliveredTime() - watchedMessage.getCreatedTime()) / 60);
+                System.out.println("** Message is arrived to final destination : " + cluster + ", Total time: " + (watchedMessage.getDeliveredTime() - watchedMessage.getCreatedTime()) / 60);
             }
         }
     }
