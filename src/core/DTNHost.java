@@ -65,11 +65,13 @@ public class DTNHost implements Comparable<DTNHost> {
 
     public List<ArffRegion> getFutureRegions() {
         final Coord coord;
+
         if (this.destination == null) {
             coord = this.location;
         } else {
             coord = this.destination;
         }
+
         int destinationPointIndex = IntStream.range(0, this.allRegions.size()).filter(index -> this.allRegions.get(index).getxPoint().equals(coord.getxRoute())
                 && this.allRegions.get(index).getyPoint().equals(coord.getyRoute())
         ).findFirst().orElse(-1);
@@ -480,19 +482,6 @@ public class DTNHost implements Comparable<DTNHost> {
                 this.location.getY());
         this.location.translate(dx, dy);
 
-
-        // bursa offset x : -3145.603, y: ?
-        // x= x_value + x_offset
-        // y = -y_value + y_offset = y_offset-y_value
-        if (this.getName().startsWith("taxi-")) {
-            //this.setCurrentCluster(ArffReader.getMostClosestRegionByPoints(this.location.getxRoute(), this.location.getyRoute()));
-            /*System.out.println(this.getCurrentCluster() + ", s: " + speed + "x: "
-                    + this.getLocation().getxRoute() + ", y: " + this.getLocation().getyRoute()
-                    + ", xDest: " + this.destination.getxRoute() + ", yDest: " + this.destination.getyRoute());*/
-
-            /*List<ArffRegion> futureRegions = this.getFutureRegions();
-            futureRegions.forEach(futureRegion -> System.out.println("x: " + futureRegion.getxPoint() + ", y: " + futureRegion.getyPoint()));*/
-        }
     }
 
     /**

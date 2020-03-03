@@ -222,7 +222,6 @@ public class ArffReader {
     }
 
     private static Map<String, List<Region>> getGraphMapByTrafficFlow(List<List<String>> regions) {
-        List<Region> listOfRegions = ArffReader.getListOfRegions();
         Map<String, List<Region>> graphMap = new HashMap<>();
         final String[] controlRegion = {null};
         regions.forEach(regionsx -> {
