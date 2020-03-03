@@ -474,7 +474,7 @@ public class SimScenario implements Serializable {
         pool.submit(() ->
                 IntStream.range(1, nrofGroups + 1).parallel().forEach(index -> {
 
-                    System.out.println(index+" has started.");
+                    //System.out.println(index+" has started.");
 
                     List<NetworkInterface> interfaces = new ArrayList<>();
                     Settings s = new Settings(GROUP_NS + index);
