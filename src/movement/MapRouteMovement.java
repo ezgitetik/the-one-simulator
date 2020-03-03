@@ -12,6 +12,7 @@ import movement.map.MapNode;
 import movement.map.MapRoute;
 import core.Coord;
 import core.Settings;
+import movement.map.SimMap;
 
 /**
  * Map based movement model that uses predetermined paths within the map area.
@@ -56,6 +57,28 @@ public class MapRouteMovement extends MapBasedMovement implements
 	 */
 	public MapRouteMovement(Settings settings) {
 		super(settings);
+		String fileName = settings.getSetting(ROUTE_FILE_S);
+		int type = settings.getInt(ROUTE_TYPE_S);
+		allRoutes = MapRoute.readRoutes(fileName, type, getMap());
+		nextRouteIndex = 0;
+		pathFinder = new DijkstraPathFinder(getOkMapNodeTypes());
+		this.route = this.allRoutes.get(this.nextRouteIndex).replicate();
+		if (this.nextRouteIndex >= this.allRoutes.size()) {
+			this.nextRouteIndex = 0;
+		}
+
+		if (settings.contains(ROUTE_FIRST_STOP_S)) {
+			this.firstStopIndex = settings.getInt(ROUTE_FIRST_STOP_S);
+			if (this.firstStopIndex >= this.route.getNrofStops()) {
+				throw new SettingsError("Too high first stop's index (" +
+						this.firstStopIndex + ") for route with only " +
+						this.route.getNrofStops() + " stops");
+			}
+		}
+	}
+
+	public MapRouteMovement(Settings settings, SimMap simmap, int nrofFile) {
+		super(settings, simmap, nrofFile);
 		String fileName = settings.getSetting(ROUTE_FILE_S);
 		int type = settings.getInt(ROUTE_TYPE_S);
 		allRoutes = MapRoute.readRoutes(fileName, type, getMap());

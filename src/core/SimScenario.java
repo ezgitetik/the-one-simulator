@@ -9,6 +9,7 @@ import custom.ArffReader;
 import input.EventQueue;
 import input.EventQueueHandler;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.IntStream;
 
+import input.WKTMapReader;
 import interfaces.SimpleBroadcastInterface;
 import movement.MapBasedMovement;
 import movement.MapRouteMovement;
@@ -426,6 +428,35 @@ public class SimScenario implements Serializable {
         return this.appListeners;
     }
 
+    public static final String MAP_BASE_MOVEMENT_NS = "MapBasedMovement";
+    public static final String NROF_FILES_S = "nrofMapFiles";
+    public static final String FILE_S = "mapFile";
+    private SimMap readMap() {
+        SimMap simMap;
+        Settings settings = new Settings(MAP_BASE_MOVEMENT_NS);
+        WKTMapReader r = new WKTMapReader(true);
+
+        try {
+            int nrofMapFiles = settings.getInt(NROF_FILES_S);
+
+            for (int i = 1; i <= nrofMapFiles; i++ ) {
+                String pathFile = settings.getSetting(FILE_S + i);
+                r.addPaths(new File(pathFile), i);
+            }
+        } catch (IOException e) {
+            throw new SimError(e.toString(),e);
+        }
+
+        simMap = r.getMap();
+        //checkMapConnectedness(simMap.getNodes());
+        // mirrors the map (y' = -y) and moves its upper left corner to origo
+        simMap.mirror();
+        Coord offset = simMap.getMinBound().clone();
+        simMap.translate(-offset.getX(), -offset.getY());
+
+        return simMap;
+    }
+
     /**
      * Creates hosts for the scenario
      */
@@ -438,6 +469,7 @@ public class SimScenario implements Serializable {
         }
 
         this.hosts = new ArrayList<>();
+        SimMap cachedSimMap=readMap();
         ForkJoinPool pool = new ForkJoinPool(20);
         pool.submit(() ->
                 IntStream.range(1, nrofGroups + 1).parallel().forEach(index -> {
@@ -454,7 +486,7 @@ public class SimScenario implements Serializable {
 
                     // creates prototypes of MessageRouter and MovementModel
                     //MovementModel mmProto = (MovementModel) s.createIntializedObject(MM_PACKAGE + s.getSetting(MOVEMENT_MODEL_S));
-                    MovementModel mmProto = new MapRouteMovement(s);
+                    MovementModel mmProto = new MapRouteMovement(s,cachedSimMap,1);
 
                     //MessageRouter mRouterProto = (MessageRouter) s.createIntializedObject(ROUTING_PACKAGE + s.getSetting(ROUTER_S));
                     MessageRouter mRouterProto = new EpidemicRouter(s);
