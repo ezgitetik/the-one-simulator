@@ -5,6 +5,9 @@ package custom;
 //import com.sun.deploy.util.StringUtils;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ForkJoinPool;
@@ -30,13 +33,22 @@ public class ArffReader {
 
     public static List<ArffRegion> read() throws IOException {
         if (ARFF_REGIONS == null) {
-            //TODO should be change to get all arff without modulo
-            InputStream stream = ArffReader.class.getClassLoader().getResourceAsStream(ARFF_PATH);
+            List<String> allLines = Files.readAllLines(Paths.get(ArffReader.class.getClassLoader().getResource(ARFF_PATH).getPath()));
+            ForkJoinPool forkJoinPool = new ForkJoinPool(20);
+            List<ArffRegion> arffRegions = new ArrayList<>();
+            forkJoinPool.submit(() -> allLines.forEach(line -> {
+                String[] regionString = line.split(",");
+                if (regionString.length == 4) {
+                    ArffRegion arffRegion = new ArffRegion(Double.parseDouble(regionString[1]), Double.parseDouble(regionString[2]), regionString[3]);
+                    arffRegions.add(arffRegion);
+                }
+            })).join();
+
+            /*InputStream stream = ArffReader.class.getClassLoader().getResourceAsStream(ARFF_PATH);
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
             String line = reader.readLine();
             List<ArffRegion> arffRegions = new ArrayList<>();
             while (line != null) {
-
                 String[] regionString = line.split(",");
                 if (regionString.length == 4) {
                     ArffRegion arffRegion = new ArffRegion(Double.parseDouble(regionString[1]), Double.parseDouble(regionString[2]), regionString[3]);
@@ -44,10 +56,10 @@ public class ArffReader {
                 }
                 line = reader.readLine();
             }
-            reader.close();
+            reader.close();*/
             ARFF_REGIONS = arffRegions;
-            regions = ArffReader.getRegionListForAllFiles();
         }
+        regions = ArffReader.getRegionListForAllFiles();
         return ARFF_REGIONS;
     }
 
@@ -66,10 +78,10 @@ public class ArffReader {
     public static String getMostClosestRegionByPoints(Double xPoint, Double yPoint) {
         Map<Double, String> hypotenuseCluster = new HashMap<>();
         // TODO: calculate arff regions by taxi
-//        ForkJoinPool forkJoinPool=new ForkJoinPool(20);
-//        forkJoinPool.submit(()->ARFF_REGIONS.parallelStream().forEach(arffRegion -> {
-//            hypotenuseCluster.put(Math.hypot(xPoint - arffRegion.getxPoint(), yPoint - arffRegion.getyPoint()), arffRegion.getRegion());
-//        })).join();
+     /*   ForkJoinPool forkJoinPool = new ForkJoinPool(20);
+        forkJoinPool.submit(() -> ARFF_REGIONS.parallelStream().forEach(arffRegion -> {
+            hypotenuseCluster.put(Math.hypot(xPoint - arffRegion.getxPoint(), yPoint - arffRegion.getyPoint()), arffRegion.getRegion());
+        })).join();*/
         ARFF_REGIONS.forEach(arffRegion -> {
             hypotenuseCluster.put(Math.hypot(xPoint - arffRegion.getxPoint(), yPoint - arffRegion.getyPoint()), arffRegion.getRegion());
         });
@@ -129,8 +141,8 @@ public class ArffReader {
 
         List<List<String>> regionList = new ArrayList<>();
 
-        ForkJoinPool forkJoinPool=new ForkJoinPool(20);
-        forkJoinPool.submit(()->files.parallelStream().forEach(file -> {
+        ForkJoinPool forkJoinPool = new ForkJoinPool(20);
+        forkJoinPool.submit(() -> files.parallelStream().forEach(file -> {
             InputStream stream = ArffReader.class.getClassLoader().getResourceAsStream(TAXI_PATH + file);
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
             String line = null;
@@ -332,7 +344,7 @@ public class ArffReader {
                         lineStringReader.parse();
 
                         List<Landmark> landmarks = lineStringReader.getLandmarks();
-                        if (landmarks.stream().filter(landmark -> landmark.getX()==arffRegion.getxPoint() && landmark.getY()==arffRegion.getyPoint()).findFirst().orElse(null)!=null){
+                        if (landmarks.stream().filter(landmark -> landmark.getX() == arffRegion.getxPoint() && landmark.getY() == arffRegion.getyPoint()).findFirst().orElse(null) != null) {
                             arffRegion.setTaxiName(file);
                             return;
                         }
@@ -341,32 +353,6 @@ public class ArffReader {
                     }
 
                 });
-//                ForkJoinPool forkJoinPool=new ForkJoinPool(1);
-//                forkJoinPool.submit(()->files.parallelStream().forEach(file -> {
-//                    InputStream taxiFileStream = ArffReader.class.getClassLoader().getResourceAsStream(TAXI_PATH + file);
-//                    BufferedReader taxiReader = new BufferedReader(new InputStreamReader(taxiFileStream));
-//                    String taxiLine = null;
-//                    try {
-//                        taxiLine = taxiReader.readLine();
-//                        String lineStringLine = "";
-//                        while (taxiLine != null) {
-//                            lineStringLine = taxiLine;
-//                            taxiLine = taxiReader.readLine();
-//                        }
-//                        taxiReader.close();
-//                        LineStringReader lineStringReader = new LineStringReader(lineStringLine);
-//                        lineStringReader.parse();
-//
-//                        List<Landmark> landmarks = lineStringReader.getLandmarks();
-//                        if (landmarks.stream().filter(landmark -> landmark.getX()==arffRegion.getxPoint() && landmark.getY()==arffRegion.getyPoint()).findFirst().orElse(null)!=null){
-//                            arffRegion.setTaxiName(file);
-//                            return;
-//                        }
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                })).join();
 
                 arffRegions.add(arffRegion);
             }
@@ -383,7 +369,7 @@ public class ArffReader {
 //        List<String> path = ArffReader.getShortestPath(start, finish);
 //        Collections.reverse(path);
         ArffReader.read();
-        List<ArffRegion> arffRegions=createWekaArffWithTaxiName();
+        List<ArffRegion> arffRegions = createWekaArffWithTaxiName();
     }
 
 }
