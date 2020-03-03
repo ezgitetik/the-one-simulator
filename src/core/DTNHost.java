@@ -47,6 +47,10 @@ public class DTNHost implements Comparable<DTNHost> {
     private List<ArffRegion> allRegions;
     private static final int windowSize = 30;
 
+    public List<ArffRegion> getAllRegions() {
+        return allRegions;
+    }
+
     static {
         DTNSim.registerForReset(DTNHost.class.getCanonicalName());
         reset();
@@ -483,13 +487,13 @@ public class DTNHost implements Comparable<DTNHost> {
                 this.location.getY());
         this.location.translate(dx, dy);
 
-        if(this.getMessageCollection().stream().map(Message::isWatched).collect(Collectors.toList()).contains(true)){
-            String cluster = ArffReader.getMostClosestRegionByPoints(this.location.getxRoute(), this.location.getyRoute());
+        if (this.getMessageCollection().stream().map(Message::isWatched).collect(Collectors.toList()).contains(true)) {
+            String cluster = ArffReader.getMostClosestArffRegionByPointsAndList(this.location.getxRoute(), this.location.getyRoute(), this.allRegions).getRegion();
             List<String> toGoRegions = this.getMessageCollection().stream().filter(Message::isWatched).findFirst().get().getToGoRegions();
-            if(toGoRegions.get(toGoRegions.size()-1).equalsIgnoreCase(cluster)){
+            if (toGoRegions.get(toGoRegions.size() - 1).equalsIgnoreCase(cluster)) {
                 Message watchedMessage = this.getMessageCollection().stream().filter(Message::isWatched).findFirst().get();
                 watchedMessage.setDeliveredTime(SimClock.getTime());
-                System.out.println("** Message is arrived to final destination : " + cluster + " Time: " + (watchedMessage.getDeliveredTime()-watchedMessage.getCreatedTime())/60);
+                System.out.println("** Message is arrived to final destination : " + cluster + " Time: " + (watchedMessage.getDeliveredTime() - watchedMessage.getCreatedTime()) / 60);
             }
         }
     }
