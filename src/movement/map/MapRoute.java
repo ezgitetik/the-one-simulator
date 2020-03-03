@@ -165,7 +165,7 @@ public class MapRoute {
 			    //	updateMap
 
 				// ezgi
-				// bursa offset x : -3145.603, y: 43632.5
+				// bursa offset x : -3145.603, y: 43632.5 (20 taxi:  x:-102.785, y:48159.212 )
                 //TODO xOffset and yOffset
 				c.translate(xOffset, yOffset);
 				//MapNode node = map.getNodeByCoord(c);

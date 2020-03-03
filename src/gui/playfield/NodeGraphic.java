@@ -9,11 +9,9 @@ import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import core.Connection;
-import core.Coord;
-import core.DTNHost;
-import core.NetworkInterface;
+import core.*;
 
 /**
  * Visualization of a DTN Node
@@ -80,8 +78,11 @@ public class NodeGraphic extends PlayFieldGraphic {
 						scale(loc.getY()-range), scale(range * 2),
 						scale(range * 2));
 
-				// draw the "range" circle
 				g2.setColor(rangeColor);
+				if(node.getMessageCollection().stream().map(Message::isWatched).collect(Collectors.toList()).contains(true)){
+					g2.setColor(Color.RED);
+				}
+				// draw the "range" circle
 				g2.draw(coverage);
 			}
 		}

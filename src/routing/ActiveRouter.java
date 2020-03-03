@@ -13,6 +13,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import custom.ArffReader;
 import custom.ArffRegion;
 import routing.util.EnergyModel;
 import routing.util.MessageTransferAcceptPolicy;
@@ -151,15 +152,6 @@ public abstract class ActiveRouter extends MessageRouter {
         if (recvCheck != RCV_OK) {
             return recvCheck;
         }
-
-        if (m.isWatched()) {
-            System.out.println("watched message sending " + m.getId() + " from: " + m.getFrom().toString() + " to: " + m.getTo().toString());
-
-        } else {
-            //    System.out.println("******** Sending "+ m.getId() + " from: " + m.getFrom().toString() + " to: " + m.getTo().toString());
-
-        }
-
         // seems OK, start receiving the message
         return super.receiveMessage(m, from);
     }
@@ -216,22 +208,27 @@ public abstract class ActiveRouter extends MessageRouter {
             return MessageRouter.DENIED_POLICY;
         }
 
-        if (m.isWatched() && m.getTo() == null) {
+        if (m.isWatched() && m.getTo() == null && !m.isOnTheRoad()) {
             if(m.getFrom() == con.getFromNode()){
                 Double fromLikelihood = likelihoodMobUpdate(con.getFromNode(), m);
                 Double toLikelihood = likelihoodMobUpdate(con.getToNode(), m);
                 if (toLikelihood > fromLikelihood) {
                     m.setTo(con.getToNode());
-                    System.out.println("message transfer started, from: " + m.getFrom().getName() + ", to: " + m.getTo
-                            ().getName());
+                    m.setOnTheRoad(true);
+                    System.out.println("message transfer started, from: " + m.getFrom().getName() + ", to: " + m.getTo().getName()
+                            + ", message's current cluster: "
+                            + ArffReader.getMostClosestRegionByPoints(m.getTo().getLocation().getxRoute(), m.getTo().getLocation().getyRoute()));
                 }
             } else if (m.getFrom() == con.getToNode()){
                 Double fromLikelihood = likelihoodMobUpdate(con.getToNode(), m);
                 Double toLikelihood = likelihoodMobUpdate(con.getFromNode(), m);
                 if (toLikelihood > fromLikelihood) {
                     m.setTo(con.getFromNode());
-                    System.out.println("message transfer started, from: " + m.getFrom().getName() + ", to: " + m.getTo
-                            ().getName());
+                    m.setOnTheRoad(true);
+                    System.out.println("message transfer started, from: " + m.getFrom().getName() + ", to: " + m.getTo().getName()
+                            + ", message's current cluster: "
+                            + ArffReader.getMostClosestRegionByPoints(m.getTo().getLocation().getxRoute(), m.getTo().getLocation().getyRoute()));
+
                 }
             }
         }
@@ -271,7 +268,10 @@ public abstract class ActiveRouter extends MessageRouter {
 
         if (m.getTo() == null) {
             retVal = DENIED_UNSPECIFIED;
-        } else {
+        } else if (!m.isOnTheRoad() && m.isWatched()){
+            retVal = DENIED_UNSPECIFIED;
+        }
+        else {
             retVal = con.startTransfer(getHost(), m);
         }
 
@@ -706,11 +706,15 @@ public abstract class ActiveRouter extends MessageRouter {
             if (con.isMessageTransferred()) {
                 if (con.getMessage() != null) {
                     transferDone(con);
-                    if (con.getMsgOnFly().isWatched()) {
-                        this.deleteMessage(con.getMsgOnFly().getId(), false);
-                        //  this.deliveredMessages.put(con.getMsgOnFly().getId(), con.getMsgOnFly());
+                    if (con.getMsgOnFly().isWatched()){
+                        if((con.getMsgOnFly().getFrom() == con.getFromNode() && con.getMsgOnFly().getTo() == con.getToNode() ||
+                                con.getMsgOnFly().getTo() == con.getFromNode() && con.getMsgOnFly().getFrom() == con.getToNode())){
+                            this.deleteMessage(con.getMsgOnFly().getId(), false);
+                            con.finalizeTransfer();
+                        }
+                    } else {
+                        con.finalizeTransfer();
                     }
-                    con.finalizeTransfer();
                 } /* else: some other entity aborted transfer */
                 removeCurrent = true;
             }
