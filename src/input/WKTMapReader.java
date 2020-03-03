@@ -5,6 +5,8 @@
 package input;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.atomic.AtomicReference;
@@ -12,6 +14,7 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import custom.ArffReader;
 import movement.map.MapNode;
 import movement.map.SimMap;
 import core.Coord;
@@ -117,24 +120,17 @@ public class WKTMapReader extends WKTReader {
             if (line != null) allLines.add(line);
         }
 
-        ForkJoinPool poolx = new ForkJoinPool();
+        //List<String> allLines = Files.readAllLines(Paths.get(file.getPath()));
 
-        poolx.submit(() ->
-                allLines.parallelStream().forEach(aLine -> {
+        ForkJoinPool forkJoinPool = new ForkJoinPool();
+
+        forkJoinPool.submit(() -> allLines.parallelStream().forEach(aLine -> {
                     try {
                         updateMap(parseLineString(readNestedContents(aLine)));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 })).join();
-        /*createStreamReader(inStream).parallel().forEach(line -> {
-            try {
-                updateMap(parseLineString(readNestedContents(line)));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        });*/
     }
 
     /**
