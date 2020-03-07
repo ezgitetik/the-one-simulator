@@ -7,6 +7,7 @@ package core;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -46,7 +47,9 @@ public class DTNHost implements Comparable<DTNHost> {
     private String currentCluster;
     private List<ArffRegion> allRegions;
     private static final int windowSize = 30;
-
+    private ArffRegion currentPoint;
+    private int currentPointIndex=0;
+    private List<ArffRegion> newAllRegions;
     public List<ArffRegion> getAllRegions() {
         return allRegions;
     }
@@ -146,7 +149,8 @@ public class DTNHost implements Comparable<DTNHost> {
         if (this.name.startsWith("taxi-")) {
             try {
                 this.allRegions = ArffReader.getArffRegionListByFileName(this.name + ".wkt");
-                this.nextTimeToMove = 0;
+                this.newAllRegions = this.allRegions;
+              //  this.nextTimeToMove = 0;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -486,7 +490,23 @@ public class DTNHost implements Comparable<DTNHost> {
         dy = (possibleMovement / distance) * (this.destination.getY() -
                 this.location.getY());
         this.location.translate(dx, dy);
+        if(this.getName().equalsIgnoreCase("taxi-528")){
+          //  System.out.println("x: " + this.getLocation().getxRoute() + " y: " + this.getLocation().getyRoute() + " destination: " + this.destination);
 
+            if(currentPoint == null){
+                currentPoint = ArffReader.getMostClosestArffRegionByPointsAndList(this.getLocation().getxRoute(), this.getLocation().getyRoute(), newAllRegions);
+            } else{
+                Integer currentPosition = getCurrentPointIndexFromAllRegions(this.newAllRegions);
+                if( currentPosition == this.newAllRegions.size()-1){
+                    Collections.reverse(this.newAllRegions);
+                }
+                currentPoint = ArffReader.getMostClosestArffRegionByPointsAndList(this.getLocation().getxRoute(),
+                        this.getLocation().getyRoute(), this.allRegions.subList(getCurrentPointIndexFromAllRegions(this.newAllRegions), this.newAllRegions.size()));
+
+            }
+            System.out.println("position index: " + getCurrentPointIndexFromAllRegions(this.newAllRegions));
+
+        }
         if (this.getMessageCollection().stream().map(Message::isWatched).collect(Collectors.toList()).contains(true)) {
             String cluster = ArffReader.getMostClosestArffRegionByPointsAndList(this.location.getxRoute(), this.location.getyRoute(), this.allRegions).getRegion();
             List<String> toGoRegions = this.getMessageCollection().stream().filter(Message::isWatched).findFirst().get().getToGoRegions();
@@ -496,6 +516,16 @@ public class DTNHost implements Comparable<DTNHost> {
                 System.out.println("** Message is arrived to final destination : " + cluster + ", Total time: " + (watchedMessage.getDeliveredTime() - watchedMessage.getCreatedTime()) / 60);
             }
         }
+    }
+
+    private int getCurrentPointIndexFromAllRegions(List<ArffRegion> newAllRegions){
+        int[] position = {-1};
+        ArffRegion indexNo = newAllRegions.stream()
+                .peek(x -> position[0]++)
+                .filter(region -> region.getxPoint().equals(currentPoint.getxPoint()) && region.getyPoint().equals(currentPoint.getyPoint()))
+                .findFirst()
+                .get();
+        return position[0];
     }
 
     /**
