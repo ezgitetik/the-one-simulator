@@ -74,7 +74,7 @@ public class MessageCreateEvent extends MessageEvent {
             world.setWatchedMessageCreated(true);
             m.setWatched(true);
             m.setCreatedTime(SimClock.getTime());
-            System.out.println("name: " + m.getId() + ", time: " + SimClock.getTime());
+            System.out.println("( message name: " + m.getId() + ", start time: " + SimClock.getTime() + " )");
         }
 
         m.setResponseSize(this.responseSize);
