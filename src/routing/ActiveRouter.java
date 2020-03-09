@@ -209,69 +209,37 @@ public abstract class ActiveRouter extends MessageRouter {
         }
 
         if (m.isWatched() && m.getTo() == null && !m.isOnTheRoad()) {
-            if(m.getFrom() == con.getFromNode()){
+            if (m.getFrom() == con.getFromNode()) {
                 Double fromLikelihood = likelihoodMobUpdate(con.getFromNode(), m);
                 Double toLikelihood = likelihoodMobUpdate(con.getToNode(), m);
                 if (toLikelihood > fromLikelihood) {
                     m.setTo(con.getToNode());
                     m.setOnTheRoad(true);
-                    System.out.println("message transfer started, from: " + m.getFrom().getName() + ", to: " + m.getTo().getName()
+                    System.out.println("message transfer started, from: " + m.getFrom().getName()
+                            + ", to: " + m.getTo().getName()
                             + ", message's current cluster: "
-                            + ArffReader.getMostClosestArffRegionByPointsAndList(m.getTo().getLocation().getxRoute(), m.getTo().getLocation().getyRoute(), m.getTo().getAllRegions()).getRegion());
+                            + m.getTo().getCurrentPoint().getRegion());
                 }
-            } else if (m.getFrom() == con.getToNode()){
+            } else if (m.getFrom() == con.getToNode()) {
                 Double fromLikelihood = likelihoodMobUpdate(con.getToNode(), m);
                 Double toLikelihood = likelihoodMobUpdate(con.getFromNode(), m);
                 if (toLikelihood > fromLikelihood) {
                     m.setTo(con.getFromNode());
                     m.setOnTheRoad(true);
-                    System.out.println("message transfer started, from: " + m.getFrom().getName() + ", to: " + m.getTo().getName()
+                    System.out.println("message transfer started, from: " + m.getFrom().getName()
+                            + ", to: " + m.getTo().getName()
                             + ", message's current cluster: "
-                            + ArffReader.getMostClosestArffRegionByPointsAndList(m.getTo().getLocation().getxRoute(), m.getTo().getLocation().getyRoute(), m.getTo().getAllRegions()).getRegion());
+                            + m.getTo().getCurrentPoint().getRegion());
 
                 }
             }
         }
 
-        /*if (con.getFromNode().getName().equals("c0") && con.getToNode().getName().equals("c1")
-        || con.getFromNode().getName().equals("c1") && con.getToNode().getName().equals("c2")
-        || con.getFromNode().getName().equals("c2") && con.getToNode().getName().equals("c3")
-        || con.getFromNode().getName().equals("c3") && con.getToNode().getName().equals("c0")){
-			if (m.isWatched() && m.getTo() == null) {
-                if(m.getFrom() != con.getToNode()){
-                    m.setTo(con.getToNode());
-                }
-			}
-		}*/
-
-        //***********************************
-//        boolean reverse = false;
-//        Message watchedMessage = null;
-//        if (con.getFromNode().getName().equals("c1") && con.getToNode().getName().equals("c0")
-//                || con.getFromNode().getName().equals("c2") && con.getToNode().getName().equals("c1")
-//                || con.getFromNode().getName().equals("c3") && con.getToNode().getName().equals("c2")
-//                || con.getFromNode().getName().equals("c0") && con.getToNode().getName().equals("c3")){
-//            watchedMessage = con.getToNode().getRouter().getMessage("M7");
-//            if (watchedMessage != null){
-//                watchedMessage.setTo(con.getFromNode());
-//                reverse=true;
-//            }
-//        }
-
-//        if (m.getTo() == null){
-//            retVal = DENIED_UNSPECIFIED;
-//        } else if (reverse){
-//            retVal = con.startTransfer(con.getToNode(), watchedMessage);
-//        } else {
-//            retVal = con.startTransfer(getHost(), m);
-//        }
-
         if (m.getTo() == null) {
             retVal = DENIED_UNSPECIFIED;
-        } else if (!m.isOnTheRoad() && m.isWatched()){
+        } else if (!m.isOnTheRoad() && m.isWatched()) {
             retVal = DENIED_UNSPECIFIED;
-        }
-        else {
+        } else {
             retVal = con.startTransfer(getHost(), m);
         }
 
@@ -289,14 +257,17 @@ public abstract class ActiveRouter extends MessageRouter {
     private Double likelihoodMobUpdate(DTNHost node, Message message) {
         AtomicReference<Double> likelihood = new AtomicReference<>();
         likelihood.set(-1.0);
+        List<String> nodeClusters = node.getFutureRegions()
+                .stream()
+                .map(ArffRegion::getRegion)
+                .collect(Collectors.toList());
+
         IntStream.range(0, message.getToGoRegions().size()).forEach(index -> {
-            if (node.getFutureRegions()
-                    .stream()
-                    .map(ArffRegion::getRegion)
-                    .collect(Collectors.toList()).contains(message.getToGoRegions().get(index))) {
+            if (nodeClusters.contains(message.getToGoRegions().get(index))) {
                 likelihood.set((1 + ((double) index / (double) message.getToGoRegions().size())));
             }
         });
+
         return likelihood.get();
     }
 
@@ -706,9 +677,9 @@ public abstract class ActiveRouter extends MessageRouter {
             if (con.isMessageTransferred()) {
                 if (con.getMessage() != null) {
                     transferDone(con);
-                    if (con.getMsgOnFly().isWatched()){
-                        if((con.getMsgOnFly().getFrom() == con.getFromNode() && con.getMsgOnFly().getTo() == con.getToNode() ||
-                                con.getMsgOnFly().getTo() == con.getFromNode() && con.getMsgOnFly().getFrom() == con.getToNode())){
+                    if (con.getMsgOnFly().isWatched()) {
+                        if ((con.getMsgOnFly().getFrom() == con.getFromNode() && con.getMsgOnFly().getTo() == con.getToNode() ||
+                                con.getMsgOnFly().getTo() == con.getFromNode() && con.getMsgOnFly().getFrom() == con.getToNode())) {
                             this.deleteMessage(con.getMsgOnFly().getId(), false);
                             con.finalizeTransfer();
                         }
