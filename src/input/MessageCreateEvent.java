@@ -55,6 +55,7 @@ public class MessageCreateEvent extends MessageEvent {
         // TODO:: this must be updated dynamically
         if (!world.isWatchedMessageCreated() && from.toString().equals(watchedTaxi)) {
             String sourceCluster = ArffReader.getMostClosestArffRegionByPointsAndList(from.getLocation().getxRoute(), from.getLocation().getyRoute(), from.getAllRegions()).getRegion();
+            //String sourceCluster = from.getCurrentPoint().getRegion();
             String destinationCluster = "cluster35";
 
             List<String> toGoRegions = null;

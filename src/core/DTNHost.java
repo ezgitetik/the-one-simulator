@@ -5,16 +5,14 @@
 package core;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 //import com.sun.tools.javac.util.StringUtils;
 import custom.ArffReader;
 import custom.ArffRegion;
+import custom.CustomerProbabilityDistribution;
 import movement.MovementModel;
 import movement.Path;
 import routing.MessageRouter;
@@ -48,8 +46,25 @@ public class DTNHost implements Comparable<DTNHost> {
     private List<ArffRegion> allRegions;
     private static final int windowSize = 30;
     private ArffRegion currentPoint;
-    private int currentPointIndex=0;
-    private List<ArffRegion> newAllRegions;
+    private int currentPointIndex = 0;
+    private boolean isTaxiOnReturnPath = false;
+    private int futureRegionIndex;
+    private boolean isTaxiStillOnStartPoint;
+    private boolean isTaxiStillOnEndPoint;
+    private boolean hasTaxiCustomer = true;
+    private Map<String, Double> contactHistoryMap = new HashMap<>();
+    //TODO it should be changed when cluster count has changed.
+    private static final int CLUSTER_COUNT = 40;
+
+
+    public ArffRegion getCurrentPoint() {
+        return currentPoint;
+    }
+
+    public boolean isHasTaxiCustomer() {
+        return hasTaxiCustomer;
+    }
+
     public List<ArffRegion> getAllRegions() {
         return allRegions;
     }
@@ -72,25 +87,14 @@ public class DTNHost implements Comparable<DTNHost> {
     }
 
     public List<ArffRegion> getFutureRegions() {
-        final Coord coord;
-
-        if (this.destination == null) {
-            coord = this.location;
+        int cursor;
+        if (this.isTaxiOnReturnPath) {
+            cursor = Math.max(this.futureRegionIndex, 0);
+            return this.allRegions.subList(cursor, this.currentPointIndex);
         } else {
-            coord = this.destination;
+            cursor = Math.min(this.futureRegionIndex, this.allRegions.size() - 1);
+            return this.allRegions.subList(this.currentPointIndex, cursor);
         }
-
-        int destinationPointIndex = IntStream.range(0, this.allRegions.size()).filter(index -> this.allRegions.get(index).getxPoint().equals(coord.getxRoute())
-                && this.allRegions.get(index).getyPoint().equals(coord.getyRoute())
-        ).findFirst().orElse(-1);
-
-        int cursor = 0;
-        if (destinationPointIndex + this.windowSize >= this.allRegions.size() - 1) {
-            cursor = this.allRegions.size() - 1;
-        } else {
-            cursor = destinationPointIndex + this.windowSize;
-        }
-        return this.allRegions.subList(destinationPointIndex, cursor);
     }
 
     /**
@@ -149,8 +153,8 @@ public class DTNHost implements Comparable<DTNHost> {
         if (this.name.startsWith("taxi-")) {
             try {
                 this.allRegions = ArffReader.getArffRegionListByFileName(this.name + ".wkt");
-                this.newAllRegions = this.allRegions;
-              //  this.nextTimeToMove = 0;
+                IntStream.range(0, CLUSTER_COUNT).forEach(cluster -> this.contactHistoryMap.put("cluster" + cluster, 0D));
+                //  this.nextTimeToMove = 0;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -490,42 +494,124 @@ public class DTNHost implements Comparable<DTNHost> {
         dy = (possibleMovement / distance) * (this.destination.getY() -
                 this.location.getY());
         this.location.translate(dx, dy);
-        if(this.getName().equalsIgnoreCase("taxi-528")){
-          //  System.out.println("x: " + this.getLocation().getxRoute() + " y: " + this.getLocation().getyRoute() + " destination: " + this.destination);
 
-            if(currentPoint == null){
-                currentPoint = ArffReader.getMostClosestArffRegionByPointsAndList(this.getLocation().getxRoute(), this.getLocation().getyRoute(), newAllRegions);
-            } else{
-                Integer currentPosition = getCurrentPointIndexFromAllRegions(this.newAllRegions);
-                if( currentPosition == this.newAllRegions.size()-1){
-                    Collections.reverse(this.newAllRegions);
-                }
-                currentPoint = ArffReader.getMostClosestArffRegionByPointsAndList(this.getLocation().getxRoute(),
-                        this.getLocation().getyRoute(), this.allRegions.subList(getCurrentPointIndexFromAllRegions(this.newAllRegions), this.newAllRegions.size()));
 
+        this.currentPoint = this.getCurrentPointFromAllRegions();
+        System.out.println("current point index:" + this.currentPointIndex);
+        if (isTaxiOnReturnPath) {
+            if ((this.currentPointIndex == this.allRegions.size() - 1 && !this.isTaxiStillOnEndPoint)
+                    || this.currentPointIndex <= this.futureRegionIndex) {
+                int count = getFutureRegionCount();
+                this.futureRegionIndex = this.currentPointIndex - count;
+                System.out.println("new future count:" + count + ", index: " + this.futureRegionIndex);
+                setTaxiStillOnEndPoint();
             }
-            System.out.println("position index: " + getCurrentPointIndexFromAllRegions(this.newAllRegions));
 
+        } else {
+            if ((this.currentPointIndex == 0 && !this.isTaxiStillOnStartPoint)
+                    || this.futureRegionIndex == 0
+                    || this.currentPointIndex >= this.futureRegionIndex) {
+                int count = getFutureRegionCount();
+                this.futureRegionIndex = count + this.currentPointIndex;
+                System.out.println("new future count:" + count + ", index: " + this.futureRegionIndex);
+                setTaxiStillOnStartPoint();
+            }
         }
+
+        if (!this.currentPoint.getRegion().equalsIgnoreCase(this.currentCluster)) {
+            System.out.println("cluster changed, new cluster:" + this.currentPoint.getRegion());
+            likelihoodConUpdate();
+        }
+        this.currentCluster = this.currentPoint.getRegion();
+
         if (this.getMessageCollection().stream().map(Message::isWatched).collect(Collectors.toList()).contains(true)) {
-            String cluster = ArffReader.getMostClosestArffRegionByPointsAndList(this.location.getxRoute(), this.location.getyRoute(), this.allRegions).getRegion();
-            List<String> toGoRegions = this.getMessageCollection().stream().filter(Message::isWatched).findFirst().get().getToGoRegions();
+            //String cluster = ArffReader.getMostClosestArffRegionByPointsAndList(this.location.getxRoute(), this.location.getyRoute(), this.allRegions).getRegion();
+            String cluster = this.currentPoint.getRegion();
+            Message watchedMessage = this.getMessageCollection().stream().filter(Message::isWatched).findFirst().get();
+            List<String> toGoRegions = watchedMessage.getToGoRegions();
             if (toGoRegions.get(toGoRegions.size() - 1).equalsIgnoreCase(cluster)) {
-                Message watchedMessage = this.getMessageCollection().stream().filter(Message::isWatched).findFirst().get();
                 watchedMessage.setDeliveredTime(SimClock.getTime());
                 System.out.println("** Message is arrived to final destination : " + cluster + ", Total time: " + (watchedMessage.getDeliveredTime() - watchedMessage.getCreatedTime()) / 60);
             }
         }
     }
 
-    private int getCurrentPointIndexFromAllRegions(List<ArffRegion> newAllRegions){
-        int[] position = {-1};
-        ArffRegion indexNo = newAllRegions.stream()
-                .peek(x -> position[0]++)
-                .filter(region -> region.getxPoint().equals(currentPoint.getxPoint()) && region.getyPoint().equals(currentPoint.getyPoint()))
-                .findFirst()
-                .get();
-        return position[0];
+    private void likelihoodConUpdate() {
+        this.contactHistoryMap.entrySet().forEach(contactHistory -> {
+            if (contactHistory.getKey().equalsIgnoreCase(this.currentPoint.getRegion())) {
+                contactHistory.setValue(contactHistory.getValue() + (1 - contactHistory.getValue()) * 0.75);
+            } else {
+                double elapsedMinutes = SimClock.getTime() / 60;
+                System.out.println("elapsedMinutes: " + elapsedMinutes);
+                contactHistory.setValue(contactHistory.getValue() * Math.pow(0.98, elapsedMinutes));
+            }
+        });
+    }
+
+    private int getFutureRegionCount() {
+        if (hasTaxiCustomer) {
+            System.out.println("customer:true");
+            hasTaxiCustomer = false;
+            return CustomerProbabilityDistribution.getFutureRegionCountForCustomer();
+        } else {
+            System.out.println("customer:false");
+            hasTaxiCustomer = true;
+            return CustomerProbabilityDistribution.getFutureRegionCountForWithoutCustomer();
+        }
+    }
+
+    private void setTaxiStillOnStartPoint() {
+        this.isTaxiStillOnStartPoint = this.currentPointIndex == 0;
+    }
+
+    private void setTaxiStillOnEndPoint() {
+        this.isTaxiStillOnEndPoint = this.currentPointIndex == this.allRegions.size() - 1;
+    }
+
+    private ArffRegion getCurrentPointFromAllRegions() {
+        Map<Double, ArffRegionIndex> hypotenuseDistances = new HashMap<>();
+
+        if (this.currentPoint == null) {
+            this.currentPointIndex = 0;
+        }
+
+        setTaxisDirection();
+
+        int cursor = getCursor();
+        double hypo;
+        for (int i = cursor; i <= cursor + 1; i++) {
+            hypo = Math.hypot(this.location.getxRoute() - this.allRegions.get(i).getxPoint()
+                    , this.location.getyRoute() - this.allRegions.get(i).getyPoint());
+
+            hypotenuseDistances.put(hypo, new ArffRegionIndex(i, this.allRegions.get(i)));
+        }
+        OptionalDouble key = hypotenuseDistances.keySet().stream().mapToDouble(v -> v).min();
+        this.currentPointIndex = hypotenuseDistances.get(key.getAsDouble()).getIndex();
+        return hypotenuseDistances.get(key.getAsDouble()).getArffRegion();
+    }
+
+    private void setTaxisDirection() {
+        if (this.currentPointIndex == this.allRegions.size() - 1) {
+            if (!this.isTaxiOnReturnPath) {
+                System.out.println("it is on return path, going on end to start...");
+            }
+            this.isTaxiOnReturnPath = true;
+        } else if (this.currentPointIndex == 0) {
+            if (this.isTaxiOnReturnPath) {
+                System.out.println("going on start to end...");
+            }
+            this.isTaxiOnReturnPath = false;
+        }
+    }
+
+    private int getCursor() {
+        int cursor;
+        if (this.isTaxiOnReturnPath) {
+            cursor = this.currentPointIndex - 1;
+        } else {
+            cursor = this.currentPointIndex;
+        }
+        return cursor;
     }
 
     /**
@@ -670,4 +756,30 @@ public class DTNHost implements Comparable<DTNHost> {
         return this.getAddress() - h.getAddress();
     }
 
+}
+
+class ArffRegionIndex {
+    private int index;
+    private ArffRegion arffRegion;
+
+    public ArffRegionIndex(int index, ArffRegion arffRegion) {
+        this.index = index;
+        this.arffRegion = arffRegion;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public ArffRegion getArffRegion() {
+        return arffRegion;
+    }
+
+    public void setArffRegion(ArffRegion arffRegion) {
+        this.arffRegion = arffRegion;
+    }
 }

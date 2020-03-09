@@ -24,6 +24,14 @@ public class CustomerProbabilityDistribution {
         return Math.round(result);
     }
 
+    public static int getFutureRegionCountForCustomer(){
+        return (int) calculateNegativeExponential(MEAN_GPS_LOG_COUNT_WITH_CUSTOMER);
+    }
+
+    public static int getFutureRegionCountForWithoutCustomer(){
+        return (int) calculateNegativeExponential(MEAN_GPS_LOG_COUNT_WITH_NO_CUSTOMER);
+    }
+
     public static void main(String[] args) throws IOException {
         ArffReader.read();
         List<ArffRegion> taxiFutureRegions = ArffReader.getArffRegionListByFileName("taxi-528.wkt");
