@@ -6,6 +6,7 @@ package core;
 
 //import com.sun.deploy.util.StringUtils;
 import custom.ArffReader;
+import custom.InfoMessage;
 import input.EventQueue;
 import input.EventQueueHandler;
 
@@ -23,6 +24,7 @@ import movement.MapBasedMovement;
 import movement.MapRouteMovement;
 import movement.MovementModel;
 import movement.map.SimMap;
+import org.apache.log4j.Logger;
 import routing.EpidemicRouter;
 import routing.MessageRouter;
 
@@ -215,6 +217,8 @@ public class SimScenario implements Serializable {
     private List<ApplicationListener> appListeners;
 
     public static final String HOST_NAME = "hostName";
+
+    private static final Logger LOGGER = Logger.getLogger(SimScenario.class);
 
     static {
         DTNSim.registerForReset(SimScenario.class.getCanonicalName());
@@ -470,7 +474,7 @@ public class SimScenario implements Serializable {
 
         this.hosts = new ArrayList<>();
         SimMap cachedSimMap=readMap();
-        ForkJoinPool pool = new ForkJoinPool(20);
+        ForkJoinPool pool = new ForkJoinPool(50);
         pool.submit(() ->
                 IntStream.range(1, nrofGroups + 1).parallel().forEach(index -> {
 
@@ -549,8 +553,11 @@ public class SimScenario implements Serializable {
 
                         // prototypes are given to new DTNHost which replicates
                         // new instances of movement model and message router
-                        DTNHost host = new DTNHost(this.messageListeners, this.movementListeners, gid, interfaces, comBus, mmProto, mRouterProto, s.getSetting(HOST_NAME));
+                        DTNHost host = new DTNHost(this.messageListeners, this.movementListeners, gid
+                                , interfaces, comBus, mmProto, mRouterProto, s.getSetting(HOST_NAME));
                         hosts.add(host);
+                        LOGGER.info(SimClock.getTimeString()+" "
+                                +InfoMessage.HOST_CREATED + " host Name: '" + s.getSetting(HOST_NAME)+"'");
                     }
                 })
         ).join();

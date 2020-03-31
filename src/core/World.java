@@ -7,6 +7,7 @@ package core;
 import input.EventQueue;
 import input.ExternalEvent;
 import input.ScheduledUpdatesQueue;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,6 +60,7 @@ public class World {
 
 	private boolean watchedMessageCreated = false;
 
+	private static final Logger LOGGER = Logger.getLogger(World.class);
 
 	/**
 	 * Constructor.
@@ -163,7 +165,6 @@ public class World {
 			updateHosts(); // update all hosts after every event
 			setNextEventQueue();
 		}
-
 		// world ezgi
 		moveHosts(this.updateInterval);
 		simClock.setTime(runUntil);

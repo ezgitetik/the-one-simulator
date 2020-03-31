@@ -4,6 +4,8 @@
  */
 package core;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Wall clock for checking the simulation time.
  */
@@ -35,6 +37,12 @@ public class SimClock {
 	 */
 	public static double getTime() {
 		return clockTime;
+	}
+
+	public static String getTimeString(){
+		return String.format("%02d:%02d:%02d", TimeUnit.SECONDS.toHours((long)clockTime),
+				TimeUnit.SECONDS.toMinutes((long)clockTime) - TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours((long)clockTime)),
+				TimeUnit.SECONDS.toSeconds((long)clockTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes((long)clockTime)));
 	}
 
 	/**
@@ -84,5 +92,9 @@ public class SimClock {
 	 */
 	public static void reset() {
 		clockTime = 0;
+	}
+
+	public static void main(String[] args) {
+
 	}
 }
