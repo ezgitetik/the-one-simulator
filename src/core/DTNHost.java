@@ -13,8 +13,10 @@ import java.util.stream.IntStream;
 import custom.ArffReader;
 import custom.ArffRegion;
 import custom.CustomerProbabilityDistribution;
+import custom.InfoMessage;
 import movement.MovementModel;
 import movement.Path;
+import org.apache.log4j.Logger;
 import routing.MessageRouter;
 import routing.util.RoutingInfo;
 
@@ -56,6 +58,7 @@ public class DTNHost implements Comparable<DTNHost> {
     //TODO it should be changed when cluster count has changed.
     private static final int CLUSTER_COUNT = 40;
 
+    private static final Logger LOGGER=Logger.getLogger(DTNHost.class);
 
     public ArffRegion getCurrentPoint() {
         return currentPoint;
@@ -86,6 +89,10 @@ public class DTNHost implements Comparable<DTNHost> {
         this.currentCluster = currentCluster;
     }
 
+    public Map<String, Double> getContactHistoryMap() {
+        return contactHistoryMap;
+    }
+
     public List<ArffRegion> getFutureRegions() {
         int cursor;
         if (this.isTaxiOnReturnPath) {
@@ -110,9 +117,12 @@ public class DTNHost implements Comparable<DTNHost> {
      */
     public DTNHost(List<MessageListener> msgLs,
                    List<MovementListener> movLs,
-                   String groupId, List<NetworkInterface> interf,
+                   String groupId,
+                   List<NetworkInterface> interf,
                    ModuleCommunicationBus comBus,
-                   MovementModel mmProto, MessageRouter mRouterProto, String hostName) {
+                   MovementModel mmProto,
+                   MessageRouter mRouterProto,
+                   String hostName) {
         this.comBus = comBus;
         this.location = new Coord(0, 0);
         this.address = getNextAddress();
@@ -123,8 +133,10 @@ public class DTNHost implements Comparable<DTNHost> {
 
         for (NetworkInterface i : interf) {
             NetworkInterface ni = i.replicate();
-            ni.setHost(this);
-            net.add(ni);
+            if (ni != null) {
+                ni.setHost(this);
+                net.add(ni);
+            }
         }
 
         // TODO - think about the names of the interfaces and the nodes
@@ -135,13 +147,20 @@ public class DTNHost implements Comparable<DTNHost> {
 
         // create instances by replicating the prototypes
         this.movement = mmProto.replicate();
-        this.movement.setComBus(comBus);
-        this.movement.setHost(this);
+        if (this.movement != null) {
+            this.movement.setComBus(comBus);
+            this.movement.setHost(this);
+        }
+
         setRouter(mRouterProto.replicate());
         // (36345.90,16272.90)
-        this.location = movement.getInitialLocation();
 
-        this.nextTimeToMove = movement.nextPathAvailable();
+        if (movement != null) {
+            this.location = movement.getInitialLocation();
+
+            this.nextTimeToMove = movement.nextPathAvailable();
+        }
+
         this.path = null;
 
         if (movLs != null) { // inform movement listeners about the location
@@ -206,8 +225,10 @@ public class DTNHost implements Comparable<DTNHost> {
      * @param router The router to set
      */
     private void setRouter(MessageRouter router) {
-        router.init(this, msgListeners);
-        this.router = router;
+        if (router != null) {
+            router.init(this, msgListeners);
+            this.router = router;
+        }
     }
 
     /**
@@ -497,13 +518,14 @@ public class DTNHost implements Comparable<DTNHost> {
 
 
         this.currentPoint = this.getCurrentPointFromAllRegions();
-        System.out.println("current point index:" + this.currentPointIndex);
+        //System.out.println("current point index:" + this.currentPointIndex);
+
         if (isTaxiOnReturnPath) {
             if ((this.currentPointIndex == this.allRegions.size() - 1 && !this.isTaxiStillOnEndPoint)
                     || this.currentPointIndex <= this.futureRegionIndex) {
                 int count = getFutureRegionCount();
                 this.futureRegionIndex = this.currentPointIndex - count;
-                System.out.println("new future count:" + count + ", index: " + this.futureRegionIndex);
+                //System.out.println("new future count:" + count + ", index: " + this.futureRegionIndex);
                 setTaxiStillOnEndPoint();
             }
 
@@ -513,26 +535,39 @@ public class DTNHost implements Comparable<DTNHost> {
                     || this.currentPointIndex >= this.futureRegionIndex) {
                 int count = getFutureRegionCount();
                 this.futureRegionIndex = count + this.currentPointIndex;
-                System.out.println("new future count:" + count + ", index: " + this.futureRegionIndex);
+                //System.out.println("new future count:" + count + ", index: " + this.futureRegionIndex);
                 setTaxiStillOnStartPoint();
             }
         }
 
         if (!this.currentPoint.getRegion().equalsIgnoreCase(this.currentCluster)) {
-            System.out.println("cluster changed, new cluster:" + this.currentPoint.getRegion());
+            //System.out.println("cluster changed, new cluster:" + this.currentPoint.getRegion());
             likelihoodConUpdate();
+            /*LOGGER.info(SimClock.getTimeString()+" "
+                        + InfoMessage.TAXI_MOVED_ANOTHER_CLUSTER
+                        + ", taxiName: '" + this.getName()
+                        + "', currentCluster: '" + this.currentPoint.getRegion()
+                        + "', previousCluster: "+ this.currentCluster+"'");*/
         }
         this.currentCluster = this.currentPoint.getRegion();
 
         if (this.getMessageCollection().stream().map(Message::isWatched).collect(Collectors.toList()).contains(true)) {
-            //String cluster = ArffReader.getMostClosestArffRegionByPointsAndList(this.location.getxRoute(), this.location.getyRoute(), this.allRegions).getRegion();
             String cluster = this.currentPoint.getRegion();
-            Message watchedMessage = this.getMessageCollection().stream().filter(Message::isWatched).findFirst().get();
-            List<String> toGoRegions = watchedMessage.getToGoRegions();
-            if (toGoRegions.get(toGoRegions.size() - 1).equalsIgnoreCase(cluster)) {
-                watchedMessage.setDeliveredTime(SimClock.getTime());
-                System.out.println("** Message is arrived to final destination : " + cluster + ", Total time: " + (watchedMessage.getDeliveredTime() - watchedMessage.getCreatedTime()) / 60);
-            }
+            List<Message> watchedMessages = this.getMessageCollection().stream().filter(Message::isWatched).collect(Collectors.toList());
+            watchedMessages.forEach(watchedMessage -> {
+                List<String> toGoRegions = watchedMessage.getToGoRegions();
+                if (toGoRegions.get(toGoRegions.size() - 1).equalsIgnoreCase(cluster)) {
+                    watchedMessage.setDeliveredTime(SimClock.getTime());
+                    LOGGER.info(SimClock.getTimeString()+" "
+                            + InfoMessage.MESSAGE_ARRIVED
+                            + "', messageId: '" + watchedMessage.getId()
+                            + "', toGoRegions: '" + watchedMessage.getToGoRegions().stream().collect(Collectors.joining(","))
+                            + "', totalTime: "+ watchedMessage.getElapsedTimeAsMinutes() + " minutes.");
+                    //this.deleteMessage(watchedMessage.getId(), true);
+                    watchedMessage.setTtl(1);
+                }
+            });
+
         }
     }
 
@@ -542,19 +577,22 @@ public class DTNHost implements Comparable<DTNHost> {
                 contactHistory.setValue(contactHistory.getValue() + (1 - contactHistory.getValue()) * 0.75);
             } else {
                 double elapsedMinutes = SimClock.getTime() / 60;
-                System.out.println("elapsedMinutes: " + elapsedMinutes);
+                //System.out.println("elapsedMinutes: " + elapsedMinutes);
                 contactHistory.setValue(contactHistory.getValue() * Math.pow(0.98, elapsedMinutes));
             }
         });
+        /*LOGGER.info(SimClock.getTimeString()+" "
+                + InfoMessage.LIKELIHOOD_CONTACT_HISTORY_UPDATE
+                + ", taxiName: '" + this.getName());*/
     }
 
     private int getFutureRegionCount() {
         if (hasTaxiCustomer) {
-            System.out.println("customer:true");
+            //System.out.println("customer:true");
             hasTaxiCustomer = false;
             return CustomerProbabilityDistribution.getFutureRegionCountForCustomer();
         } else {
-            System.out.println("customer:false");
+            //System.out.println("customer:false");
             hasTaxiCustomer = true;
             return CustomerProbabilityDistribution.getFutureRegionCountForWithoutCustomer();
         }
@@ -593,12 +631,12 @@ public class DTNHost implements Comparable<DTNHost> {
     private void setTaxisDirection() {
         if (this.currentPointIndex == this.allRegions.size() - 1) {
             if (!this.isTaxiOnReturnPath) {
-                System.out.println("it is on return path, going on end to start...");
+                //System.out.println("it is on return path, going on end to start...");
             }
             this.isTaxiOnReturnPath = true;
         } else if (this.currentPointIndex == 0) {
             if (this.isTaxiOnReturnPath) {
-                System.out.println("going on start to end...");
+                //System.out.println("going on start to end...");
             }
             this.isTaxiOnReturnPath = false;
         }

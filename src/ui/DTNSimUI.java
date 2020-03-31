@@ -6,6 +6,8 @@ package ui;
 
 import java.util.Vector;
 
+import custom.InfoMessage;
+import org.apache.log4j.Logger;
 import report.Report;
 import core.ApplicationListener;
 import core.ConnectionListener;
@@ -59,6 +61,7 @@ public abstract class DTNSimUI {
 	/** simtime of last UI update */
 	protected double lastUpdate;
 
+	private static  final Logger LOGGER = Logger.getLogger(DTNSimUI.class);
 	/**
 	 * Constructor.
 	 */
@@ -114,7 +117,8 @@ public abstract class DTNSimUI {
 			world.warmupMovementModel(warmupTime);
 
 			long endTime = System.currentTimeMillis();
-			System.out.println("started in: "+(endTime-startTime)/1000+" seconds.");
+			//System.out.println("started in: "+(endTime-startTime)/1000+" seconds.");
+			LOGGER.info(SimClock.getTimeString()+" "+InfoMessage.APPLICATION_STARTED + " started in: " + (endTime-startTime)/1000 + " seconds.");
 		}
 		catch (SettingsError se) {
 			System.err.println("Can't start: error in configuration file(s)");

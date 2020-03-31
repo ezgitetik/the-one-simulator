@@ -29,10 +29,12 @@ public class LineStringReader {
         String coordinatesString = this.lineStringLine.substring(12, this.lineStringLine.length() - 1);
         String[] coordinates = coordinatesString.split(",");
         Arrays.stream(coordinates).forEach(coordinate->{
-            Landmark landmark = new Landmark();
-            landmark.setY(Double.parseDouble(coordinate.trim().split(" ")[1].trim()));
-            landmark.setX(Double.parseDouble(coordinate.trim().split(" ")[0].trim()));
-            this.landmarks.add(landmark);
+            if (coordinate.contains(" ")){
+                Landmark landmark = new Landmark();
+                landmark.setY(Double.parseDouble(coordinate.trim().split(" ")[1].trim()));
+                landmark.setX(Double.parseDouble(coordinate.trim().split(" ")[0].trim()));
+                this.landmarks.add(landmark);
+            }
         });
     }
 }

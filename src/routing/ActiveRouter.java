@@ -15,6 +15,7 @@ import java.util.stream.IntStream;
 
 import custom.ArffReader;
 import custom.ArffRegion;
+import custom.LikelihoodComparator;
 import routing.util.EnergyModel;
 import routing.util.MessageTransferAcceptPolicy;
 import routing.util.RoutingInfo;
@@ -209,29 +210,54 @@ public abstract class ActiveRouter extends MessageRouter {
         }
 
         if (m.isWatched() && m.getTo() == null && !m.isOnTheRoad()) {
-            if (m.getFrom() == con.getFromNode()) {
+            /*if (m.getFrom() == con.getFromNode()) {
                 Double fromLikelihood = likelihoodMobUpdate(con.getFromNode(), m);
                 Double toLikelihood = likelihoodMobUpdate(con.getToNode(), m);
-                if (toLikelihood > fromLikelihood) {
+                Double fromConHistory = con.getFromNode().getContactHistoryMap().get(destinationCluster);
+                Double toConHistory = con.getToNode().getContactHistoryMap().get(destinationCluster);
+
+                if (con.getToNode().isHasTaxiCustomer() && con.getFromNode().isHasTaxiCustomer()) {
+                    if ((toLikelihood > fromLikelihood)
+                            || (toConHistory > fromConHistory)) {
+                        forwardMessage = true;
+                    }
+                }
+                else if (con.getToNode().isHasTaxiCustomer() && !con.getFromNode().isHasTaxiCustomer()) {
+                    if (toLikelihood > -1 || (toConHistory > fromConHistory)) {
+                        forwardMessage = true;
+                    }
+                }
+                else if (!con.getToNode().isHasTaxiCustomer() && con.getFromNode().isHasTaxiCustomer()) {
+                    if (fromLikelihood <= -1 && (toConHistory > fromConHistory)) {
+                        forwardMessage = true;
+                    }
+                }
+                else if (!con.getToNode().isHasTaxiCustomer() && !con.getFromNode().isHasTaxiCustomer()) {
+                    if ((toConHistory > fromConHistory)) {
+                        forwardMessage = true;
+                    }
+                }
+
+                if (forwardMessage) {
                     m.setTo(con.getToNode());
                     m.setOnTheRoad(true);
-                    System.out.println("message transfer started, from: " + m.getFrom().getName()
-                            + ", to: " + m.getTo().getName()
-                            + ", message's current cluster: "
-                            + m.getTo().getCurrentPoint().getRegion());
                 }
-            } else if (m.getFrom() == con.getToNode()) {
-                Double fromLikelihood = likelihoodMobUpdate(con.getToNode(), m);
-                Double toLikelihood = likelihoodMobUpdate(con.getFromNode(), m);
-                if (toLikelihood > fromLikelihood) {
-                    m.setTo(con.getFromNode());
-                    m.setOnTheRoad(true);
-                    System.out.println("message transfer started, from: " + m.getFrom().getName()
-                            + ", to: " + m.getTo().getName()
-                            + ", message's current cluster: "
-                            + m.getTo().getCurrentPoint().getRegion());
-
+            }
+            else if (m.getFrom() == con.getToNode()) {
+                if (con.getToNode().isHasTaxiCustomer() && con.getFromNode().isHasTaxiCustomer()) {
+                    Double fromLikelihood = likelihoodMobUpdate(con.getToNode(), m);
+                    Double toLikelihood = likelihoodMobUpdate(con.getFromNode(), m);
+                    if ((toLikelihood > fromLikelihood)
+                            || con.getFromNode().getContactHistoryMap().get(destinationCluster) > con.getToNode().getContactHistoryMap().get(destinationCluster)) {
+                        m.setTo(con.getFromNode());
+                        m.setOnTheRoad(true);
+                    }
                 }
+            }*/
+            if (m.getFrom() == con.getFromNode()){
+                LikelihoodComparator.compare(m, con.getFromNode(), con.getToNode());
+            }else if (m.getFrom() == con.getToNode()){
+                LikelihoodComparator.compare(m, con.getToNode(), con.getFromNode());
             }
         }
 

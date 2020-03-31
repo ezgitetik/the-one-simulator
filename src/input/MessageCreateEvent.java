@@ -9,6 +9,7 @@ import core.Message;
 import core.SimClock;
 import core.World;
 import custom.ArffReader;
+import custom.RandomMessageGenerator;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,47 +51,31 @@ public class MessageCreateEvent extends MessageEvent {
         DTNHost to = world.getNodeByAddress(this.toAddr);
         DTNHost from = world.getNodeByAddress(this.fromAddr);
         Message m = new Message(from, to, this.id, this.size);
-        String watchedTaxi = "taxi-528";
-
-        // TODO:: this must be updated dynamically
-        if (!world.isWatchedMessageCreated() && from.toString().equals(watchedTaxi)) {
-            String sourceCluster = ArffReader.getMostClosestArffRegionByPointsAndList(from.getLocation().getxRoute(), from.getLocation().getyRoute(), from.getAllRegions()).getRegion();
-            //String sourceCluster = from.getCurrentPoint().getRegion();
-            String destinationCluster = "cluster35";
-
-            List<String> toGoRegions = null;
-            try {
-                toGoRegions = ArffReader.getShortestPath(sourceCluster, destinationCluster);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Collections.reverse(toGoRegions);
-            List<String> shortestPath = new ArrayList<>();
-            shortestPath.add(sourceCluster);
-            shortestPath.addAll(toGoRegions);
-
-            shortestPath.forEach(path -> System.out.print(path + ", "));
-            m.addToGoRegions(shortestPath);
-            m.setTo(null);
-            world.setWatchedMessageCreated(true);
-            m.setWatched(true);
-            m.setCreatedTime(SimClock.getTime());
-            System.out.println("( message name: " + m.getId() + ", start time: " + SimClock.getTime() + " )");
-        }
-
         m.setResponseSize(this.responseSize);
-        from.createNewMessage(m);   // TODO:: MESSAGES ARE CREATED HERE!
-        //System.out.println( from.toString() + " message location: " + from.getLocation());
+
+        DTNHost randomCarrierHost = RandomMessageGenerator.pickRandomCarrierHost(world);
+        if (RandomMessageGenerator.MESSAGE_COUNT <= 20
+                && SimClock.getTime() > RandomMessageGenerator.LAST_MESSAGE_CREATE_TIME + RandomMessageGenerator.MESSAGE_CREATE_DELAY
+                ) {
+            m = RandomMessageGenerator.generateMessage(from);
+        }
+        from.createNewMessage(m);
     }
 
-    // ezgi
- /*   @Override
-    public void processEvent(World world) {
-        DTNHost from = world.getNodeByAddress(this.fromAddr);
-        if (from.toString().equals("c0")) {
-            if (message == null) from.createNewMessage(buildNewMessage(world));
+    private List<String> getMessageShortestPath(String sourceCluster, String destinationCluster) {
+        List<String> toGoRegions = null;
+        try {
+            toGoRegions = ArffReader.getShortestPath(sourceCluster, destinationCluster);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-    }*/
+        Collections.reverse(toGoRegions);
+        List<String> shortestPath = new ArrayList<>();
+        shortestPath.add(sourceCluster);
+        shortestPath.addAll(toGoRegions);
+        return shortestPath;
+    }
+
 
     private Message buildNewMessage(World world) {
         if (message == null) {

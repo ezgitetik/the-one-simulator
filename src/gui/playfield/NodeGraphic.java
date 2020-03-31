@@ -122,6 +122,12 @@ public class NodeGraphic extends PlayFieldGraphic {
 			// Draw node's address next to it
 			g2.drawString(node.toString(), scale(loc.getX()),
 					scale(loc.getY()));
+
+			if(node.getMessageCollection().stream().map(Message::isWatched).collect(Collectors.toList()).contains(true)){
+				g2.drawString(node.toString()+"-"+node.getMessageCollection().stream().filter(item->item.getId().contains("WM")).count(),
+						scale(loc.getX()),
+						scale(loc.getY()));
+			}
 		}
 	}
 
