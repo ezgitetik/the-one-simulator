@@ -14,13 +14,13 @@ import java.util.List;
 public class Apriori {
 
     public static void main(String[] arg) throws IOException {
-       /* ArffReader.read();
+        ArffReader.read();
         ArffReader.regions.forEach(region -> System.out.println(String.join(",", region)));
         System.out.println("############################");
-        ArffReader.distinctedRegions.forEach(region -> System.out.println(String.join(" ", region)));*/
+        ArffReader.distinctedRegions.forEach(region -> System.out.println(String.join(" ", region)));
 
         //taxi50_month1_day1_clusters.txt
-        String input = fileToPath("taxi100_month1_week1_5transactions.txt");
+        String input = fileToPath("taxi100_month1_week1_clusters.txt.txt");
         String output = null;
         double minsup = 0.2D;
         AlgoApriori algorithm = new AlgoApriori();
