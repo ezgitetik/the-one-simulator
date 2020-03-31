@@ -17,7 +17,7 @@ import java.util.Map;
 public class CptPlus {
 
     public static void main(String[] arg) throws IOException {
-        String inputPath = fileToPath("taxi100_month1_week1_cpt_clusters.txt");
+        String inputPath = fileToPath("taxi100_month1_week1_cpt_5transactions.txt");
         SequenceDatabase trainingSet = new SequenceDatabase();
         trainingSet.loadFileSPMFFormat(inputPath, 2147483647, 0, 2147483647);
         System.out.println("--- Training sequences ---");
@@ -34,9 +34,10 @@ public class CptPlus {
         CPTPlusPredictor predictionModel = new CPTPlusPredictor("CPT+", optionalParameters);
         predictionModel.Train(trainingSet.getSequences());
         Sequence sequence = new Sequence(0);
-        sequence.addItem(new Item(39));
-        sequence.addItem(new Item(22));
-        sequence.addItem(new Item(14));
+        sequence.addItem(new Item(10));
+        sequence.addItem(new Item(32));
+        sequence.addItem(new Item(37));
+        sequence.addItem(new Item(29));
         Sequence thePrediction = predictionModel.Predict(sequence);
         System.out.println("For the sequence <(1),(2)>, the prediction for the next symbol is: " + thePrediction);
         System.out.println();
