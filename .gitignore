@@ -21,3 +21,5 @@ doc/package-list
 the-one.iml
 /out
 *.DS_Store
+
+/resources/
