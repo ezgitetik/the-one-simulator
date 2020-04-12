@@ -29,7 +29,7 @@ public class CptPlus {
         }
 
         System.out.println();*/
-        SequenceStatsGenerator.prinStats(trainingSet, "CPT+ training sequences ");
+        SequenceStatsGenerator.prinStats(trainingSet, " CPT+ training sequences ");
         String optionalParameters = "CCF:true CBS:true CCFmin:1 CCFmax:6 CCFsup:3 splitMethod:0 splitLength:5 minPredictionRatio:1.0 noiseRatio:1.0";
         CPTPlusPredictor predictionModel = new CPTPlusPredictor("CPT+", optionalParameters);
         predictionModel.Train(trainingSet.getSequences());
@@ -38,8 +38,14 @@ public class CptPlus {
         sequence.addItem(new Item(21));
         sequence.addItem(new Item(7));
         sequence.addItem(new Item(24));
+
+        double startTime=System.currentTimeMillis();
+
         Sequence thePrediction = predictionModel.Predict(sequence);
         System.out.println("For the sequence <(21),(7),(24)>, the prediction for the next symbol is: " + thePrediction);
+
+        double endTime=System.currentTimeMillis();
+        System.out.println("delay: "+(endTime-startTime));
         System.out.println();
         System.out.println("To make the prediction, the scores were calculated as follows:");
         Map<Integer, Float> countTable = predictionModel.getCountTable();
