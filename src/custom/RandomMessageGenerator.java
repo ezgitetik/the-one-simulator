@@ -34,7 +34,8 @@ public class RandomMessageGenerator {
         message.addToGoRegions(shortestPath);
         message.setWatched(true);
         message.setCreatedTime(SimClock.getTime());
-        message.setTtl(-1);
+     //   message.setTtl(-1);
+        message.setTtl(120); //120 minutes
         LAST_MESSAGE_CREATE_TIME = SimClock.getTime();
         LOGGER.info(SimClock.getTimeString()+" "+InfoMessage.MESSAGE_CREATED
                 + ", messageId: '"+message.getId()

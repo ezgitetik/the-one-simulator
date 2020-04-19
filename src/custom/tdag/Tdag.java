@@ -29,7 +29,7 @@ public class Tdag {
 //        }
 //
 //        System.out.println();
-        SequenceStatsGenerator.prinStats(trainingSet, "TDAG training sequences ");
+        SequenceStatsGenerator.prinStats(trainingSet, " TDAG training sequences ");
         TDAGPredictor predictionModel = new TDAGPredictor("TDAG");
         predictionModel.Train(trainingSet.getSequences());
         Sequence sequence = new Sequence(0);
@@ -37,7 +37,12 @@ public class Tdag {
         sequence.addItem(new Item(21));
         sequence.addItem(new Item(7));
         sequence.addItem(new Item(24));
+        double startTime=System.currentTimeMillis();
+
         Sequence thePrediction = predictionModel.Predict(sequence);
+
+        double endTime=System.currentTimeMillis();
+        System.out.println("delay: "+(endTime-startTime));
         System.out.println("For the sequence <(21),(7),(24)>, the prediction for the next symbol is: +" + thePrediction);
     }
 

@@ -17,11 +17,13 @@ import java.util.stream.Stream;
 
 public class ArffReader {
 
-    private static final String ARFF_WITH_MOD = "custom/taxidata/taxi-top10-all-0101-weka.arff";
-    private static final String ARFF_WITHOUT_MOD = "custom/taxidata/100taxi-month1-week1-weka.arff";
+  //  private static final String ARFF_WITH_MOD = "custom/taxidata/taxi-top10-all-0101-weka.arff";
+   // private static final String ARFF_WITHOUT_MOD = "custom/taxidata/100taxi-month1-week1-weka.arff";
+    private static final String ARFF_WITHOUT_MOD = "custom/taxidata/100taxi-month1-weka.arff";
     private static final String ARFF_PATH = ARFF_WITHOUT_MOD;
-    private static final String TAXI_WITH_MOD = "custom/taxidata/bursa-month1-week1-20/";
-    private static final String TAXI_WITHOUT_MOD = "custom/taxidata/bursa-0101-notmodulo/";
+ //   private static final String ARFF_PATH = "";
+    private static final String TAXI_WITH_MOD = "custom/taxidata/100taxi-month1-simulation/";
+  //  private static final String TAXI_WITHOUT_MOD = "custom/taxidata/bursa-0101-notmodulo/";
     private static final String TAXI_PATH = TAXI_WITH_MOD;
 
 
