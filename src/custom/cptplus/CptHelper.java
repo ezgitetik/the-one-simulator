@@ -4,7 +4,7 @@ package custom.cptplus;
 
 //import com.sun.deploy.util.StringUtils;
 
-import custom.FiveTransaction;
+import custom.ConvertClusterDataToSequenceData;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -41,7 +41,7 @@ public class CptHelper {
     }
 
     private static void writeToFile(String content) throws IOException {
-        Files.write(Paths.get(FiveTransaction.class.getClassLoader().getResource("taxi100_month1_week1_cpt_5transactions_combination.txt").getPath()),
+        Files.write(Paths.get(ConvertClusterDataToSequenceData.class.getClassLoader().getResource("taxi100_month1_week1_cpt_5transactions_combination.txt").getPath()),
                 content.getBytes(), StandardOpenOption.WRITE);
     }
 
