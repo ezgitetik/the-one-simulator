@@ -24,3 +24,6 @@ the-one.iml
 
 /resources/
 /data/custom/taxidata/100taxi-month1-weka.arff
+
+"C:\\log4j-application.log"
+the-one-simulator.iml
