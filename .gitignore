@@ -23,3 +23,4 @@ the-one.iml
 *.DS_Store
 
 /resources/
+/data/custom/taxidata/100taxi-month1-weka.arff
