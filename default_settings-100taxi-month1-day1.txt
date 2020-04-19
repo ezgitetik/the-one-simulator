@@ -55,7 +55,7 @@ Group1.okMaps = 1
 Group1.speed = 10.8, 13.6
 Group1.nrofHosts = 1
 Group1.movementModel = MapRouteMovement
-Group1.routeFile = data/custom/taxidata/bursa-0101/taxi-818.wkt
+Group1.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-818.wkt
 Group1.routeType = 1
 Group1.routeFirstStop = 0
 
@@ -66,7 +66,7 @@ Group2.okMaps = 1
 Group2.speed = 9.7, 12.5
 Group2.nrofHosts = 1
 Group2.movementModel = MapRouteMovement
-Group2.routeFile = data/custom/taxidata/bursa-0101/taxi-815.wkt
+Group2.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-815.wkt
 Group2.routeType = 1
 Group2.routeFirstStop = 0
 
@@ -77,7 +77,7 @@ Group3.okMaps = 1
 Group3.speed = 11.4, 14.2
 Group3.nrofHosts = 1
 Group3.movementModel = MapRouteMovement
-Group3.routeFile = data/custom/taxidata/bursa-0101/taxi-816.wkt
+Group3.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-816.wkt
 Group3.routeType = 1
 Group3.routeFirstStop = 0
 
@@ -88,7 +88,7 @@ Group4.okMaps = 1
 Group4.speed = 10.3, 13.1
 Group4.nrofHosts = 1
 Group4.movementModel = MapRouteMovement
-Group4.routeFile = data/custom/taxidata/bursa-0101/taxi-823.wkt
+Group4.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-823.wkt
 Group4.routeType = 1
 Group4.routeFirstStop = 0
 
@@ -99,7 +99,7 @@ Group5.okMaps = 1
 Group5.speed = 9.4, 12.2
 Group5.nrofHosts = 1
 Group5.movementModel = MapRouteMovement
-Group5.routeFile = data/custom/taxidata/bursa-0101/taxi-825.wkt
+Group5.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-825.wkt
 Group5.routeType = 1
 Group5.routeFirstStop = 0
 
@@ -110,7 +110,7 @@ Group6.okMaps = 1
 Group6.speed = 12.2, 15.0
 Group6.nrofHosts = 1
 Group6.movementModel = MapRouteMovement
-Group6.routeFile = data/custom/taxidata/bursa-0101/taxi-824.wkt
+Group6.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-824.wkt
 Group6.routeType = 1
 Group6.routeFirstStop = 0
 
@@ -121,7 +121,7 @@ Group7.okMaps = 1
 Group7.speed = 11.9, 14.7
 Group7.nrofHosts = 1
 Group7.movementModel = MapRouteMovement
-Group7.routeFile = data/custom/taxidata/bursa-0101/taxi-817.wkt
+Group7.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-817.wkt
 Group7.routeType = 1
 Group7.routeFirstStop = 0
 
@@ -132,7 +132,7 @@ Group8.okMaps = 1
 Group8.speed = 9.2, 11.9
 Group8.nrofHosts = 1
 Group8.movementModel = MapRouteMovement
-Group8.routeFile = data/custom/taxidata/bursa-0101/taxi-531.wkt
+Group8.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-531.wkt
 Group8.routeType = 1
 Group8.routeFirstStop = 0
 
@@ -143,7 +143,7 @@ Group9.okMaps = 1
 Group9.speed = 11.1, 13.9
 Group9.nrofHosts = 1
 Group9.movementModel = MapRouteMovement
-Group9.routeFile = data/custom/taxidata/bursa-0101/taxi-822.wkt
+Group9.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-822.wkt
 Group9.routeType = 1
 Group9.routeFirstStop = 0
 
@@ -154,7 +154,7 @@ Group10.okMaps = 1
 Group10.speed = 10.8, 13.6
 Group10.nrofHosts = 1
 Group10.movementModel = MapRouteMovement
-Group10.routeFile = data/custom/taxidata/bursa-0101/taxi-528.wkt
+Group10.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-528.wkt
 Group10.routeType = 1
 Group10.routeFirstStop = 0
 
@@ -165,7 +165,7 @@ Group11.okMaps = 1
 Group11.speed = 11.7, 14.4
 Group11.nrofHosts = 1
 Group11.movementModel = MapRouteMovement
-Group11.routeFile = data/custom/taxidata/bursa-0101/taxi-819.wkt
+Group11.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-819.wkt
 Group11.routeType = 1
 Group11.routeFirstStop = 0
 
@@ -176,7 +176,7 @@ Group12.okMaps = 1
 Group12.speed = 9.7, 12.5
 Group12.nrofHosts = 1
 Group12.movementModel = MapRouteMovement
-Group12.routeFile = data/custom/taxidata/bursa-0101/taxi-541.wkt
+Group12.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-541.wkt
 Group12.routeType = 1
 Group12.routeFirstStop = 0
 
@@ -187,7 +187,7 @@ Group13.okMaps = 1
 Group13.speed = 9.7, 12.5
 Group13.nrofHosts = 1
 Group13.movementModel = MapRouteMovement
-Group13.routeFile = data/custom/taxidata/bursa-0101/taxi-736.wkt
+Group13.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-736.wkt
 Group13.routeType = 1
 Group13.routeFirstStop = 0
 
@@ -198,7 +198,7 @@ Group14.okMaps = 1
 Group14.speed = 11.1, 13.9
 Group14.nrofHosts = 1
 Group14.movementModel = MapRouteMovement
-Group14.routeFile = data/custom/taxidata/bursa-0101/taxi-820.wkt
+Group14.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-820.wkt
 Group14.routeType = 1
 Group14.routeFirstStop = 0
 
@@ -209,7 +209,7 @@ Group15.okMaps = 1
 Group15.speed = 10.0, 12.8
 Group15.nrofHosts = 1
 Group15.movementModel = MapRouteMovement
-Group15.routeFile = data/custom/taxidata/bursa-0101/taxi-735.wkt
+Group15.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-735.wkt
 Group15.routeType = 1
 Group15.routeFirstStop = 0
 
@@ -220,7 +220,7 @@ Group16.okMaps = 1
 Group16.speed = 10.0, 12.8
 Group16.nrofHosts = 1
 Group16.movementModel = MapRouteMovement
-Group16.routeFile = data/custom/taxidata/bursa-0101/taxi-549.wkt
+Group16.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-549.wkt
 Group16.routeType = 1
 Group16.routeFirstStop = 0
 
@@ -231,7 +231,7 @@ Group17.okMaps = 1
 Group17.speed = 9.4, 12.2
 Group17.nrofHosts = 1
 Group17.movementModel = MapRouteMovement
-Group17.routeFile = data/custom/taxidata/bursa-0101/taxi-532.wkt
+Group17.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-532.wkt
 Group17.routeType = 1
 Group17.routeFirstStop = 0
 
@@ -242,7 +242,7 @@ Group18.okMaps = 1
 Group18.speed = 8.1, 10.8
 Group18.nrofHosts = 1
 Group18.movementModel = MapRouteMovement
-Group18.routeFile = data/custom/taxidata/bursa-0101/taxi-547.wkt
+Group18.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-547.wkt
 Group18.routeType = 1
 Group18.routeFirstStop = 0
 
@@ -253,7 +253,7 @@ Group19.okMaps = 1
 Group19.speed = 10.6, 13.3
 Group19.nrofHosts = 1
 Group19.movementModel = MapRouteMovement
-Group19.routeFile = data/custom/taxidata/bursa-0101/taxi-722.wkt
+Group19.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-722.wkt
 Group19.routeType = 1
 Group19.routeFirstStop = 0
 
@@ -264,7 +264,7 @@ Group20.okMaps = 1
 Group20.speed = 10.8, 13.6
 Group20.nrofHosts = 1
 Group20.movementModel = MapRouteMovement
-Group20.routeFile = data/custom/taxidata/bursa-0101/taxi-320.wkt
+Group20.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-320.wkt
 Group20.routeType = 1
 Group20.routeFirstStop = 0
 
@@ -275,7 +275,7 @@ Group21.okMaps = 1
 Group21.speed = 9.2, 11.9
 Group21.nrofHosts = 1
 Group21.movementModel = MapRouteMovement
-Group21.routeFile = data/custom/taxidata/bursa-0101/taxi-739.wkt
+Group21.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-739.wkt
 Group21.routeType = 1
 Group21.routeFirstStop = 0
 
@@ -286,7 +286,7 @@ Group22.okMaps = 1
 Group22.speed = 10.6, 13.3
 Group22.nrofHosts = 1
 Group22.movementModel = MapRouteMovement
-Group22.routeFile = data/custom/taxidata/bursa-0101/taxi-325.wkt
+Group22.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-325.wkt
 Group22.routeType = 1
 Group22.routeFirstStop = 0
 
@@ -297,7 +297,7 @@ Group23.okMaps = 1
 Group23.speed = 9.2, 11.9
 Group23.nrofHosts = 1
 Group23.movementModel = MapRouteMovement
-Group23.routeFile = data/custom/taxidata/bursa-0101/taxi-529.wkt
+Group23.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-529.wkt
 Group23.routeType = 1
 Group23.routeFirstStop = 0
 
@@ -308,7 +308,7 @@ Group24.okMaps = 1
 Group24.speed = 11.9, 14.7
 Group24.nrofHosts = 1
 Group24.movementModel = MapRouteMovement
-Group24.routeFile = data/custom/taxidata/bursa-0101/taxi-534.wkt
+Group24.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-534.wkt
 Group24.routeType = 1
 Group24.routeFirstStop = 0
 
@@ -319,7 +319,7 @@ Group25.okMaps = 1
 Group25.speed = 9.4, 12.2
 Group25.nrofHosts = 1
 Group25.movementModel = MapRouteMovement
-Group25.routeFile = data/custom/taxidata/bursa-0101/taxi-546.wkt
+Group25.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-546.wkt
 Group25.routeType = 1
 Group25.routeFirstStop = 0
 
@@ -330,7 +330,7 @@ Group26.okMaps = 1
 Group26.speed = 8.6, 11.4
 Group26.nrofHosts = 1
 Group26.movementModel = MapRouteMovement
-Group26.routeFile = data/custom/taxidata/bursa-0101/taxi-526.wkt
+Group26.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-526.wkt
 Group26.routeType = 1
 Group26.routeFirstStop = 0
 
@@ -341,7 +341,7 @@ Group27.okMaps = 1
 Group27.speed = 11.4, 14.2
 Group27.nrofHosts = 1
 Group27.movementModel = MapRouteMovement
-Group27.routeFile = data/custom/taxidata/bursa-0101/taxi-821.wkt
+Group27.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-821.wkt
 Group27.routeType = 1
 Group27.routeFirstStop = 0
 
@@ -352,7 +352,7 @@ Group28.okMaps = 1
 Group28.speed = 9.4, 12.2
 Group28.nrofHosts = 1
 Group28.movementModel = MapRouteMovement
-Group28.routeFile = data/custom/taxidata/bursa-0101/taxi-542.wkt
+Group28.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-542.wkt
 Group28.routeType = 1
 Group28.routeFirstStop = 0
 
@@ -363,7 +363,7 @@ Group29.okMaps = 1
 Group29.speed = 10.6, 13.3
 Group29.nrofHosts = 1
 Group29.movementModel = MapRouteMovement
-Group29.routeFile = data/custom/taxidata/bursa-0101/taxi-537.wkt
+Group29.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-537.wkt
 Group29.routeType = 1
 Group29.routeFirstStop = 0
 
@@ -374,7 +374,7 @@ Group30.okMaps = 1
 Group30.speed = 10.0, 12.8
 Group30.nrofHosts = 1
 Group30.movementModel = MapRouteMovement
-Group30.routeFile = data/custom/taxidata/bursa-0101/taxi-533.wkt
+Group30.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-533.wkt
 Group30.routeType = 1
 Group30.routeFirstStop = 0
 
@@ -385,7 +385,7 @@ Group31.okMaps = 1
 Group31.speed = 8.3, 11.1
 Group31.nrofHosts = 1
 Group31.movementModel = MapRouteMovement
-Group31.routeFile = data/custom/taxidata/bursa-0101/taxi-539.wkt
+Group31.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-539.wkt
 Group31.routeType = 1
 Group31.routeFirstStop = 0
 
@@ -396,7 +396,7 @@ Group32.okMaps = 1
 Group32.speed = 10.3, 13.1
 Group32.nrofHosts = 1
 Group32.movementModel = MapRouteMovement
-Group32.routeFile = data/custom/taxidata/bursa-0101/taxi-552.wkt
+Group32.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-552.wkt
 Group32.routeType = 1
 Group32.routeFirstStop = 0
 
@@ -407,7 +407,7 @@ Group33.okMaps = 1
 Group33.speed = 8.9, 11.7
 Group33.nrofHosts = 1
 Group33.movementModel = MapRouteMovement
-Group33.routeFile = data/custom/taxidata/bursa-0101/taxi-535.wkt
+Group33.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-535.wkt
 Group33.routeType = 1
 Group33.routeFirstStop = 0
 
@@ -418,7 +418,7 @@ Group34.okMaps = 1
 Group34.speed = 8.9, 11.7
 Group34.nrofHosts = 1
 Group34.movementModel = MapRouteMovement
-Group34.routeFile = data/custom/taxidata/bursa-0101/taxi-538.wkt
+Group34.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-538.wkt
 Group34.routeType = 1
 Group34.routeFirstStop = 0
 
@@ -429,7 +429,7 @@ Group35.okMaps = 1
 Group35.speed = 9.4, 12.2
 Group35.nrofHosts = 1
 Group35.movementModel = MapRouteMovement
-Group35.routeFile = data/custom/taxidata/bursa-0101/taxi-524.wkt
+Group35.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-524.wkt
 Group35.routeType = 1
 Group35.routeFirstStop = 0
 
@@ -440,7 +440,7 @@ Group36.okMaps = 1
 Group36.speed = 9.4, 12.2
 Group36.nrofHosts = 1
 Group36.movementModel = MapRouteMovement
-Group36.routeFile = data/custom/taxidata/bursa-0101/taxi-540.wkt
+Group36.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-540.wkt
 Group36.routeType = 1
 Group36.routeFirstStop = 0
 
@@ -451,7 +451,7 @@ Group37.okMaps = 1
 Group37.speed = 9.7, 12.5
 Group37.nrofHosts = 1
 Group37.movementModel = MapRouteMovement
-Group37.routeFile = data/custom/taxidata/bursa-0101/taxi-543.wkt
+Group37.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-543.wkt
 Group37.routeType = 1
 Group37.routeFirstStop = 0
 
@@ -462,7 +462,7 @@ Group38.okMaps = 1
 Group38.speed = 9.4, 12.2
 Group38.nrofHosts = 1
 Group38.movementModel = MapRouteMovement
-Group38.routeFile = data/custom/taxidata/bursa-0101/taxi-545.wkt
+Group38.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-545.wkt
 Group38.routeType = 1
 Group38.routeFirstStop = 0
 
@@ -473,7 +473,7 @@ Group39.okMaps = 1
 Group39.speed = 9.7, 12.5
 Group39.nrofHosts = 1
 Group39.movementModel = MapRouteMovement
-Group39.routeFile = data/custom/taxidata/bursa-0101/taxi-550.wkt
+Group39.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-550.wkt
 Group39.routeType = 1
 Group39.routeFirstStop = 0
 
@@ -484,7 +484,7 @@ Group40.okMaps = 1
 Group40.speed = 9.4, 12.2
 Group40.nrofHosts = 1
 Group40.movementModel = MapRouteMovement
-Group40.routeFile = data/custom/taxidata/bursa-0101/taxi-551.wkt
+Group40.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-551.wkt
 Group40.routeType = 1
 Group40.routeFirstStop = 0
 
@@ -495,7 +495,7 @@ Group41.okMaps = 1
 Group41.speed = 7.8, 10.6
 Group41.nrofHosts = 1
 Group41.movementModel = MapRouteMovement
-Group41.routeFile = data/custom/taxidata/bursa-0101/taxi-737.wkt
+Group41.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-737.wkt
 Group41.routeType = 1
 Group41.routeFirstStop = 0
 
@@ -506,7 +506,7 @@ Group42.okMaps = 1
 Group42.speed = 9.4, 12.2
 Group42.nrofHosts = 1
 Group42.movementModel = MapRouteMovement
-Group42.routeFile = data/custom/taxidata/bursa-0101/taxi-527.wkt
+Group42.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-527.wkt
 Group42.routeType = 1
 Group42.routeFirstStop = 0
 
@@ -517,7 +517,7 @@ Group43.okMaps = 1
 Group43.speed = 8.6, 11.4
 Group43.nrofHosts = 1
 Group43.movementModel = MapRouteMovement
-Group43.routeFile = data/custom/taxidata/bursa-0101/taxi-536.wkt
+Group43.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-536.wkt
 Group43.routeType = 1
 Group43.routeFirstStop = 0
 
@@ -528,7 +528,7 @@ Group44.okMaps = 1
 Group44.speed = 11.7, 14.4
 Group44.nrofHosts = 1
 Group44.movementModel = MapRouteMovement
-Group44.routeFile = data/custom/taxidata/bursa-0101/taxi-794.wkt
+Group44.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-794.wkt
 Group44.routeType = 1
 Group44.routeFirstStop = 0
 
@@ -539,7 +539,7 @@ Group45.okMaps = 1
 Group45.speed = 10.8, 13.6
 Group45.nrofHosts = 1
 Group45.movementModel = MapRouteMovement
-Group45.routeFile = data/custom/taxidata/bursa-0101/taxi-364.wkt
+Group45.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-364.wkt
 Group45.routeType = 1
 Group45.routeFirstStop = 0
 
@@ -550,7 +550,7 @@ Group46.okMaps = 1
 Group46.speed = 8.1, 10.8
 Group46.nrofHosts = 1
 Group46.movementModel = MapRouteMovement
-Group46.routeFile = data/custom/taxidata/bursa-0101/taxi-738.wkt
+Group46.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-738.wkt
 Group46.routeType = 1
 Group46.routeFirstStop = 0
 
@@ -561,7 +561,7 @@ Group47.okMaps = 1
 Group47.speed = 9.7, 12.5
 Group47.nrofHosts = 1
 Group47.movementModel = MapRouteMovement
-Group47.routeFile = data/custom/taxidata/bursa-0101/taxi-530.wkt
+Group47.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-530.wkt
 Group47.routeType = 1
 Group47.routeFirstStop = 0
 
@@ -572,7 +572,7 @@ Group48.okMaps = 1
 Group48.speed = 10.6, 13.3
 Group48.nrofHosts = 1
 Group48.movementModel = MapRouteMovement
-Group48.routeFile = data/custom/taxidata/bursa-0101/taxi-796.wkt
+Group48.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-796.wkt
 Group48.routeType = 1
 Group48.routeFirstStop = 0
 
@@ -583,7 +583,7 @@ Group49.okMaps = 1
 Group49.speed = 11.4, 14.2
 Group49.nrofHosts = 1
 Group49.movementModel = MapRouteMovement
-Group49.routeFile = data/custom/taxidata/bursa-0101/taxi-789.wkt
+Group49.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-789.wkt
 Group49.routeType = 1
 Group49.routeFirstStop = 0
 
@@ -594,7 +594,7 @@ Group50.okMaps = 1
 Group50.speed = 11.4, 14.2
 Group50.nrofHosts = 1
 Group50.movementModel = MapRouteMovement
-Group50.routeFile = data/custom/taxidata/bursa-0101/taxi-798.wkt
+Group50.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-798.wkt
 Group50.routeType = 1
 Group50.routeFirstStop = 0
 
@@ -605,7 +605,7 @@ Group51.okMaps = 1
 Group51.speed = 8.9, 11.7
 Group51.nrofHosts = 1
 Group51.movementModel = MapRouteMovement
-Group51.routeFile = data/custom/taxidata/bursa-0101/taxi-548.wkt
+Group51.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-548.wkt
 Group51.routeType = 1
 Group51.routeFirstStop = 0
 
@@ -616,7 +616,7 @@ Group52.okMaps = 1
 Group52.speed = 8.6, 11.4
 Group52.nrofHosts = 1
 Group52.movementModel = MapRouteMovement
-Group52.routeFile = data/custom/taxidata/bursa-0101/taxi-525.wkt
+Group52.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-525.wkt
 Group52.routeType = 1
 Group52.routeFirstStop = 0
 
@@ -627,7 +627,7 @@ Group53.okMaps = 1
 Group53.speed = 10.3, 13.1
 Group53.nrofHosts = 1
 Group53.movementModel = MapRouteMovement
-Group53.routeFile = data/custom/taxidata/bursa-0101/taxi-793.wkt
+Group53.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-793.wkt
 Group53.routeType = 1
 Group53.routeFirstStop = 0
 
@@ -638,7 +638,7 @@ Group54.okMaps = 1
 Group54.speed = 7.5, 10.3
 Group54.nrofHosts = 1
 Group54.movementModel = MapRouteMovement
-Group54.routeFile = data/custom/taxidata/bursa-0101/taxi-873.wkt
+Group54.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-873.wkt
 Group54.routeType = 1
 Group54.routeFirstStop = 0
 
@@ -649,7 +649,7 @@ Group55.okMaps = 1
 Group55.speed = 11.7, 14.4
 Group55.nrofHosts = 1
 Group55.movementModel = MapRouteMovement
-Group55.routeFile = data/custom/taxidata/bursa-0101/taxi-785.wkt
+Group55.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-785.wkt
 Group55.routeType = 1
 Group55.routeFirstStop = 0
 
@@ -660,7 +660,7 @@ Group56.okMaps = 1
 Group56.speed = 9.7, 12.5
 Group56.nrofHosts = 1
 Group56.movementModel = MapRouteMovement
-Group56.routeFile = data/custom/taxidata/bursa-0101/taxi-790.wkt
+Group56.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-790.wkt
 Group56.routeType = 1
 Group56.routeFirstStop = 0
 
@@ -671,7 +671,7 @@ Group57.okMaps = 1
 Group57.speed = 8.3, 11.1
 Group57.nrofHosts = 1
 Group57.movementModel = MapRouteMovement
-Group57.routeFile = data/custom/taxidata/bursa-0101/taxi-743.wkt
+Group57.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-743.wkt
 Group57.routeType = 1
 Group57.routeFirstStop = 0
 
@@ -682,7 +682,7 @@ Group58.okMaps = 1
 Group58.speed = 10.6, 13.3
 Group58.nrofHosts = 1
 Group58.movementModel = MapRouteMovement
-Group58.routeFile = data/custom/taxidata/bursa-0101/taxi-787.wkt
+Group58.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-787.wkt
 Group58.routeType = 1
 Group58.routeFirstStop = 0
 
@@ -693,7 +693,7 @@ Group59.okMaps = 1
 Group59.speed = 11.7, 14.4
 Group59.nrofHosts = 1
 Group59.movementModel = MapRouteMovement
-Group59.routeFile = data/custom/taxidata/bursa-0101/taxi-786.wkt
+Group59.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-786.wkt
 Group59.routeType = 1
 Group59.routeFirstStop = 0
 
@@ -704,7 +704,7 @@ Group60.okMaps = 1
 Group60.speed = 8.3, 11.1
 Group60.nrofHosts = 1
 Group60.movementModel = MapRouteMovement
-Group60.routeFile = data/custom/taxidata/bursa-0101/taxi-742.wkt
+Group60.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-742.wkt
 Group60.routeType = 1
 Group60.routeFirstStop = 0
 
@@ -715,7 +715,7 @@ Group61.okMaps = 1
 Group61.speed = 7.8, 10.6
 Group61.nrofHosts = 1
 Group61.movementModel = MapRouteMovement
-Group61.routeFile = data/custom/taxidata/bursa-0101/taxi-745.wkt
+Group61.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-745.wkt
 Group61.routeType = 1
 Group61.routeFirstStop = 0
 
@@ -726,7 +726,7 @@ Group62.okMaps = 1
 Group62.speed = 9.7, 12.5
 Group62.nrofHosts = 1
 Group62.movementModel = MapRouteMovement
-Group62.routeFile = data/custom/taxidata/bursa-0101/taxi-792.wkt
+Group62.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-792.wkt
 Group62.routeType = 1
 Group62.routeFirstStop = 0
 
@@ -737,7 +737,7 @@ Group63.okMaps = 1
 Group63.speed = 10.3, 13.1
 Group63.nrofHosts = 1
 Group63.movementModel = MapRouteMovement
-Group63.routeFile = data/custom/taxidata/bursa-0101/taxi-799.wkt
+Group63.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-799.wkt
 Group63.routeType = 1
 Group63.routeFirstStop = 0
 
@@ -748,7 +748,7 @@ Group64.okMaps = 1
 Group64.speed = 9.4, 12.2
 Group64.nrofHosts = 1
 Group64.movementModel = MapRouteMovement
-Group64.routeFile = data/custom/taxidata/bursa-0101/taxi-806.wkt
+Group64.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-806.wkt
 Group64.routeType = 1
 Group64.routeFirstStop = 0
 
@@ -759,7 +759,7 @@ Group65.okMaps = 1
 Group65.speed = 9.2, 11.9
 Group65.nrofHosts = 1
 Group65.movementModel = MapRouteMovement
-Group65.routeFile = data/custom/taxidata/bursa-0101/taxi-744.wkt
+Group65.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-744.wkt
 Group65.routeType = 1
 Group65.routeFirstStop = 0
 
@@ -770,7 +770,7 @@ Group66.okMaps = 1
 Group66.speed = 6.4, 9.2
 Group66.nrofHosts = 1
 Group66.movementModel = MapRouteMovement
-Group66.routeFile = data/custom/taxidata/bursa-0101/taxi-750.wkt
+Group66.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-750.wkt
 Group66.routeType = 1
 Group66.routeFirstStop = 0
 
@@ -781,7 +781,7 @@ Group67.okMaps = 1
 Group67.speed = 10.0, 12.8
 Group67.nrofHosts = 1
 Group67.movementModel = MapRouteMovement
-Group67.routeFile = data/custom/taxidata/bursa-0101/taxi-801.wkt
+Group67.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-801.wkt
 Group67.routeType = 1
 Group67.routeFirstStop = 0
 
@@ -792,7 +792,7 @@ Group68.okMaps = 1
 Group68.speed = 9.2, 11.9
 Group68.nrofHosts = 1
 Group68.movementModel = MapRouteMovement
-Group68.routeFile = data/custom/taxidata/bursa-0101/taxi-804.wkt
+Group68.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-804.wkt
 Group68.routeType = 1
 Group68.routeFirstStop = 0
 
@@ -803,7 +803,7 @@ Group69.okMaps = 1
 Group69.speed = 8.6, 11.4
 Group69.nrofHosts = 1
 Group69.movementModel = MapRouteMovement
-Group69.routeFile = data/custom/taxidata/bursa-0101/taxi-872.wkt
+Group69.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-872.wkt
 Group69.routeType = 1
 Group69.routeFirstStop = 0
 
@@ -814,7 +814,7 @@ Group70.okMaps = 1
 Group70.speed = 9.2, 11.9
 Group70.nrofHosts = 1
 Group70.movementModel = MapRouteMovement
-Group70.routeFile = data/custom/taxidata/bursa-0101/taxi-571.wkt
+Group70.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-571.wkt
 Group70.routeType = 1
 Group70.routeFirstStop = 0
 
@@ -825,7 +825,7 @@ Group71.okMaps = 1
 Group71.speed = 9.7, 12.5
 Group71.nrofHosts = 1
 Group71.movementModel = MapRouteMovement
-Group71.routeFile = data/custom/taxidata/bursa-0101/taxi-460.wkt
+Group71.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-460.wkt
 Group71.routeType = 1
 Group71.routeFirstStop = 0
 
@@ -836,7 +836,7 @@ Group72.okMaps = 1
 Group72.speed = 7.5, 10.3
 Group72.nrofHosts = 1
 Group72.movementModel = MapRouteMovement
-Group72.routeFile = data/custom/taxidata/bursa-0101/taxi-562.wkt
+Group72.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-562.wkt
 Group72.routeType = 1
 Group72.routeFirstStop = 0
 
@@ -847,7 +847,7 @@ Group73.okMaps = 1
 Group73.speed = 8.9, 11.7
 Group73.nrofHosts = 1
 Group73.movementModel = MapRouteMovement
-Group73.routeFile = data/custom/taxidata/bursa-0101/taxi-803.wkt
+Group73.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-803.wkt
 Group73.routeType = 1
 Group73.routeFirstStop = 0
 
@@ -858,7 +858,7 @@ Group74.okMaps = 1
 Group74.speed = 8.6, 11.4
 Group74.nrofHosts = 1
 Group74.movementModel = MapRouteMovement
-Group74.routeFile = data/custom/taxidata/bursa-0101/taxi-802.wkt
+Group74.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-802.wkt
 Group74.routeType = 1
 Group74.routeFirstStop = 0
 
@@ -869,7 +869,7 @@ Group75.okMaps = 1
 Group75.speed = 8.6, 11.4
 Group75.nrofHosts = 1
 Group75.movementModel = MapRouteMovement
-Group75.routeFile = data/custom/taxidata/bursa-0101/taxi-805.wkt
+Group75.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-805.wkt
 Group75.routeType = 1
 Group75.routeFirstStop = 0
 
@@ -880,7 +880,7 @@ Group76.okMaps = 1
 Group76.speed = 8.9, 11.7
 Group76.nrofHosts = 1
 Group76.movementModel = MapRouteMovement
-Group76.routeFile = data/custom/taxidata/bursa-0101/taxi-809.wkt
+Group76.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-809.wkt
 Group76.routeType = 1
 Group76.routeFirstStop = 0
 
@@ -891,7 +891,7 @@ Group77.okMaps = 1
 Group77.speed = 10.3, 13.1
 Group77.nrofHosts = 1
 Group77.movementModel = MapRouteMovement
-Group77.routeFile = data/custom/taxidata/bursa-0101/taxi-795.wkt
+Group77.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-795.wkt
 Group77.routeType = 1
 Group77.routeFirstStop = 0
 
@@ -902,7 +902,7 @@ Group78.okMaps = 1
 Group78.speed = 11.1, 13.9
 Group78.nrofHosts = 1
 Group78.movementModel = MapRouteMovement
-Group78.routeFile = data/custom/taxidata/bursa-0101/taxi-791.wkt
+Group78.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-791.wkt
 Group78.routeType = 1
 Group78.routeFirstStop = 0
 
@@ -913,7 +913,7 @@ Group79.okMaps = 1
 Group79.speed = 7.8, 10.6
 Group79.nrofHosts = 1
 Group79.movementModel = MapRouteMovement
-Group79.routeFile = data/custom/taxidata/bursa-0101/taxi-425.wkt
+Group79.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-425.wkt
 Group79.routeType = 1
 Group79.routeFirstStop = 0
 
@@ -924,7 +924,7 @@ Group80.okMaps = 1
 Group80.speed = 8.3, 11.1
 Group80.nrofHosts = 1
 Group80.movementModel = MapRouteMovement
-Group80.routeFile = data/custom/taxidata/bursa-0101/taxi-410.wkt
+Group80.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-410.wkt
 Group80.routeType = 1
 Group80.routeFirstStop = 0
 
@@ -935,7 +935,7 @@ Group81.okMaps = 1
 Group81.speed = 8.9, 11.7
 Group81.nrofHosts = 1
 Group81.movementModel = MapRouteMovement
-Group81.routeFile = data/custom/taxidata/bursa-0101/taxi-800.wkt
+Group81.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-800.wkt
 Group81.routeType = 1
 Group81.routeFirstStop = 0
 
@@ -946,7 +946,7 @@ Group82.okMaps = 1
 Group82.speed = 8.1, 10.8
 Group82.nrofHosts = 1
 Group82.movementModel = MapRouteMovement
-Group82.routeFile = data/custom/taxidata/bursa-0101/taxi-422.wkt
+Group82.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-422.wkt
 Group82.routeType = 1
 Group82.routeFirstStop = 0
 
@@ -957,7 +957,7 @@ Group83.okMaps = 1
 Group83.speed = 8.6, 11.4
 Group83.nrofHosts = 1
 Group83.movementModel = MapRouteMovement
-Group83.routeFile = data/custom/taxidata/bursa-0101/taxi-807.wkt
+Group83.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-807.wkt
 Group83.routeType = 1
 Group83.routeFirstStop = 0
 
@@ -968,7 +968,7 @@ Group84.okMaps = 1
 Group84.speed = 8.9, 11.7
 Group84.nrofHosts = 1
 Group84.movementModel = MapRouteMovement
-Group84.routeFile = data/custom/taxidata/bursa-0101/taxi-461.wkt
+Group84.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-461.wkt
 Group84.routeType = 1
 Group84.routeFirstStop = 0
 
@@ -979,7 +979,7 @@ Group85.okMaps = 1
 Group85.speed = 10.6, 13.3
 Group85.nrofHosts = 1
 Group85.movementModel = MapRouteMovement
-Group85.routeFile = data/custom/taxidata/bursa-0101/taxi-797.wkt
+Group85.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-797.wkt
 Group85.routeType = 1
 Group85.routeFirstStop = 0
 
@@ -990,7 +990,7 @@ Group86.okMaps = 1
 Group86.speed = 6.9, 9.7
 Group86.nrofHosts = 1
 Group86.movementModel = MapRouteMovement
-Group86.routeFile = data/custom/taxidata/bursa-0101/taxi-746.wkt
+Group86.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-746.wkt
 Group86.routeType = 1
 Group86.routeFirstStop = 0
 
@@ -1001,7 +1001,7 @@ Group87.okMaps = 1
 Group87.speed = 10.0, 12.8
 Group87.nrofHosts = 1
 Group87.movementModel = MapRouteMovement
-Group87.routeFile = data/custom/taxidata/bursa-0101/taxi-419.wkt
+Group87.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-419.wkt
 Group87.routeType = 1
 Group87.routeFirstStop = 0
 
@@ -1012,7 +1012,7 @@ Group88.okMaps = 1
 Group88.speed = 11.1, 13.9
 Group88.nrofHosts = 1
 Group88.movementModel = MapRouteMovement
-Group88.routeFile = data/custom/taxidata/bursa-0101/taxi-728.wkt
+Group88.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-728.wkt
 Group88.routeType = 1
 Group88.routeFirstStop = 0
 
@@ -1023,7 +1023,7 @@ Group89.okMaps = 1
 Group89.speed = 10.6, 13.3
 Group89.nrofHosts = 1
 Group89.movementModel = MapRouteMovement
-Group89.routeFile = data/custom/taxidata/bursa-0101/taxi-788.wkt
+Group89.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-788.wkt
 Group89.routeType = 1
 Group89.routeFirstStop = 0
 
@@ -1034,7 +1034,7 @@ Group90.okMaps = 1
 Group90.speed = 8.6, 11.4
 Group90.nrofHosts = 1
 Group90.movementModel = MapRouteMovement
-Group90.routeFile = data/custom/taxidata/bursa-0101/taxi-840.wkt
+Group90.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-840.wkt
 Group90.routeType = 1
 Group90.routeFirstStop = 0
 
@@ -1045,7 +1045,7 @@ Group91.okMaps = 1
 Group91.speed = 8.6, 11.4
 Group91.nrofHosts = 1
 Group91.movementModel = MapRouteMovement
-Group91.routeFile = data/custom/taxidata/bursa-0101/taxi-839.wkt
+Group91.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-839.wkt
 Group91.routeType = 1
 Group91.routeFirstStop = 0
 
@@ -1056,7 +1056,7 @@ Group92.okMaps = 1
 Group92.speed = 8.1, 10.8
 Group92.nrofHosts = 1
 Group92.movementModel = MapRouteMovement
-Group92.routeFile = data/custom/taxidata/bursa-0101/taxi-453.wkt
+Group92.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-453.wkt
 Group92.routeType = 1
 Group92.routeFirstStop = 0
 
@@ -1067,7 +1067,7 @@ Group93.okMaps = 1
 Group93.speed = 10.0, 12.8
 Group93.nrofHosts = 1
 Group93.movementModel = MapRouteMovement
-Group93.routeFile = data/custom/taxidata/bursa-0101/taxi-459.wkt
+Group93.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-459.wkt
 Group93.routeType = 1
 Group93.routeFirstStop = 0
 
@@ -1078,7 +1078,7 @@ Group94.okMaps = 1
 Group94.speed = 7.8, 10.6
 Group94.nrofHosts = 1
 Group94.movementModel = MapRouteMovement
-Group94.routeFile = data/custom/taxidata/bursa-0101/taxi-881.wkt
+Group94.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-881.wkt
 Group94.routeType = 1
 Group94.routeFirstStop = 0
 
@@ -1089,7 +1089,7 @@ Group95.okMaps = 1
 Group95.speed = 9.4, 12.2
 Group95.nrofHosts = 1
 Group95.movementModel = MapRouteMovement
-Group95.routeFile = data/custom/taxidata/bursa-0101/taxi-841.wkt
+Group95.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-841.wkt
 Group95.routeType = 1
 Group95.routeFirstStop = 0
 
@@ -1100,7 +1100,7 @@ Group96.okMaps = 1
 Group96.speed = 10.3, 13.1
 Group96.nrofHosts = 1
 Group96.movementModel = MapRouteMovement
-Group96.routeFile = data/custom/taxidata/bursa-0101/taxi-838.wkt
+Group96.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-838.wkt
 Group96.routeType = 1
 Group96.routeFirstStop = 0
 
@@ -1111,7 +1111,7 @@ Group97.okMaps = 1
 Group97.speed = 8.9, 11.7
 Group97.nrofHosts = 1
 Group97.movementModel = MapRouteMovement
-Group97.routeFile = data/custom/taxidata/bursa-0101/taxi-843.wkt
+Group97.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-843.wkt
 Group97.routeType = 1
 Group97.routeFirstStop = 0
 
@@ -1122,7 +1122,7 @@ Group98.okMaps = 1
 Group98.speed = 6.9, 9.7
 Group98.nrofHosts = 1
 Group98.movementModel = MapRouteMovement
-Group98.routeFile = data/custom/taxidata/bursa-0101/taxi-808.wkt
+Group98.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-808.wkt
 Group98.routeType = 1
 Group98.routeFirstStop = 0
 
@@ -1133,7 +1133,7 @@ Group99.okMaps = 1
 Group99.speed = 8.1, 10.8
 Group99.nrofHosts = 1
 Group99.movementModel = MapRouteMovement
-Group99.routeFile = data/custom/taxidata/bursa-0101/taxi-421.wkt
+Group99.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-421.wkt
 Group99.routeType = 1
 Group99.routeFirstStop = 0
 
@@ -1144,7 +1144,7 @@ Group100.okMaps = 1
 Group100.speed = 7.2, 10.0
 Group100.nrofHosts = 1
 Group100.movementModel = MapRouteMovement
-Group100.routeFile = data/custom/taxidata/bursa-0101/taxi-423.wkt
+Group100.routeFile = data/custom/taxidata/100taxi-month1-simulation/taxi-423.wkt
 Group100.routeType = 1
 Group100.routeFirstStop = 0
 
@@ -1176,7 +1176,7 @@ MovementModel.warmup = 0
 ## Map based movement -movement model specific settings
 MapBasedMovement.nrofMapFiles = 1
 
-MapBasedMovement.mapFile1 = data/custom/bursa-map-taxi528.osm.wkt
+MapBasedMovement.mapFile1 = data/custom/bursa-map-100taxi-month1-day1.osm.wkt
 ##MapBasedMovement.mapFile2 = data/main_roads.wkt
 #MapBasedMovement.mapFile3 = data/pedestrian_paths.wkt
 #MapBasedMovement.mapFile4 = data/shops.wkt
