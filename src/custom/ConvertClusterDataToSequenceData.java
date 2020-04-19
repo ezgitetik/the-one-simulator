@@ -11,9 +11,11 @@ public class ConvertClusterDataToSequenceData {
 
 
     public static List<List<String>> read() throws IOException {
-        List<String> allLines = Files.readAllLines(Paths.get(ConvertClusterDataToSequenceData.class.getClassLoader().getResource("taxi100_month1_week1_clusters.txt").getPath()));
+        /*List<String> allLines = Files.readAllLines(Paths.get(ConvertClusterDataToSequenceData.class.getClassLoader().getResource("taxi100_month1_week1_clusters.txt").getPath()));
         List<List<String>> splittedLines = allLines.stream().map(line -> Arrays.asList(line.split(" "))).collect(Collectors.toList());
-        return splittedLines;
+        return splittedLines;*/
+        ArffReader.read();
+
     }
 
     public static void main(String[] args) throws IOException {
