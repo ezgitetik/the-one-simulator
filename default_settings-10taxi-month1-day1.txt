@@ -47,7 +47,7 @@ highspeedInterface.transmitRange = 1000
 # routeType: route's type - for MapRouteMovement
 
 # Define 6 different node groups
-Scenario.nrofHostGroups = 20
+Scenario.nrofHostGroups = 10
 
 Group1.groupID = taxi1
 Group1.hostName = taxi-818
@@ -171,7 +171,7 @@ Events1.interval = 25,35
 # Message sizes (500kB - 1MB)
 Events1.size = 500k,1M
 # range of message source/destination addresses
-Events1.hosts = 0,20
+Events1.hosts = 0,10
 # Message ID prefix
 Events1.prefix = M
 
