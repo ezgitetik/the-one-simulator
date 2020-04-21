@@ -1,4 +1,4 @@
-package custom.cptplus;
+package custom.predictionclient;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -6,6 +6,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.util.EntityUtils;
+
 import java.io.IOException;
 
 public class HttpClientTest {
@@ -22,6 +24,7 @@ public class HttpClientTest {
         double startTime=System.currentTimeMillis();
         CloseableHttpResponse response = client.execute(httpPost);
         HttpEntity httpEntity =response.getEntity();
+        String content = EntityUtils.toString(httpEntity);
         client.close();
         double endTime=System.currentTimeMillis();
         System.out.println("delay: "+(endTime-startTime));
