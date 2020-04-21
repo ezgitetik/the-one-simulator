@@ -46,6 +46,19 @@ highspeedInterface.transmitRange = 1000
 # routeFile: route's file path - for MapRouteMovement
 # routeType: route's type - for MapRouteMovement
 
+# Common settings for all groups
+Group.movementModel = MapRouteMovement
+Group.router = EpidemicRouter
+#Group.bufferSize = 5M
+Group.waitTime = 0, 120
+# All nodes have the bluetooth interface
+Group.nrofInterfaces = 1
+Group.interface1 = btInterface
+# Walking speeds
+Group.speed = 0.5, 1.5
+# Message TTL of 300 minutes (5 hours)
+Group.msgTtl = 300
+
 # Define 6 different node groups
 Scenario.nrofHostGroups = 10
 
