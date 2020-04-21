@@ -15,8 +15,12 @@ public class Coord implements Cloneable, Comparable<Coord> {
     private double xRoute;
     private double yRoute;
 
-    private static final double xOffset = 102.785;
-    private static final double yOffset = 83045.508;
+//    private static final double xOffset = 102.785;
+//    private static final double yOffset = 83045.508;
+
+    // 10 taxi, 2 taxi, month 1 day1 xOffset = 3145.603, yOffset = 43632.5
+    private static final double xOffset = 3145.603;
+    private static final double yOffset = 43632.5;
 
     /**
      * Constructor.
