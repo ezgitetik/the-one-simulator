@@ -474,7 +474,7 @@ public class SimScenario implements Serializable {
 
         this.hosts = new ArrayList<>();
         SimMap cachedSimMap=readMap();
-        ForkJoinPool pool = new ForkJoinPool(50);
+        ForkJoinPool pool = new ForkJoinPool(2);
         pool.submit(() ->
                 IntStream.range(1, nrofGroups + 1).parallel().forEach(index -> {
 

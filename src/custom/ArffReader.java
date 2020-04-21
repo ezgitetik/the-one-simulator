@@ -16,8 +16,8 @@ public class ArffReader {
     private static final String ARFF_WITHOUT_MOD = "custom/taxidata/2taxi-month1-weka.arff";
     private static final String ARFF_PATH = ARFF_WITHOUT_MOD;
 
-    private static final String TAXI_WITHOUT_MOD = "custom/taxidata/2taxi-month1-training/";
-    private static final String TAXI_PATH = TAXI_WITHOUT_MOD;
+    private static final String TAXI_WITHOUT_MOD = "custom/taxidata/2taxi-month1-training-day1/";
+    private static final String  TAXI_PATH = TAXI_WITHOUT_MOD;
 
 
     private static List<ArffRegion> ARFF_REGIONS = null;
