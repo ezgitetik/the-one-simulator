@@ -11,9 +11,9 @@ public class PredictionClientTest {
         BasePredictionClient cptPlusPredictionClient = new CPTPlusPredictionClient();
         BasePredictionClient tdagPredictionClient = new TDAGPredictionClient();
 
-        System.out.println(akomPredictionClient.getPrediction(Arrays.asList(12,12,12)));
-        System.out.println(cptPlusPredictionClient.getPrediction(Arrays.asList(12,12,12)));
-        System.out.println(tdagPredictionClient.getPrediction(Arrays.asList(12,12,12)));
+        System.out.println(akomPredictionClient.getPrediction(Arrays.asList(21,11,5,8)));
+        System.out.println(cptPlusPredictionClient.getPrediction(Arrays.asList(21,11,5,8)));
+        System.out.println(tdagPredictionClient.getPrediction(Arrays.asList(21,11,5,8)));
 
     }
 

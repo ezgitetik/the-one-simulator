@@ -1,5 +1,6 @@
 package custom.predictionclient;
 
+import com.google.gson.Gson;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -28,7 +29,9 @@ public class BasePredictionClient {
             this.httpPost = getHttpPostClient();
         }
 
-        String json = "[31,35,14]";
+        Gson gson = new Gson();
+        gson.toJson(sequence);
+        String json = gson.toJson(sequence);
         StringEntity entity = new StringEntity(json);
         httpPost.setEntity(entity);
 
