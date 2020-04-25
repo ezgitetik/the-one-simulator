@@ -46,7 +46,6 @@ public class DTNHost implements Comparable<DTNHost> {
 
     private String currentCluster;
     private List<ArffRegion> allRegions;
-    private static final int windowSize = 30;
     private ArffRegion currentPoint;
     private int currentPointIndex = 0;
     private boolean isTaxiOnReturnPath = false;
@@ -518,15 +517,14 @@ public class DTNHost implements Comparable<DTNHost> {
 
 
         this.currentPoint = this.getCurrentPointFromAllRegions();
-        //System.out.println("current point index:" + this.currentPointIndex);
 
         if (isTaxiOnReturnPath) {
             if ((this.currentPointIndex == this.allRegions.size() - 1 && !this.isTaxiStillOnEndPoint)
                     || this.currentPointIndex <= this.futureRegionIndex) {
                 int count = getFutureRegionCount();
                 this.futureRegionIndex = this.currentPointIndex - count;
-                //System.out.println("new future count:" + count + ", index: " + this.futureRegionIndex);
                 setTaxiStillOnEndPoint();
+                System.out.println("current point index:"+this.currentPointIndex);
             }
 
         } else {
@@ -535,19 +533,13 @@ public class DTNHost implements Comparable<DTNHost> {
                     || this.currentPointIndex >= this.futureRegionIndex) {
                 int count = getFutureRegionCount();
                 this.futureRegionIndex = count + this.currentPointIndex;
-                //System.out.println("new future count:" + count + ", index: " + this.futureRegionIndex);
                 setTaxiStillOnStartPoint();
+                System.out.println("current point index:"+this.currentPointIndex);
             }
         }
 
         if (!this.currentPoint.getRegion().equalsIgnoreCase(this.currentCluster)) {
-            //System.out.println("cluster changed, new cluster:" + this.currentPoint.getRegion());
             likelihoodConUpdate();
-            /*LOGGER.info(SimClock.getTimeString()+" "
-                        + InfoMessage.TAXI_MOVED_ANOTHER_CLUSTER
-                        + ", taxiName: '" + this.getName()
-                        + "', currentCluster: '" + this.currentPoint.getRegion()
-                        + "', previousCluster: "+ this.currentCluster+"'");*/
         }
         this.currentCluster = this.currentPoint.getRegion();
 
