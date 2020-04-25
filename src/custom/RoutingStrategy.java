@@ -8,11 +8,11 @@ import custom.predictionclient.BasePredictionClient;
 import custom.predictionclient.CPTPlusPredictionClient;
 import custom.predictionclient.TDAGPredictionClient;
 import org.apache.log4j.Logger;
+import org.mockito.cglib.core.CollectionUtils;
+import org.mockito.internal.util.collections.ListUtil;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -24,6 +24,8 @@ public class RoutingStrategy {
     private static BasePredictionClient akomPredictionClient = new AkomPredictionClient();
     private static BasePredictionClient cptPlusPredictionClient = new CPTPlusPredictionClient();
     private static BasePredictionClient tdagPredictionClient = new TDAGPredictionClient();
+
+    private static Map<List<Integer>, String> predictionResults = new HashMap<>();
 
     public static Message compare(Message message, DTNHost fromNode, DTNHost toNode) {
         String destinationCluster = message.getToGoRegions().get(message.getToGoRegions().size() - 1);
@@ -91,6 +93,7 @@ public class RoutingStrategy {
         if (node.isHasTaxiCustomer()) {
             return calculateLikelihood(node, message);
         } else {
+            //return -1d;
             return calculatePredictedLikelihood(node, message);
         }
     }
@@ -116,9 +119,9 @@ public class RoutingStrategy {
         AtomicReference<Double> likelihood = new AtomicReference<>();
         likelihood.set(-1.0);
         String nextCluster = predictNextCluster(node);
-        if(nextCluster != null){
+        if (nextCluster != null) {
             IntStream.range(0, message.getToGoRegions().size()).forEach(index -> {
-                if ( message.getToGoRegions().get(index).equals(nextCluster) ) {
+                if (message.getToGoRegions().get(index).equals(nextCluster)) {
                     likelihood.set((1 + ((double) index / (double) message.getToGoRegions().size())));
                 }
             });
@@ -127,19 +130,49 @@ public class RoutingStrategy {
         return likelihood.get();
     }
 
-    public static String predictNextCluster(DTNHost node) {
+    private static String predictNextCluster(DTNHost node) {
         BasePredictionClient predictionClient = getPredictionClient();
-        List<Integer> lastClusters = new ArrayList<>(); // get last 4 cluster from node
+        List<Integer> lastClusters = getPreviousClusterIds(node);
         String nextCluster = null;
         try {
-            String nextClusterNumber = predictionClient.getPrediction(lastClusters);
-            if(nextClusterNumber != null){
-                nextCluster = "cluster" + nextClusterNumber;
+            if (lastClusters.size() > 0) {
+                if (predictionResults.get(lastClusters) != null) {
+                    nextCluster = "cluster" + predictionResults.get(lastClusters);
+                } else {
+                    String nextClusterNumber = predictionClient.getPrediction(lastClusters);
+                    if (nextClusterNumber != null) {
+                        nextCluster = "cluster" + nextClusterNumber;
+                        predictionResults.put(lastClusters, nextClusterNumber);
+                    }
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
         return nextCluster;
+    }
+
+    private static List<Integer> getPreviousClusterIds(DTNHost node) {
+        List<Integer> previousClusterIds = new ArrayList<>();
+        if (node.isTaxiOnReturnPath()) {
+            for (int i = node.getCurrentPointIndex(); i < node.getAllRegions().size(); i++) {
+                Integer clusterId = Integer.parseInt(node.getAllRegions().get(i).getRegion().replace("cluster", ""));
+                if (!previousClusterIds.contains(clusterId)) {
+                    previousClusterIds.add(clusterId);
+                    if (previousClusterIds.size() == 4) break;
+                }
+            }
+        } else {
+            for (int i = node.getCurrentPointIndex(); i >= 0; i--) {
+                Integer clusterId = Integer.parseInt(node.getAllRegions().get(i).getRegion().replace("cluster", ""));
+                if (!previousClusterIds.contains(clusterId)) {
+                    previousClusterIds.add(clusterId);
+                    if (previousClusterIds.size() == 4) break;
+                }
+            }
+        }
+        Collections.reverse(previousClusterIds);
+        return previousClusterIds;
     }
 
     private static BasePredictionClient getPredictionClient() {
