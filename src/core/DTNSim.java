@@ -6,7 +6,9 @@ package core;
 import gui.DTNSimGUI;
 
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import ui.DTNSimTextUI;
@@ -26,6 +28,11 @@ public class DTNSim {
 	public static final String RESET_METHOD_NAME = "reset";
 	/** List of class names that should be reset between batch runs */
 	private static List<Class<?>> resetList = new ArrayList<Class<?>>();
+
+	static{
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH:mm:ss");
+		System.setProperty("current_date", dateFormat.format(new Date()));
+	}
 
 	/**
 	 * Starts the user interface with given arguments.

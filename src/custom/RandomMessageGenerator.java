@@ -21,7 +21,7 @@ public class RandomMessageGenerator {
     private static final Random random = new Random();
     public static int MESSAGE_CREATE_DELAY = 2 * 60;
     public static double LAST_MESSAGE_CREATE_TIME = 0;
-    private static final Logger LOGGER = Logger.getLogger(RandomMessageGenerator.class);
+    private static final Logger LOGGER = Logger.getLogger("file");
 
     public static Message generateMessage(DTNHost carrierHost) {
         String messageId = getMessageId();

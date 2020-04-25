@@ -60,7 +60,7 @@ public class World {
 
 	private boolean watchedMessageCreated = false;
 
-	private static final Logger LOGGER = Logger.getLogger(World.class);
+	private static final Logger LOGGER = Logger.getLogger("file");
 
 	/**
 	 * Constructor.
