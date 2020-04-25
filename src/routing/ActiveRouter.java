@@ -16,6 +16,7 @@ import java.util.stream.IntStream;
 import custom.ArffReader;
 import custom.ArffRegion;
 import custom.LikelihoodComparator;
+import custom.RoutingStrategy;
 import routing.util.EnergyModel;
 import routing.util.MessageTransferAcceptPolicy;
 import routing.util.RoutingInfo;
@@ -210,54 +211,12 @@ public abstract class ActiveRouter extends MessageRouter {
         }
 
         if (m.isWatched() && m.getTo() == null && !m.isOnTheRoad()) {
-            /*if (m.getFrom() == con.getFromNode()) {
-                Double fromLikelihood = likelihoodMobUpdate(con.getFromNode(), m);
-                Double toLikelihood = likelihoodMobUpdate(con.getToNode(), m);
-                Double fromConHistory = con.getFromNode().getContactHistoryMap().get(destinationCluster);
-                Double toConHistory = con.getToNode().getContactHistoryMap().get(destinationCluster);
-
-                if (con.getToNode().isHasTaxiCustomer() && con.getFromNode().isHasTaxiCustomer()) {
-                    if ((toLikelihood > fromLikelihood)
-                            || (toConHistory > fromConHistory)) {
-                        forwardMessage = true;
-                    }
-                }
-                else if (con.getToNode().isHasTaxiCustomer() && !con.getFromNode().isHasTaxiCustomer()) {
-                    if (toLikelihood > -1 || (toConHistory > fromConHistory)) {
-                        forwardMessage = true;
-                    }
-                }
-                else if (!con.getToNode().isHasTaxiCustomer() && con.getFromNode().isHasTaxiCustomer()) {
-                    if (fromLikelihood <= -1 && (toConHistory > fromConHistory)) {
-                        forwardMessage = true;
-                    }
-                }
-                else if (!con.getToNode().isHasTaxiCustomer() && !con.getFromNode().isHasTaxiCustomer()) {
-                    if ((toConHistory > fromConHistory)) {
-                        forwardMessage = true;
-                    }
-                }
-
-                if (forwardMessage) {
-                    m.setTo(con.getToNode());
-                    m.setOnTheRoad(true);
-                }
-            }
-            else if (m.getFrom() == con.getToNode()) {
-                if (con.getToNode().isHasTaxiCustomer() && con.getFromNode().isHasTaxiCustomer()) {
-                    Double fromLikelihood = likelihoodMobUpdate(con.getToNode(), m);
-                    Double toLikelihood = likelihoodMobUpdate(con.getFromNode(), m);
-                    if ((toLikelihood > fromLikelihood)
-                            || con.getFromNode().getContactHistoryMap().get(destinationCluster) > con.getToNode().getContactHistoryMap().get(destinationCluster)) {
-                        m.setTo(con.getFromNode());
-                        m.setOnTheRoad(true);
-                    }
-                }
-            }*/
             if (m.getFrom() == con.getFromNode()){
-                LikelihoodComparator.compare(m, con.getFromNode(), con.getToNode());
+                //LikelihoodComparator.compare(m, con.getFromNode(), con.getToNode());
+                RoutingStrategy.compare(m, con.getFromNode(), con.getToNode());
             }else if (m.getFrom() == con.getToNode()){
-                LikelihoodComparator.compare(m, con.getToNode(), con.getFromNode());
+               // LikelihoodComparator.compare(m, con.getToNode(), con.getFromNode());
+                RoutingStrategy.compare(m, con.getToNode(), con.getFromNode());
             }
         }
 
