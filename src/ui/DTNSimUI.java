@@ -61,7 +61,7 @@ public abstract class DTNSimUI {
 	/** simtime of last UI update */
 	protected double lastUpdate;
 
-	private static  final Logger LOGGER = Logger.getLogger(DTNSimUI.class);
+	private static  final Logger LOGGER = Logger.getLogger("file");
 	/**
 	 * Constructor.
 	 */

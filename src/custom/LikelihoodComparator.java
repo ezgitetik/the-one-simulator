@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
 
 public class LikelihoodComparator {
 
-    private static final Logger LOGGER = Logger.getLogger(LikelihoodComparator.class);
+    private static final Logger LOGGER = Logger.getLogger("admin");
 
     public static Message compare(Message message, DTNHost fromNode, DTNHost toNode) {
         String destinationCluster = message.getToGoRegions().get(message.getToGoRegions().size() - 1);

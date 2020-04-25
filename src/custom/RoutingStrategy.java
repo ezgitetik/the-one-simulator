@@ -19,7 +19,7 @@ import java.util.stream.IntStream;
 
 public class RoutingStrategy {
 
-    private static final Logger LOGGER = Logger.getLogger(RoutingStrategy.class);
+    private static final Logger LOGGER = Logger.getLogger("file");
 
     private static BasePredictionClient akomPredictionClient = new AkomPredictionClient();
     private static BasePredictionClient cptPlusPredictionClient = new CPTPlusPredictionClient();
