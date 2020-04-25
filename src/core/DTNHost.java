@@ -71,6 +71,10 @@ public class DTNHost implements Comparable<DTNHost> {
         return allRegions;
     }
 
+    public int getCurrentPointIndex() {
+        return currentPointIndex;
+    }
+
     static {
         DTNSim.registerForReset(DTNHost.class.getCanonicalName());
         reset();
@@ -517,6 +521,8 @@ public class DTNHost implements Comparable<DTNHost> {
 
 
         this.currentPoint = this.getCurrentPointFromAllRegions();
+        this.currentCluster = this.currentPoint.getRegion();
+        System.out.println("taxi: "+this.name+"current index:" + this.currentCluster);
 
         if (isTaxiOnReturnPath) {
             if ((this.currentPointIndex == this.allRegions.size() - 1 && !this.isTaxiStillOnEndPoint)
@@ -524,7 +530,7 @@ public class DTNHost implements Comparable<DTNHost> {
                 int count = getFutureRegionCount();
                 this.futureRegionIndex = this.currentPointIndex - count;
                 setTaxiStillOnEndPoint();
-                System.out.println("current point index:"+this.currentPointIndex);
+
             }
 
         } else {
@@ -534,15 +540,14 @@ public class DTNHost implements Comparable<DTNHost> {
                 int count = getFutureRegionCount();
                 this.futureRegionIndex = count + this.currentPointIndex;
                 setTaxiStillOnStartPoint();
-                System.out.println("current point index:"+this.currentPointIndex);
             }
         }
+
+
 
         if (!this.currentPoint.getRegion().equalsIgnoreCase(this.currentCluster)) {
             likelihoodConUpdate();
         }
-        this.currentCluster = this.currentPoint.getRegion();
-
         if (this.getMessageCollection().stream().map(Message::isWatched).collect(Collectors.toList()).contains(true)) {
             String cluster = this.currentPoint.getRegion();
             List<Message> watchedMessages = this.getMessageCollection().stream().filter(Message::isWatched).collect(Collectors.toList());
@@ -612,7 +617,6 @@ public class DTNHost implements Comparable<DTNHost> {
         for (int i = cursor; i <= cursor + 1; i++) {
             hypo = Math.hypot(this.location.getxRoute() - this.allRegions.get(i).getxPoint()
                     , this.location.getyRoute() - this.allRegions.get(i).getyPoint());
-
             hypotenuseDistances.put(hypo, new ArffRegionIndex(i, this.allRegions.get(i)));
         }
         OptionalDouble key = hypotenuseDistances.keySet().stream().mapToDouble(v -> v).min();
@@ -632,6 +636,10 @@ public class DTNHost implements Comparable<DTNHost> {
             }
             this.isTaxiOnReturnPath = false;
         }
+    }
+
+    public boolean isTaxiOnReturnPath(){
+        return this.isTaxiOnReturnPath;
     }
 
     private int getCursor() {
