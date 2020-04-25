@@ -59,26 +59,6 @@ public class RoutingStrategy {
             }
         }
 
-
-//        if (toNode.isHasTaxiCustomer() && fromNode.isHasTaxiCustomer()) {
-//            if ((toLikelihood > fromLikelihood)
-//                    || (toConHistory > fromConHistory)) {
-//                forwardMessage = true;
-//            }
-//        } else if (toNode.isHasTaxiCustomer() && !fromNode.isHasTaxiCustomer()) {
-//            if (toLikelihood > -1 || (toConHistory > fromConHistory)) {
-//                forwardMessage = true;
-//            }
-//        } else if (!toNode.isHasTaxiCustomer() && fromNode.isHasTaxiCustomer()) {
-//            if (fromLikelihood <= -1 && (toConHistory > fromConHistory)) {
-//                forwardMessage = true;
-//            }
-//        } else if (!toNode.isHasTaxiCustomer() && !fromNode.isHasTaxiCustomer()) {
-//            if ((toConHistory > fromConHistory)) {
-//                forwardMessage = true;
-//            }
-//        }
-
         if (forwardMessage) {
             message.setTo(toNode);
             message.setOnTheRoad(true);
