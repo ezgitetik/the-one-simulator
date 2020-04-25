@@ -46,7 +46,6 @@ public class DTNHost implements Comparable<DTNHost> {
     private List<Message> loggedMessages = new ArrayList<>();
     private String currentCluster;
     private List<ArffRegion> allRegions;
-    private static final int windowSize = 30;
     private ArffRegion currentPoint;
     private int currentPointIndex = 0;
     private boolean isTaxiOnReturnPath = false;
@@ -70,6 +69,10 @@ public class DTNHost implements Comparable<DTNHost> {
 
     public List<ArffRegion> getAllRegions() {
         return allRegions;
+    }
+
+    public int getCurrentPointIndex() {
+        return currentPointIndex;
     }
 
     static {
@@ -522,15 +525,16 @@ public class DTNHost implements Comparable<DTNHost> {
 
 
         this.currentPoint = this.getCurrentPointFromAllRegions();
-        //System.out.println("current point index:" + this.currentPointIndex);
+        this.currentCluster = this.currentPoint.getRegion();
+        System.out.println("taxi: "+this.name+"current index:" + this.currentCluster);
 
         if (isTaxiOnReturnPath) {
             if ((this.currentPointIndex == this.allRegions.size() - 1 && !this.isTaxiStillOnEndPoint)
                     || this.currentPointIndex <= this.futureRegionIndex) {
                 int count = getFutureRegionCount();
                 this.futureRegionIndex = this.currentPointIndex - count;
-                //System.out.println("new future count:" + count + ", index: " + this.futureRegionIndex);
                 setTaxiStillOnEndPoint();
+
             }
 
         } else {
@@ -539,22 +543,15 @@ public class DTNHost implements Comparable<DTNHost> {
                     || this.currentPointIndex >= this.futureRegionIndex) {
                 int count = getFutureRegionCount();
                 this.futureRegionIndex = count + this.currentPointIndex;
-                //System.out.println("new future count:" + count + ", index: " + this.futureRegionIndex);
                 setTaxiStillOnStartPoint();
             }
         }
 
-        if (!this.currentPoint.getRegion().equalsIgnoreCase(this.currentCluster)) {
-            //System.out.println("cluster changed, new cluster:" + this.currentPoint.getRegion());
-            likelihoodConUpdate();
-            /*LOGGER.info(SimClock.getTimeString()+" "
-                        + InfoMessage.TAXI_MOVED_ANOTHER_CLUSTER
-                        + ", taxiName: '" + this.getName()
-                        + "', currentCluster: '" + this.currentPoint.getRegion()
-                        + "', previousCluster: "+ this.currentCluster+"'");*/
-        }
-        this.currentCluster = this.currentPoint.getRegion();
 
+
+        if (!this.currentPoint.getRegion().equalsIgnoreCase(this.currentCluster)) {
+            likelihoodConUpdate();
+        }
         if (this.getMessageCollection().stream().map(Message::isWatched).collect(Collectors.toList()).contains(true)) {
             String cluster = this.currentPoint.getRegion();
             List<Message> watchedMessages = this.getMessageCollection().stream().filter(Message::isWatched).collect(Collectors.toList());
@@ -629,7 +626,6 @@ public class DTNHost implements Comparable<DTNHost> {
         for (int i = cursor; i <= cursor + 1; i++) {
             hypo = Math.hypot(this.location.getxRoute() - this.allRegions.get(i).getxPoint()
                     , this.location.getyRoute() - this.allRegions.get(i).getyPoint());
-
             hypotenuseDistances.put(hypo, new ArffRegionIndex(i, this.allRegions.get(i)));
         }
         OptionalDouble key = hypotenuseDistances.keySet().stream().mapToDouble(v -> v).min();
@@ -649,6 +645,10 @@ public class DTNHost implements Comparable<DTNHost> {
             }
             this.isTaxiOnReturnPath = false;
         }
+    }
+
+    public boolean isTaxiOnReturnPath(){
+        return this.isTaxiOnReturnPath;
     }
 
     private int getCursor() {

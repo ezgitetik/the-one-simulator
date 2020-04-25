@@ -17,6 +17,8 @@ public class ArffReader {
     private static final String ARFF_PATH = ARFF_WITHOUT_MOD;
 
     private static final String TAXI_WITHOUT_MOD = "custom/taxidata/2taxi-month1-training-day1/";
+    private static final String TAXI_SIMULATION = "custom/taxidata/2taxi-month1-simulation/";
+
     private static final String  TAXI_PATH = TAXI_WITHOUT_MOD;
 
 
@@ -82,7 +84,7 @@ public class ArffReader {
         return hypotenuseCluster.get(key.getAsDouble());
     }
 
-    public static List<String> getRegionListByFileName(String fileName) throws IOException {
+   /* public static List<String> getRegionListByFileName(String fileName) throws IOException {
         InputStream stream = ArffReader.class.getClassLoader().getResourceAsStream(TAXI_PATH + fileName);
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         String line = reader.readLine();
@@ -97,10 +99,10 @@ public class ArffReader {
         return lineStringReader.getLandmarks()
                 .stream()
                 .map(landmark -> ArffReader.getRegionByPoints(landmark.getX(), landmark.getY())).collect(Collectors.toList());
-    }
+    }*/
 
     public static List<ArffRegion> getArffRegionListByFileName(String fileName) throws IOException {
-        InputStream stream = ArffReader.class.getClassLoader().getResourceAsStream(TAXI_PATH + fileName);
+        InputStream stream = ArffReader.class.getClassLoader().getResourceAsStream(TAXI_SIMULATION + fileName);
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         String line = reader.readLine();
         String lineStringLine = "";
@@ -167,7 +169,7 @@ public class ArffReader {
         return updatedTaxiPath;
     }
 
-    public static List<String> getDistinctRegionListByFileName(String fileName) throws IOException {
+    /*public static List<String> getDistinctRegionListByFileName(String fileName) throws IOException {
         InputStream stream = ArffReader.class.getClassLoader().getResourceAsStream(TAXI_PATH + fileName);
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         String line = reader.readLine();
@@ -191,7 +193,7 @@ public class ArffReader {
                 })
                 .filter(distinctByKey(region -> region))
                 .collect(Collectors.toList());
-    }
+    }*/
 
     private static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
 
