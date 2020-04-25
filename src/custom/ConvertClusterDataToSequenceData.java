@@ -11,8 +11,8 @@ import java.util.stream.Stream;
 
 public class ConvertClusterDataToSequenceData {
 
-    private static final String ARFF_PATH = "custom/taxidata/2taxi-month1-weka.arff";
-    private static final String  TAXI_PATH = "custom/taxidata/2taxi-month1-training/";
+    private static final String ARFF_PATH = "custom/taxidata/2taxi-month1/2taxi-month1-weka.arff";
+    private static final String  TAXI_PATH = "custom/taxidata/2taxi-month1/2taxi-month1-training/";
 
     public static List<List<String>> read() throws IOException {
         /*List<String> allLines = Files.readAllLines(Paths.get(ConvertClusterDataToSequenceData.class.getClassLoader().getResource("taxi100_month1_week1_clusters.txt").getPath()));
