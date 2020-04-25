@@ -218,7 +218,7 @@ public class SimScenario implements Serializable {
 
     public static final String HOST_NAME = "hostName";
 
-    private static final Logger LOGGER = Logger.getLogger(SimScenario.class);
+    private static final Logger LOGGER = Logger.getLogger("file");
 
     static {
         DTNSim.registerForReset(SimScenario.class.getCanonicalName());

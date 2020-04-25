@@ -58,7 +58,7 @@ public class DTNHost implements Comparable<DTNHost> {
     //TODO it should be changed when cluster count has changed.
     private static final int CLUSTER_COUNT = 40;
 
-    private static final Logger LOGGER=Logger.getLogger(DTNHost.class);
+    private static final Logger LOGGER=Logger.getLogger("file");
 
     public ArffRegion getCurrentPoint() {
         return currentPoint;
@@ -486,6 +486,10 @@ public class DTNHost implements Comparable<DTNHost> {
         double distance;
         double dx, dy;
 
+        Logger LOGGER_ADMIN = Logger.getLogger("admin");;
+        Logger LOGGER_STDOUT = Logger.getLogger("stdout");
+
+
         if (!isMovementActive() || SimClock.getTime() < this.nextTimeToMove) {
             return;
         }
@@ -565,6 +569,8 @@ public class DTNHost implements Comparable<DTNHost> {
                             + "', totalTime: "+ watchedMessage.getElapsedTimeAsMinutes() + " minutes.");
                     //this.deleteMessage(watchedMessage.getId(), true);
                     watchedMessage.setTtl(1);
+                    LOGGER_ADMIN.info(watchedMessage.getId() + "," + watchedMessage.getElapsedTimeAsMinutes());
+                    LOGGER_STDOUT.info(watchedMessage.getId() + "," + watchedMessage.getElapsedTimeAsMinutes());
                 }
             });
 
