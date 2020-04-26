@@ -68,7 +68,7 @@ Group1.okMaps = 1
 Group1.speed = 10.8, 13.6
 Group1.nrofHosts = 1
 Group1.movementModel = MapRouteMovement
-Group1.routeFile = data/custom/taxidata/2taxi-month1-simulation/taxi-818.wkt
+Group1.routeFile = data/custom/taxidata/2taxi-month1/2taxi-month1-simulation/taxi-818.wkt
 Group1.routeType = 1
 Group1.routeFirstStop = 0
 
@@ -79,7 +79,7 @@ Group2.okMaps = 1
 Group2.speed = 9.7, 12.5
 Group2.nrofHosts = 1
 Group2.movementModel = MapRouteMovement
-Group2.routeFile = data/custom/taxidata/2taxi-month1-simulation/taxi-815.wkt
+Group2.routeFile = data/custom/taxidata/2taxi-month1/2taxi-month1-simulation/taxi-815.wkt
 Group2.routeType = 1
 Group2.routeFirstStop = 0
 
