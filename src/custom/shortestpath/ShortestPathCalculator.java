@@ -8,27 +8,64 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ShortestPathCalculator {
 
-    public static List<String> getShortestPath(String start, String finish) throws IOException {
+    private static Map<String, List<Region>> graphMap = null;
+    private static Graph graph = null;
+
+    public static List<String> getShortestPath(String start, String finish) {
         //List<List<String>> regions = ArffReader.getRegionListForAllFiles();
         //Map<String, List<Region>> graphMap = ArffReader.getGraphMapByTrafficVolume(regions);
-        Map<String, List<Region>> graphMap = getGraphMapByTrafficFlow(ArffReader.REGIONS);
-
-        Graph graph = new Graph();
-        graphMap.forEach((key, value) -> {
-            List<Vertex> vertexes = value.stream().map(region -> {
-                return new Vertex(region.getName(), region.getWeight());
-            }).collect(Collectors.toList());
-            graph.addVertex(key, vertexes);
-        });
+        if (graphMap == null) {
+            graphMap = getGraphMapByTrafficFlow(ArffReader.REGIONS);
+            graph = new Graph();
+            graphMap.forEach((key, value) -> {
+                List<Vertex> vertexes = value.stream().map(region -> {
+                    return new Vertex(region.getName(), region.getWeight());
+                }).collect(Collectors.toList());
+                graph.addVertex(key, vertexes);
+            });
+        }
         return graph.getShortestPath(start, finish);
     }
 
-    public static Map<String, List<Region>> getGraphMapByTrafficVolume(List<List<String>> regions) {
-        List<Region> listOfRegions = ArffReader.getListOfRegions();
+    private static Map<String, List<Region>> getGraphMapByTrafficFlow(List<List<String>> regions) {
+        Map<String, List<Region>> graphMap = new HashMap<>();
+        final String[] controlRegion = {null};
+
+        regions.forEach(regionsx -> {
+            controlRegion[0] = null;
+            for (String region : regionsx) {
+                if (controlRegion[0] != null && !region.equalsIgnoreCase(controlRegion[0])) {
+
+                    if (graphMap.get(controlRegion[0]) == null) graphMap.put(controlRegion[0], new ArrayList<>());
+                    List<Region> neighbors = graphMap.get(controlRegion[0]);
+
+                    if (neighbors.stream().filter(neighbor -> neighbor.getName().equalsIgnoreCase(region)).count() <= 0) {
+                        Region currentRegion = new Region(region, 0, 1);
+                        neighbors.add(currentRegion);
+                        graphMap.put(controlRegion[0], neighbors);
+                    } else {
+                        Region currentRegion = neighbors.stream().filter(neighbor -> neighbor.getName().equalsIgnoreCase(region)).findFirst().get();
+                        currentRegion.increaseFlowCount();
+                    }
+
+                }
+                controlRegion[0] = region;
+            }
+        });
+
+        graphMap.values().forEach(regionList -> regionList.forEach(region -> region.setWeight(1 / region.getFlowCount())));
+        return graphMap;
+    }
+
+    /*public static Map<String, List<Region>> getGraphMapByTrafficVolume(List<List<String>> regions) {
+        List<Region> listOfRegions = getListOfRegions();
         Map<String, List<Region>> graphMap = new HashMap<>();
         final String[] controlRegion = {null};
         regions.forEach(regionsx -> {
@@ -54,33 +91,26 @@ public class ShortestPathCalculator {
             }
         });
         return graphMap;
+    }*/
+
+    /*public static List<Region> getListOfRegions() {
+        List<String> regionNames = ArffReader.ARFF_REGIONS.stream()
+                .map(region -> region.getRegion())
+                .filter(distinctByKey(region -> region))
+                .sorted()
+                .collect(Collectors.toList());
+
+        return regionNames.stream().map(regionName -> {
+            int weight = (int) ArffReader.ARFF_REGIONS.stream().filter(region -> region.getRegion().equalsIgnoreCase(regionName)).count();
+            return new Region(regionName, (1 / weight));
+        }).collect(Collectors.toList());
+    }*/
+
+    private static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+
+        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
 
-    private static Map<String, List<Region>> getGraphMapByTrafficFlow(List<List<String>> regions) {
-        Map<String, List<Region>> graphMap = new HashMap<>();
-        final String[] controlRegion = {null};
-        regions.forEach(regionsx -> {
-            controlRegion[0] = null;
-            for (String region : regionsx) {
-                if (controlRegion[0] != null && !region.equalsIgnoreCase(controlRegion[0])) {
 
-                    if (graphMap.get(controlRegion[0]) == null) graphMap.put(controlRegion[0], new ArrayList<>());
-                    List<Region> neighbors = graphMap.get(controlRegion[0]);
-
-                    if (neighbors.stream().filter(neighbor -> neighbor.getName().equalsIgnoreCase(region)).count() <= 0) {
-                        Region currentRegion = new Region(region, 0, 1);
-                        neighbors.add(currentRegion);
-                        graphMap.put(controlRegion[0], neighbors);
-                    } else {
-                        Region currentRegion = neighbors.stream().filter(neighbor -> neighbor.getName().equalsIgnoreCase(region)).findFirst().get();
-                        currentRegion.increaseFlowCount();
-                    }
-
-                }
-                controlRegion[0] = region;
-            }
-        });
-        graphMap.values().forEach(regionList -> regionList.stream().forEach(region -> region.setWeight(1 / region.getFlowCount())));
-        return graphMap;
-    }
 }
