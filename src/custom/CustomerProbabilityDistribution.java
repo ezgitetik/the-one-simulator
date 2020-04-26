@@ -32,12 +32,4 @@ public class CustomerProbabilityDistribution {
         return (int) calculateNegativeExponential(MEAN_GPS_LOG_COUNT_WITH_NO_CUSTOMER);
     }
 
-    public static void main(String[] args) throws IOException {
-        ArffReader.read();
-        List<ArffRegion> taxiFutureRegions = ArffReader.getArffRegionListByFileName("taxi-528.wkt");
-        IntStream.range(0, 100).forEach(index -> System.out.println("customer expo: " + calculateNegativeExponential(MEAN_GPS_LOG_COUNT_WITH_CUSTOMER)));
-        IntStream.range(0, 100).forEach(index -> System.out.println("no customer expo: " + calculateNegativeExponential(MEAN_GPS_LOG_COUNT_WITH_NO_CUSTOMER)));
-    }
-
-
 }
