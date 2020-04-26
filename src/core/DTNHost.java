@@ -43,7 +43,7 @@ public class DTNHost implements Comparable<DTNHost> {
     private List<NetworkInterface> net;
     private ModuleCommunicationBus comBus;
 
-    private List<Message> loggedMessages = new ArrayList<>();
+    private List<String> loggedMessages = new ArrayList<>();
     private String currentCluster;
     private List<ArffRegion> allRegions;
     private ArffRegion currentPoint;
@@ -565,11 +565,11 @@ public class DTNHost implements Comparable<DTNHost> {
                             + "', totalTime: "+ watchedMessage.getElapsedTimeAsMinutes() + " minutes.");
                     //this.deleteMessage(watchedMessage.getId(), true);
                     watchedMessage.setTtl(1);
-                    if(!loggedMessages.contains(watchedMessage)){
+                    if(!loggedMessages.contains(watchedMessage.getId())){
                         LOGGER_ADMIN.info(watchedMessage.getId() + "," + watchedMessage.getElapsedTimeAsMinutes());
                         LOGGER_STDOUT.info(watchedMessage.getId() + "," + watchedMessage.getElapsedTimeAsMinutes());
                     }
-                    loggedMessages.add(watchedMessage);
+                    loggedMessages.add(watchedMessage.getId());
                 }
             });
 
