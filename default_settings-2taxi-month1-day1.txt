@@ -57,7 +57,7 @@ Group.interface1 = btInterface
 # Walking speeds
 Group.speed = 0.5, 1.5
 # Message TTL of 300 minutes (5 hours)
-Group.msgTtl = 300
+Group.msgTtl = 120
 
 # Define 6 different node groups
 Scenario.nrofHostGroups = 2

@@ -384,7 +384,7 @@ public abstract class MessageRouter {
 			aMessage.setFrom(this.host);
 			aMessage.setTo(null);
 			//aMessage.setTtl(-1);
-			aMessage.setTtl(120);
+			//aMessage.setTtl(120);
 			aMessage.setOnTheRoad(false);
 			//System.out.println("Message transfer completed to: " + aMessage.getFrom().getName());
 		}

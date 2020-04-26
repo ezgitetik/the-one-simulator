@@ -163,7 +163,7 @@ public class Apriori {
 
         ArffReader.read();
         AtomicInteger taxiIndex = new AtomicInteger(0);
-        ArffReader.regions.forEach(taxiRoute -> {
+        ArffReader.REGIONS.forEach(taxiRoute -> {
             List<String> taxiMap = new ArrayList<>();
             taxiMap.add("taxi" + taxiIndex);
             taxiIndex.getAndIncrement();
