@@ -526,7 +526,6 @@ public class DTNHost implements Comparable<DTNHost> {
 
         this.currentPoint = this.getCurrentPointFromAllRegions();
         this.currentCluster = this.currentPoint.getRegion();
-        System.out.println("taxi: "+this.name+"current index:" + this.currentCluster);
 
         if (isTaxiOnReturnPath) {
             if ((this.currentPointIndex == this.allRegions.size() - 1 && !this.isTaxiStillOnEndPoint)
