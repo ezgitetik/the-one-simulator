@@ -13,11 +13,11 @@ import java.util.stream.Stream;
 
 public class ArffReader {
 
-    private static final String ARFF_WITHOUT_MOD = "custom/taxidata/2taxi-month1/2taxi-month1-weka.arff";
+    private static final String ARFF_WITHOUT_MOD = "custom/taxidata/10taxi-month1/10taxi-month1-weka.arff";
     private static final String ARFF_PATH = ARFF_WITHOUT_MOD;
 
-    private static final String TAXI_WITHOUT_MOD = "custom/taxidata/2taxi-month1/2taxi-month1-training-day1/";
-    private static final String TAXI_SIMULATION = "custom/taxidata/2taxi-month1/2taxi-month1-simulation/";
+    private static final String TAXI_WITHOUT_MOD = "custom/taxidata/10taxi-month1/10taxi-month1-training-day1/";
+    private static final String TAXI_SIMULATION = "custom/taxidata/10taxi-month1/10taxi-month1-simulation/";
 
     private static final String TAXI_PATH = TAXI_WITHOUT_MOD;
 
@@ -96,15 +96,18 @@ public class ArffReader {
         reader.close();
         LineStringReader lineStringReader = new LineStringReader(lineStringLine);
         lineStringReader.parse();
+
         return lineStringReader.getLandmarks()
                 .stream()
-                .map(landmark -> ArffReader.getArffRegionByPoints(landmark.getX(), landmark.getY())).collect(Collectors.toList());
+                .map(landmark -> ArffReader.getArffRegionByPoints(landmark.getX(), landmark.getY()))
+                .collect(Collectors.toList());
     }
 
     private static ArffRegion getArffRegionByPoints(Double xPoint, Double yPoint) {
-        return ARFF_REGIONS.stream()
+        return ARFF_REGIONS.parallelStream()
                 .filter(arffRegion -> arffRegion.getxPoint().equals(xPoint) && arffRegion.getyPoint().equals(yPoint))
-                .findFirst().orElse(new ArffRegion(0.0, 0.0, ""));
+                .findFirst()
+                .orElse(new ArffRegion(0.0, 0.0, ""));
     }
 
     private static String getRegionByPoints(Double xPoint, Double yPoint) {

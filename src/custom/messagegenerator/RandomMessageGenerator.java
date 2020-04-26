@@ -27,7 +27,7 @@ public class RandomMessageGenerator {
     private static final List<String> centralClusters=Arrays.asList("cluster6","cluster19");
     private static final List<String> centralAndFarClusters=Arrays.asList("cluster26","cluster29");
 
-    private static final MessageGenerationType MESSAGE_GENERATION_TYPE = MessageGenerationType.BETWEEN_TWO_CENTRAL_CLUSTERS;
+    private static final MessageGenerationType MESSAGE_GENERATION_TYPE = MessageGenerationType.UNIFORM;
     private static final MessageGenerationFrequency MESSAGE_GENERATION_FREQUENCY = MessageGenerationFrequency.ONE_MESSAGE_PER_MINUTE;
 
     public static Message generateMessage(DTNHost fromHost) {
@@ -88,7 +88,7 @@ public class RandomMessageGenerator {
         message.addToGoRegions(shortestPath);
         message.setWatched(true);
         message.setCreatedTime(SimClock.getTime());
-        message.setTtl(120); //120 minutes
+       // message.setTtl(120); //120 minutes
 
         LAST_MESSAGE_CREATE_TIME = SimClock.getTime();
 
