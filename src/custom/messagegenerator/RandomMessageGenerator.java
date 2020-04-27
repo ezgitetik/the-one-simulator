@@ -95,6 +95,7 @@ public class RandomMessageGenerator {
         LOGGER.info(SimClock.getTimeString() + " " + InfoMessage.MESSAGE_CREATED
                 + ", messageId: '" + message.getId()
                 + "', carrier taxiName: '" + fromHost.getName()
+                + "', cluster: '" + fromHost.getCurrentCluster()
                 + "', toGoClusters: '" + shortestPath.stream().collect(Collectors.joining(",")) + "'");
 
         return message;
