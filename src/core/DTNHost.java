@@ -177,7 +177,8 @@ public class DTNHost implements Comparable<DTNHost> {
                 this.allRegions = ArffReader.getArffRegionListByFileName(this.name + ".wkt");
                 IntStream.range(0, CLUSTER_COUNT).forEach(cluster -> this.contactHistoryMap.put("cluster" + cluster, 0D));
                 //  this.nextTimeToMove = 0;
-            } catch (IOException e) {
+            }
+            catch (Exception e) {
                 e.printStackTrace();
             }
         }

@@ -27,8 +27,8 @@ public class LineStringReader {
 
     public void parse() {
         String coordinatesString = this.lineStringLine.substring(12, this.lineStringLine.length() - 1);
-        String[] coordinates = coordinatesString.split(",");
-        Arrays.stream(coordinates).forEach(coordinate->{
+        List<String> coordinates = Arrays.asList(coordinatesString.split(","));
+        coordinates.forEach(coordinate->{
             if (coordinate.contains(" ")){
                 Landmark landmark = new Landmark();
                 landmark.setY(Double.parseDouble(coordinate.trim().split(" ")[1].trim()));

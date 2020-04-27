@@ -21,7 +21,7 @@ public class ConvertClusterDataToSequenceData {
       //  ArffReader.read();
 
         List<String> allLines = Files.readAllLines(Paths.get(ArffReader.class.getClassLoader().getResource(ARFF_PATH).getPath()));
-        ForkJoinPool forkJoinPool = new ForkJoinPool(50);
+        ForkJoinPool forkJoinPool = new ForkJoinPool(60);
         List<ArffRegion> arffRegions = new ArrayList<>();
         forkJoinPool.submit(() -> allLines.forEach(line -> {
             String[] regionString = line.split(",");
@@ -43,7 +43,7 @@ public class ConvertClusterDataToSequenceData {
 
         List<List<String>> distinctedRegions = new ArrayList<>();
 
-        ForkJoinPool forkJoinPool = new ForkJoinPool(50);
+        ForkJoinPool forkJoinPool = new ForkJoinPool(60);
         forkJoinPool.submit(() -> files.parallelStream().forEach(file -> {
             InputStream stream = ArffReader.class.getClassLoader().getResourceAsStream(TAXI_PATH + file);
             System.out.println("file " + file);

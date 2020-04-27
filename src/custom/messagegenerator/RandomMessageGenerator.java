@@ -23,9 +23,9 @@ public class RandomMessageGenerator {
     private static double LAST_MESSAGE_CREATE_TIME = 0;
     private static final Logger LOGGER = Logger.getLogger("file");
 
-    private static final List<String> farClusters=Arrays.asList("cluster2","cluster10");
-    private static final List<String> centralClusters=Arrays.asList("cluster6","cluster19");
-    private static final List<String> centralAndFarClusters=Arrays.asList("cluster26","cluster29");
+    private static final List<String> farClusters = Arrays.asList("cluster2", "cluster10");
+    private static final List<String> centralClusters = Arrays.asList("cluster6", "cluster19");
+    private static final List<String> centralAndFarClusters = Arrays.asList("cluster26", "cluster29");
 
     private static final MessageGenerationType MESSAGE_GENERATION_TYPE = MessageGenerationType.UNIFORM;
     private static final MessageGenerationFrequency MESSAGE_GENERATION_FREQUENCY = MessageGenerationFrequency.ONE_MESSAGE_PER_MINUTE;
@@ -37,32 +37,29 @@ public class RandomMessageGenerator {
                 String sourceCluster = getSourceCluster(fromHost);
                 String destinationCluster = pickRandomDestinationCluster(sourceCluster);
                 message = buildMessage(fromHost, sourceCluster, destinationCluster);
-            }
-            else if (MESSAGE_GENERATION_TYPE == MessageGenerationType.BETWEEN_TWO_FAR_DISTANCE_CLUSTERS){
+            } else if (MESSAGE_GENERATION_TYPE == MessageGenerationType.BETWEEN_TWO_FAR_DISTANCE_CLUSTERS) {
                 String sourceCluster = getSourceCluster(fromHost);
-                if (farClusters.contains(sourceCluster)){
+                if (farClusters.contains(sourceCluster)) {
                     String destinationCluster = farClusters.stream()
-                            .filter(cluster->!cluster.equalsIgnoreCase(sourceCluster))
+                            .filter(cluster -> !cluster.equalsIgnoreCase(sourceCluster))
                             .collect(Collectors.toList())
                             .get(0);
                     message = buildMessage(fromHost, sourceCluster, destinationCluster);
                 }
-            }
-            else if (MESSAGE_GENERATION_TYPE == MessageGenerationType.BETWEEN_TWO_CENTRAL_CLUSTERS){
+            } else if (MESSAGE_GENERATION_TYPE == MessageGenerationType.BETWEEN_TWO_CENTRAL_CLUSTERS) {
                 String sourceCluster = getSourceCluster(fromHost);
-                if (centralClusters.contains(sourceCluster)){
+                if (centralClusters.contains(sourceCluster)) {
                     String destinationCluster = centralClusters.stream()
-                            .filter(cluster->!cluster.equalsIgnoreCase(sourceCluster))
+                            .filter(cluster -> !cluster.equalsIgnoreCase(sourceCluster))
                             .collect(Collectors.toList())
                             .get(0);
                     message = buildMessage(fromHost, sourceCluster, destinationCluster);
                 }
-            }
-            else if (MESSAGE_GENERATION_TYPE == MessageGenerationType.BETWEEN_CENTRAL_AND_FAR_DISTANCE_CLUSTERS){
+            } else if (MESSAGE_GENERATION_TYPE == MessageGenerationType.BETWEEN_CENTRAL_AND_FAR_DISTANCE_CLUSTERS) {
                 String sourceCluster = getSourceCluster(fromHost);
-                if (centralAndFarClusters.contains(sourceCluster)){
+                if (centralAndFarClusters.contains(sourceCluster)) {
                     String destinationCluster = centralAndFarClusters.stream()
-                            .filter(cluster->!cluster.equalsIgnoreCase(sourceCluster))
+                            .filter(cluster -> !cluster.equalsIgnoreCase(sourceCluster))
                             .collect(Collectors.toList())
                             .get(0);
                     message = buildMessage(fromHost, sourceCluster, destinationCluster);
@@ -88,7 +85,7 @@ public class RandomMessageGenerator {
         message.addToGoRegions(shortestPath);
         message.setWatched(true);
         message.setCreatedTime(SimClock.getTime());
-       // message.setTtl(120); //120 minutes
+        // message.setTtl(120); //120 minutes
 
         LAST_MESSAGE_CREATE_TIME = SimClock.getTime();
 
@@ -134,12 +131,7 @@ public class RandomMessageGenerator {
     }
 
     private static List<String> getMessageShortestPath(String sourceCluster, String destinationCluster) {
-        List<String> toGoRegions = null;
-        try {
-            toGoRegions = ShortestPathCalculator.getShortestPath(sourceCluster, destinationCluster);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        List<String> toGoRegions = ShortestPathCalculator.getShortestPath(sourceCluster, destinationCluster);
         Collections.reverse(toGoRegions);
         List<String> shortestPath = new ArrayList<>();
         shortestPath.add(sourceCluster);
