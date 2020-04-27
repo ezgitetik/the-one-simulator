@@ -12,7 +12,7 @@ import java.net.URLDecoder;
 public class Apriori {
 
     public static void main(String[] arg) throws IOException {
-        ArffReader.read();
+        /*ArffReader.read();
         ArffReader.REGIONS.forEach(region -> System.out.println(String.join(",", region)));
         System.out.println("############################");
         ArffReader.DISTINCTED_REGIONS.forEach(region -> System.out.println(String.join(" ", region)));
@@ -24,7 +24,7 @@ public class Apriori {
         AlgoApriori algorithm = new AlgoApriori();
         Itemsets result = algorithm.runAlgorithm(minsup, input, (String) output);
         algorithm.printStats();
-        result.printItemsets(algorithm.getDatabaseSize());
+        result.printItemsets(algorithm.getDatabaseSize());*/
     }
 
     public static String fileToPath(String filename) throws UnsupportedEncodingException {

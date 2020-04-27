@@ -125,6 +125,7 @@ public class MapRoute {
 
 
     //TODO should be refactores it takes to much time to execute below.
+
     /**
      * Reads routes from files defined in Settings
      *
@@ -155,36 +156,43 @@ public class MapRoute {
                     fileName + " (cause: " + ioe.getMessage() + ")");
         }
 
-		for (List<Coord> l : coords) {
-			List<MapNode> nodes = new ArrayList<MapNode>();
-			for (Coord c : l) {
-				// make coordinates match sim map data
-				if (mirror) {
-					c.setLocation(c.getX(), -c.getY());
-				}
-			    //	updateMap
+        for (List<Coord> l : coords) {
+            List<MapNode> nodes = new ArrayList<MapNode>();
+            for (Coord c : l) {
+                // make coordinates match sim map data
+                if (mirror) {
+                    c.setLocation(c.getX(), -c.getY());
+                }
+                //	updateMap
 
-				// ezgi
-				// bursa offset x : -3145.603, y: 43632.5 (20 taxi:  x:-102.785, y:48159.212 )
+                // ezgi
+                // bursa offset x : -3145.603, y: 43632.5 (20 taxi:  x:-102.785, y:48159.212 )
                 //TODO xOffset and yOffset
-				c.translate(xOffset, yOffset);
-				//MapNode node = map.getNodeByCoord(c);
+                c.translate(xOffset, yOffset);
+                //MapNode node = map.getNodeByCoord(c);
 
-				MapNode node = map.getNodes().stream().filter(nodex->nodex.getLocation().getX()==c.getX() && nodex.getLocation().getY()==c.getY()).findFirst().get();
-				if (node == null) {
-					Coord orig = c.clone();
-					orig.translate(-xOffset, -yOffset);
-					orig.setLocation(orig.getX(), -orig.getY());
+                MapNode node = null;
 
-					throw new SettingsError("MapRoute in file " + routeFile +
-							" contained invalid coordinate " + c + " orig: " +
-							orig);
-				}
-				nodes.add(node);
-			}
+                for (MapNode nodex : map.getNodes()) {
+                    if (nodex.getLocation().getX() == c.getX() && nodex.getLocation().getY() == c.getY()) {
+                        node = nodex;
+                    }
+                }
 
-			routes.add(new MapRoute(type, nodes));
-		}
+                if (node == null) {
+                    Coord orig = c.clone();
+                    orig.translate(-xOffset, -yOffset);
+                    orig.setLocation(orig.getX(), -orig.getY());
+
+                    throw new SettingsError("MapRoute in file " + routeFile +
+                            " contained invalid coordinate " + c + " orig: " +
+                            orig);
+                }
+                nodes.add(node);
+            }
+
+            routes.add(new MapRoute(type, nodes));
+        }
 
         return routes;
     }
