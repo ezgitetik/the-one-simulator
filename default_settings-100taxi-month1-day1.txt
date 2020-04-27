@@ -2,6 +2,11 @@
 # Default settings for the simulation
 #
 
+## Training settings
+ARFF_WITHOUT_MOD = custom/taxidata/100taxi-month1/100taxi-month1-weka.arff
+TAXI_WITHOUT_MOD = custom/taxidata/100taxi-month1/100taxi-month1-training-day1/
+TAXI_SIMULATION = custom/taxidata/100taxi-month1/100taxi-month1-simulation/
+
 ## Scenario settings
 Scenario.name = default_scenario
 Scenario.simulateConnections = true
