@@ -2,6 +2,7 @@ package custom;
 
 import core.DTNHost;
 import core.Message;
+import core.Settings;
 import core.SimClock;
 import custom.predictionclient.AkomPredictionClient;
 import custom.predictionclient.BasePredictionClient;
@@ -21,6 +22,9 @@ public class RoutingStrategy {
 
     private static final Logger LOGGER = Logger.getLogger("file");
 
+    private static final Settings s = new Settings();
+    private static final String PREDICTION_MOD = s.getSetting("prediction");
+
     private static BasePredictionClient akomPredictionClient = new AkomPredictionClient();
     private static BasePredictionClient cptPlusPredictionClient = new CPTPlusPredictionClient();
     private static BasePredictionClient tdagPredictionClient = new TDAGPredictionClient();
@@ -32,8 +36,12 @@ public class RoutingStrategy {
 
         Double fromLikelihood = likelihoodMobUpdate(fromNode, message);
         Double toLikelihood = likelihoodMobUpdate(toNode, message);
+
         Double fromConHistory = likelihoodConUpdate(fromNode, destinationCluster);
+        //Double fromConHistory = calculatePredictedLikelihood(fromNode, message);
+
         Double toConHistory = likelihoodConUpdate(toNode, destinationCluster);
+        //Double toConHistory = calculatePredictedLikelihood(toNode, message);
 
         boolean forwardMessage = false;
 
@@ -176,6 +184,11 @@ public class RoutingStrategy {
     }
 
     private static BasePredictionClient getPredictionClient() {
+        if(PREDICTION_MOD.equals("akom")) return akomPredictionClient;
+        if(PREDICTION_MOD.equals("tdag")) return tdagPredictionClient;
+        if(PREDICTION_MOD.equals("cpt")) return cptPlusPredictionClient;
+
+        // default akomPredictionClient
         return akomPredictionClient;
     }
 
