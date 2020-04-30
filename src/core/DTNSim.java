@@ -32,6 +32,11 @@ public class DTNSim {
 	static{
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH:mm:ss");
 		System.setProperty("current_date", dateFormat.format(new Date()));
+
+
+		Settings s = new Settings(); // don't use any namespace
+		System.setProperty("prediction", s.getSetting("prediction"));
+		System.setProperty("nrofHostGroups", s.getSetting("Scenario.nrofHostGroups"));
 	}
 
 	/**

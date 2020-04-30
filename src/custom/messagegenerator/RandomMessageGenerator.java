@@ -19,6 +19,9 @@ public class RandomMessageGenerator {
     private static int MESSAGE_COUNT = 0;
     private static final int MESSAGE_SIZE = 977273;
     private static final int CLUSTER_COUNT = 40;
+    private static final int FINAL_HOUR = 60 * 60 * 22;
+    private static final int START_HOUR = 60 * 60 * 6;
+
     private static final Random random = new Random();
     private static double LAST_MESSAGE_CREATE_TIME = 0;
     private static final Logger LOGGER = Logger.getLogger("file");
@@ -32,7 +35,7 @@ public class RandomMessageGenerator {
 
     public static Message generateMessage(DTNHost fromHost) {
         Message message = null;
-        if (SimClock.getTime() > elapsedTimeAfterLastMessageGeneration()) {
+        if (SimClock.getTime() > START_HOUR && SimClock.getTime() > elapsedTimeAfterLastMessageGeneration() && SimClock.getTime() < FINAL_HOUR) {
             if (MESSAGE_GENERATION_TYPE == MessageGenerationType.UNIFORM) {
                 String sourceCluster = getSourceCluster(fromHost);
                 String destinationCluster = pickRandomDestinationCluster(sourceCluster);
