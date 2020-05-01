@@ -58,8 +58,8 @@ public class InfoPanel extends JPanel implements ActionListener{
 
 
 		DecimalFormat df = new DecimalFormat("#####.###");
-		// bursa offset x : -3145.603, y: 43632.5
-		String textWithOffset = "offset:(" + (df.format(host.getLocation().getX()+3145.603 ))+ " " + df.format((48120.294-host.getLocation().getY())) + ") " + host.getCurrentCluster();
+		// bursa offset x : -3145.603, y: 43632.5, -3145.603, y: 43632.5
+		String textWithOffset = "weka:(" + (df.format(host.getLocation().getxRoute() ))+ " " + df.format((host.getLocation().getyRoute())) + ") " + host.getCurrentCluster();
 
 		msgChooser = new JComboBox(messages);
 		msgChooser.insertItemAt(messages.size() + " messages", 0);

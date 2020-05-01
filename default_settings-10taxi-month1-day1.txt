@@ -7,6 +7,9 @@ ARFF_WITHOUT_MOD = custom/taxidata/10taxi-month1/10taxi-month1-weka.arff
 TAXI_WITHOUT_MOD = custom/taxidata/10taxi-month1/10taxi-month1-training-day1/
 TAXI_SIMULATION = custom/taxidata/10taxi-month1/10taxi-month1-simulation/
 
+## prediction method (akom, tdag, cpt)
+prediction = akom
+
 ## Scenario settings
 Scenario.name = default_scenario
 Scenario.simulateConnections = true
