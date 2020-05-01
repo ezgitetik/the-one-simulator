@@ -524,7 +524,7 @@ public abstract class MessageRouter {
 		if (removed == null) throw new SimError("no message for id " +
 				id + " to remove at " + this.host);
 		if(removed.isWatched()){
-			System.out.println("Message " + removed.getId() + " is deleted" );
+			//System.out.println("Message " + removed.getId() + " is deleted" );
 		}
 		for (MessageListener ml : this.mListeners) {
 			ml.messageDeleted(removed, this.host, drop);

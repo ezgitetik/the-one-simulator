@@ -116,7 +116,7 @@ public class RoutingStrategy {
 
         IntStream.range(0, message.getToGoRegions().size()).forEach(index -> {
             if (nodeClusters.contains(message.getToGoRegions().get(index))) {
-                likelihood.set((1 + ((double) index / (double) message.getToGoRegions().size())));
+                likelihood.set((1 + ((double) (index + 1) / (double) message.getToGoRegions().size())));
             }
         });
 
@@ -130,7 +130,7 @@ public class RoutingStrategy {
         if (nextCluster != null) {
             IntStream.range(0, message.getToGoRegions().size()).forEach(index -> {
                 if (message.getToGoRegions().get(index).equals(nextCluster)) {
-                    likelihood.set((1 + ((double) index / (double) message.getToGoRegions().size())));
+                    likelihood.set((1 + ((double) (index+1) / (double) message.getToGoRegions().size())));
                 }
             });
         }

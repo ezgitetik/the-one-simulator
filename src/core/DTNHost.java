@@ -59,6 +59,8 @@ public class DTNHost implements Comparable<DTNHost> {
 
     private static final Logger LOGGER=Logger.getLogger("file");
 
+    private List<String> passedRegions = new ArrayList<>();
+
     public ArffRegion getCurrentPoint() {
         return currentPoint;
     }
@@ -175,6 +177,10 @@ public class DTNHost implements Comparable<DTNHost> {
         if (this.name.startsWith("taxi-")) {
             try {
                 this.allRegions = ArffReader.getArffRegionListByFileName(this.name + ".wkt");
+                if(this.getName().equalsIgnoreCase("taxi-797")){
+                    System.out.print(this.allRegions.stream().map(ArffRegion::getRegion).collect(Collectors.joining(",")));
+                    System.out.println("");
+                }
                 IntStream.range(0, CLUSTER_COUNT).forEach(cluster -> this.contactHistoryMap.put("cluster" + cluster, 0D));
                 //  this.nextTimeToMove = 0;
             }
@@ -528,6 +534,17 @@ public class DTNHost implements Comparable<DTNHost> {
         this.currentPoint = this.getCurrentPointFromAllRegions();
         this.currentCluster = this.currentPoint.getRegion();
 
+        if(this.getName().equalsIgnoreCase("taxi-797")){
+            if(this.passedRegions.size() == 0){
+                this.passedRegions.add(this.currentCluster);
+                System.out.println(this.currentCluster);
+            } else {
+                if(!this.passedRegions.get(this.passedRegions.size()-1).equalsIgnoreCase(this.currentCluster)){
+                    this.passedRegions.add(this.currentCluster);
+                    System.out.println(this.currentCluster);
+                }
+            }
+        }
         if (isTaxiOnReturnPath) {
             if ((this.currentPointIndex == this.allRegions.size() - 1 && !this.isTaxiStillOnEndPoint)
                     || this.currentPointIndex <= this.futureRegionIndex) {
@@ -568,7 +585,7 @@ public class DTNHost implements Comparable<DTNHost> {
                     watchedMessage.setTtl(1);
                     if(!loggedMessages.contains(watchedMessage.getId())){
                         LOGGER_ADMIN.info(watchedMessage.getId() + "," + watchedMessage.getElapsedTimeAsMinutes());
-                        LOGGER_STDOUT.info(watchedMessage.getId() + "," + watchedMessage.getElapsedTimeAsMinutes());
+                        //LOGGER_STDOUT.info(watchedMessage.getId() + "," + watchedMessage.getElapsedTimeAsMinutes());
                     }
                     loggedMessages.add(watchedMessage.getId());
                 }
@@ -620,10 +637,10 @@ public class DTNHost implements Comparable<DTNHost> {
         }
 
         setTaxisDirection();
-
+        // TODO: cursor + 1
         int cursor = getCursor();
         double hypo;
-        for (int i = cursor; i <= cursor + 1; i++) {
+        for (int i = cursor; i < cursor+10; i++) {
             hypo = Math.hypot(this.location.getxRoute() - this.allRegions.get(i).getxPoint()
                     , this.location.getyRoute() - this.allRegions.get(i).getyPoint());
             hypotenuseDistances.put(hypo, new ArffRegionIndex(i, this.allRegions.get(i)));
