@@ -45,6 +45,8 @@ public class SimMap implements Serializable {
         return nodesMap;
     }
 
+    private Map<String, MapNode> mapNodes;
+
     public SimMap(Map<Coord, MapNode> nodes) {
         this.offset = new Coord(0, 0);
         this.nodes = new ArrayList<MapNode>(nodes.values());
@@ -53,6 +55,14 @@ public class SimMap implements Serializable {
         setBounds();
     }
 
+    public SimMap(Map<Coord, MapNode> nodes, Map<String, MapNode> mapNodes) {
+        this.offset = new Coord(0, 0);
+        this.nodes = new ArrayList<MapNode>(nodes.values());
+        this.nodesMap = nodes;
+        this.isMirrored = false;
+        this.mapNodes=mapNodes;
+        setBounds();
+    }
     /**
      * Returns all the map nodes in a list
      *
@@ -60,6 +70,14 @@ public class SimMap implements Serializable {
      */
     public List<MapNode> getNodes() {
         return this.nodes;
+    }
+
+    public Map<String, MapNode> getMapNodes() {
+        return mapNodes;
+    }
+
+    public void setMapNodes(Map<String, MapNode> mapNodes) {
+        this.mapNodes = mapNodes;
     }
 
     /**
@@ -73,12 +91,14 @@ public class SimMap implements Serializable {
 
         if (needsRehash) { // some coordinates have changed after creating hash
             nodesMap.clear();
+            //mapNodes.clear();
             /*ForkJoinPool pooly = new ForkJoinPool(5);
             pooly.submit(() -> getNodes().parallelStream().forEach(node -> {
                 nodesMap.put(node.getLocation(), node); // re-hash
             })).join();*/
 			for (MapNode node : getNodes()) {
 				nodesMap.put(node.getLocation(), node); // re-hash
+                //mapNodes.put(node.getLocation().getX()+"#"+node.getLocation().getY(), node);
 			}
         }
 

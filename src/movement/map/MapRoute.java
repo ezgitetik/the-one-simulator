@@ -9,6 +9,7 @@ import input.WKTReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 
@@ -156,6 +157,9 @@ public class MapRoute {
                     fileName + " (cause: " + ioe.getMessage() + ")");
         }
 
+        //map.setMapNodes(new HashMap<>());
+        map.getNodes().forEach(node ->map.getMapNodes().put(node.getLocation().getX()+"#"+node.getLocation().getY(),node));
+
         for (List<Coord> l : coords) {
             List<MapNode> nodes = new ArrayList<MapNode>();
             for (Coord c : l) {
@@ -173,11 +177,12 @@ public class MapRoute {
 
                 MapNode node = null;
 
-                for (MapNode nodex : map.getNodes()) {
+                node=map.getMapNodes().get(c.getX()+"#"+c.getY());
+                /*for (MapNode nodex : map.getNodes()) {
                     if (nodex.getLocation().getX() == c.getX() && nodex.getLocation().getY() == c.getY()) {
                         node = nodex;
                     }
-                }
+                }*/
 
                 if (node == null) {
                     Coord orig = c.clone();

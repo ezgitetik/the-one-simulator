@@ -27,6 +27,7 @@ import core.Coord;
  */
 public class WKTMapReader extends WKTReader {
     private Hashtable<Coord, MapNode> nodes;
+    private Map<String, MapNode> mapNodes;
     /**
      * are all paths bidirectional
      */
@@ -42,6 +43,7 @@ public class WKTMapReader extends WKTReader {
     public WKTMapReader(boolean bidi) {
         this.bidirectionalPaths = bidi;
         this.nodes = new Hashtable<Coord, MapNode>();
+        this.mapNodes=new HashMap<>();
     }
 
     /**
@@ -77,7 +79,7 @@ public class WKTMapReader extends WKTReader {
      * @return new a SimMap that is based on the read map
      */
     public SimMap getMap() {
-        return new SimMap(this.nodes);
+        return new SimMap(this.nodes, this.mapNodes);
     }
 
     /**
@@ -143,6 +145,7 @@ public class WKTMapReader extends WKTReader {
 
         for (Coord c : coords) {
             previousNode = createOrUpdateNode(c, previousNode);
+            mapNodes.put(previousNode.getLocation().getX()+"#"+previousNode.getLocation().getY(),previousNode);
         }
     }
 
@@ -162,6 +165,7 @@ public class WKTMapReader extends WKTReader {
         if (n == null) {    // no node in that location -> create new
             n = new MapNode(c);
             nodes.put(c, n);
+            //mapNodes.put(n.getLocation().getX()+"#"+n.getLocation().getY(),n);
         }
 
         if (previous != null) {
