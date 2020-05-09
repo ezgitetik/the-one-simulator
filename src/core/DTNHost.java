@@ -4,8 +4,9 @@
  */
 package core;
 
-import java.io.IOException;
+import java.awt.geom.Point2D;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -31,6 +32,7 @@ public class DTNHost implements Comparable<DTNHost> {
 
     private Coord location;    // where is the host
     private Coord destination;    // where is it going
+    private Coord previousDestination=null;    // where is it going
 
     private MessageRouter router;
     private MovementModel movement;
@@ -53,6 +55,8 @@ public class DTNHost implements Comparable<DTNHost> {
     private boolean isTaxiStillOnStartPoint;
     private boolean isTaxiStillOnEndPoint;
     private boolean hasTaxiCustomer = true;
+    private int destinationPointIndex=0;
+    private int previousDestinationPointIndex=0;
     private Map<String, Double> contactHistoryMap = new HashMap<>();
     //TODO it should be changed when cluster count has changed.
     private static final int CLUSTER_COUNT = 40;
@@ -530,21 +534,34 @@ public class DTNHost implements Comparable<DTNHost> {
                 this.location.getY());
         this.location.translate(dx, dy);
 
+        if(this.getName().equalsIgnoreCase("taxi-815")){
+            //System.out.println("previous Index:"+this.previousDestinationPointIndex+", nextIndex: "+this.destinationPointIndex);
+        }
 
+        //this.destinationPointIndex = this.getIndexFromAllArffPoints(this.destination.getxRoute(),this.destination.getyRoute());
         this.currentPoint = this.getCurrentPointFromAllRegions();
         this.currentCluster = this.currentPoint.getRegion();
 
-        if(this.getName().equalsIgnoreCase("taxi-528")){
+        if(this.getName().equalsIgnoreCase("taxi-815")){
             if(this.passedRegions.size() == 0){
                 this.passedRegions.add(this.currentCluster);
-                System.out.println(this.currentCluster);
+                //System.out.println(this.currentCluster);
             } else {
                 if(!this.passedRegions.get(this.passedRegions.size()-1).equalsIgnoreCase(this.currentCluster)){
                     this.passedRegions.add(this.currentCluster);
-                    System.out.println(this.currentCluster);
+                    //System.out.println(this.currentCluster);
                 }
             }
+
+            System.out.print("previous destination wkt point: "+(this.previousDestination!=null? this.previousDestination.getxRoute():"null")+" "+(this.previousDestination!=null?this.previousDestination.getyRoute():"null"));
+            System.out.print(" next destination wkt point: "+this.destination.getxRoute()+" "+this.destination.getyRoute());
+            System.out.print(" current point: "+this.location.getxRoute()+" "+this.location.getyRoute());
+            System.out.print(" wkt point: "+this.currentPoint.getxPoint()+" "+this.currentPoint.getyPoint());
+            System.out.print(" current cluster: "+this.currentCluster);
+            System.out.println(" current pointIndex: "+this.currentPointIndex);
+
         }
+
         if (isTaxiOnReturnPath) {
             if ((this.currentPointIndex == this.allRegions.size() - 1 && !this.isTaxiStillOnEndPoint)
                     || this.currentPointIndex <= this.futureRegionIndex) {
@@ -638,19 +655,35 @@ public class DTNHost implements Comparable<DTNHost> {
 
         setTaxisDirection();
         // TODO: cursor + 1
-        int cursor = getCursor();
+        //int cursor = getCursor();
         double hypo;
 
-        for (int i = cursor; i <= cursor+5 && i<this.allRegions.size(); i++) {
-            hypo = Math.hypot(this.location.getxRoute() - this.allRegions.get(i).getxPoint()
-                    , this.location.getyRoute() - this.allRegions.get(i).getyPoint());
+        if (this.destination==null){
+            this.destinationPointIndex = 0;
+        }else{
+            this.destinationPointIndex = this.getIndexFromAllArffPoints(this.destination.getxRoute(),this.destination.getyRoute());
+        }
+
+        if (this.previousDestination==null){
+            this.previousDestinationPointIndex=0;
+        }else{
+            this.previousDestinationPointIndex=this.getIndexFromAllArffPoints(this.previousDestination.getxRoute(),this.previousDestination.getyRoute());
+        }
+
+        System.out.println("previous Index:"+this.previousDestinationPointIndex+", nextIndex: "+this.destinationPointIndex+", previous x:"+this.previousDestination.getxRoute()+" y:"+ this.previousDestination.getyRoute()+", taxi:"+this.name);
+
+        for (int i = this.previousDestinationPointIndex; i <= this.destinationPointIndex; i++) {
+            hypo =  Point2D.distance(this.location.getxRoute(), this.location.getyRoute(),
+                    this.allRegions.get(i).getxPoint(), this.allRegions.get(i).getyPoint());
+            /*hypo = Math.hypot(this.location.getxRoute() - this.allRegions.get(i).getxPoint()
+                    , this.location.getyRoute() - this.allRegions.get(i).getyPoint());*/
             hypotenuseDistances.put(hypo, new ArffRegionIndex(i, this.allRegions.get(i)));
         }
 
         OptionalDouble key = hypotenuseDistances.keySet().stream().mapToDouble(v -> v).min();
         this.currentPointIndex = hypotenuseDistances.get(key.getAsDouble()).getIndex();
         if(this.getName().equalsIgnoreCase("taxi-528")){
-            System.out.println("Current point index: "+ this.currentPointIndex);
+            //System.out.println("Current point index: "+ this.currentPointIndex);
         }
         return hypotenuseDistances.get(key.getAsDouble()).getArffRegion();
     }
@@ -684,6 +717,27 @@ public class DTNHost implements Comparable<DTNHost> {
         return cursor;
     }
 
+    private int getIndexFromAllArffPoints(double xRoute, double yRoute){
+        /*AtomicInteger pointIndex = new AtomicInteger();
+         IntStream.range(0,this.allRegions.size()).forEach(index -> {
+            if(this.allRegions.get(index).getxPoint().equals(xRoute)
+                    && this.allRegions.get(index).getyPoint().equals(yRoute)){
+                pointIndex.set(index);
+                return;
+            }
+        });
+         return pointIndex.get();*/
+       int pointIndex = 0;
+       for (int i = this.previousDestinationPointIndex; i < this.allRegions.size(); i++){
+           if(this.allRegions.get(i).getxPoint() == xRoute
+                   && this.allRegions.get(i).getyPoint()==yRoute){
+               pointIndex=i;
+               break;
+           }
+       }
+       return pointIndex;
+    }
+
     /**
      * Sets the next destination and speed to correspond the next waypoint
      * on the path.
@@ -702,7 +756,13 @@ public class DTNHost implements Comparable<DTNHost> {
             return false;
         }
 
-        this.destination = path.getNextWaypoint();
+
+        Coord currentCoord=path.getNextWaypoint();
+        if (currentCoord != previousDestination){
+            this.previousDestination = this.destination;
+        }
+        this.destination=currentCoord;
+        //this.destination = path.getNextWaypoint();
         this.speed = path.getSpeed();
 
         if (this.movListeners != null) {
