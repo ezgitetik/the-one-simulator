@@ -5,7 +5,7 @@
 ## Training settings
 ARFF_WITHOUT_MOD = custom/taxidata/2taxi-month1/2taxi-month1-weka.arff
 TAXI_WITHOUT_MOD = custom/taxidata/2taxi-month1/2taxi-month1-training-day1/
-TAXI_SIMULATION = custom/taxidata/2taxi-month1/2taxi-month1-simulation/
+TAXI_SIMULATION = custom/taxidata/2taxi-month1/2taxi-month1-training-day1/
 
 ## prediction method (akom, tdag, cpt)
 prediction = akom
@@ -76,7 +76,7 @@ Group1.okMaps = 1
 Group1.speed = 10.8, 13.6
 Group1.nrofHosts = 1
 Group1.movementModel = MapRouteMovement
-Group1.routeFile = data/custom/taxidata/2taxi-month1/2taxi-month1-simulation/taxi-818.wkt
+Group1.routeFile = data/custom/taxidata/2taxi-month1/2taxi-month1-training-day1/taxi-818.wkt
 Group1.routeType = 1
 Group1.routeFirstStop = 0
 
@@ -87,7 +87,7 @@ Group2.okMaps = 1
 Group2.speed = 9.7, 12.5
 Group2.nrofHosts = 1
 Group2.movementModel = MapRouteMovement
-Group2.routeFile = data/custom/taxidata/2taxi-month1/2taxi-month1-simulation/taxi-815.wkt
+Group2.routeFile = data/custom/taxidata/2taxi-month1/2taxi-month1-training-day1/taxi-815.wkt
 Group2.routeType = 1
 Group2.routeFirstStop = 0
 
@@ -120,7 +120,7 @@ MovementModel.warmup = 0
 ## Map based movement -movement model specific settings
 MapBasedMovement.nrofMapFiles = 1
 
-MapBasedMovement.mapFile1 = data/custom/bursa-map-2taxi-month1-day1.osm.wkt
+MapBasedMovement.mapFile1 = data/custom/bursa-map-2taxi-month1-day1-withoutmod.osm.wkt
 ##MapBasedMovement.mapFile2 = data/main_roads.wkt
 #MapBasedMovement.mapFile3 = data/pedestrian_paths.wkt
 #MapBasedMovement.mapFile4 = data/shops.wkt

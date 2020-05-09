@@ -5,7 +5,7 @@
 ## Training settings
 ARFF_WITHOUT_MOD = custom/taxidata/10taxi-month1/10taxi-month1-weka.arff
 TAXI_WITHOUT_MOD = custom/taxidata/10taxi-month1/10taxi-month1-training-day1/
-TAXI_SIMULATION = custom/taxidata/10taxi-month1/10taxi-month1-simulation/
+TAXI_SIMULATION = custom/taxidata/10taxi-month1/10taxi-month1-training-day1/
 
 ## prediction method (akom, tdag, cpt)
 prediction = akom
@@ -76,7 +76,7 @@ Group1.okMaps = 1
 Group1.speed = 10.8, 13.6
 Group1.nrofHosts = 1
 Group1.movementModel = MapRouteMovement
-Group1.routeFile = data/custom/taxidata/10taxi-month1/10taxi-month1-simulation/taxi-818.wkt
+Group1.routeFile = data/custom/taxidata/10taxi-month1/10taxi-month1-training-day1/taxi-818.wkt
 Group1.routeType = 1
 Group1.routeFirstStop = 0
  
@@ -87,7 +87,7 @@ Group2.okMaps = 1
 Group2.speed = 9.7, 12.5
 Group2.nrofHosts = 1
 Group2.movementModel = MapRouteMovement
-Group2.routeFile = data/custom/taxidata/10taxi-month1/10taxi-month1-simulation/taxi-815.wkt
+Group2.routeFile = data/custom/taxidata/10taxi-month1/10taxi-month1-training-day1/taxi-815.wkt
 Group2.routeType = 1
 Group2.routeFirstStop = 0
  
@@ -98,7 +98,7 @@ Group3.okMaps = 1
 Group3.speed = 11.4, 14.2
 Group3.nrofHosts = 1
 Group3.movementModel = MapRouteMovement
-Group3.routeFile = data/custom/taxidata/10taxi-month1/10taxi-month1-simulation/taxi-816.wkt
+Group3.routeFile = data/custom/taxidata/10taxi-month1/10taxi-month1-training-day1/taxi-816.wkt
 Group3.routeType = 1
 Group3.routeFirstStop = 0
  
@@ -109,7 +109,7 @@ Group4.okMaps = 1
 Group4.speed = 10.3, 13.1
 Group4.nrofHosts = 1
 Group4.movementModel = MapRouteMovement
-Group4.routeFile = data/custom/taxidata/10taxi-month1/10taxi-month1-simulation/taxi-823.wkt
+Group4.routeFile = data/custom/taxidata/10taxi-month1/10taxi-month1-training-day1/taxi-823.wkt
 Group4.routeType = 1
 Group4.routeFirstStop = 0
  
@@ -120,7 +120,7 @@ Group5.okMaps = 1
 Group5.speed = 9.4, 12.2
 Group5.nrofHosts = 1
 Group5.movementModel = MapRouteMovement
-Group5.routeFile = data/custom/taxidata/10taxi-month1/10taxi-month1-simulation/taxi-825.wkt
+Group5.routeFile = data/custom/taxidata/10taxi-month1/10taxi-month1-training-day1/taxi-825.wkt
 Group5.routeType = 1
 Group5.routeFirstStop = 0
  
@@ -131,7 +131,7 @@ Group6.okMaps = 1
 Group6.speed = 12.2, 15.0
 Group6.nrofHosts = 1
 Group6.movementModel = MapRouteMovement
-Group6.routeFile = data/custom/taxidata/10taxi-month1/10taxi-month1-simulation/taxi-824.wkt
+Group6.routeFile = data/custom/taxidata/10taxi-month1/10taxi-month1-training-day1/taxi-824.wkt
 Group6.routeType = 1
 Group6.routeFirstStop = 0
  
@@ -142,7 +142,7 @@ Group7.okMaps = 1
 Group7.speed = 11.9, 14.7
 Group7.nrofHosts = 1
 Group7.movementModel = MapRouteMovement
-Group7.routeFile = data/custom/taxidata/10taxi-month1/10taxi-month1-simulation/taxi-817.wkt
+Group7.routeFile = data/custom/taxidata/10taxi-month1/10taxi-month1-training-day1/taxi-817.wkt
 Group7.routeType = 1
 Group7.routeFirstStop = 0
  
@@ -153,7 +153,7 @@ Group8.okMaps = 1
 Group8.speed = 9.2, 11.9
 Group8.nrofHosts = 1
 Group8.movementModel = MapRouteMovement
-Group8.routeFile = data/custom/taxidata/10taxi-month1/10taxi-month1-simulation/taxi-531.wkt
+Group8.routeFile = data/custom/taxidata/10taxi-month1/10taxi-month1-training-day1/taxi-531.wkt
 Group8.routeType = 1
 Group8.routeFirstStop = 0
  
@@ -164,7 +164,7 @@ Group9.okMaps = 1
 Group9.speed = 11.1, 13.9
 Group9.nrofHosts = 1
 Group9.movementModel = MapRouteMovement
-Group9.routeFile = data/custom/taxidata/10taxi-month1/10taxi-month1-simulation/taxi-822.wkt
+Group9.routeFile = data/custom/taxidata/10taxi-month1/10taxi-month1-training-day1/taxi-822.wkt
 Group9.routeType = 1
 Group9.routeFirstStop = 0
  
@@ -175,7 +175,7 @@ Group10.okMaps = 1
 Group10.speed = 10.8, 13.6
 Group10.nrofHosts = 1
 Group10.movementModel = MapRouteMovement
-Group10.routeFile = data/custom/taxidata/10taxi-month1/10taxi-month1-simulation/taxi-528.wkt
+Group10.routeFile = data/custom/taxidata/10taxi-month1/10taxi-month1-training-day1/taxi-528.wkt
 Group10.routeType = 1
 Group10.routeFirstStop = 0
  
@@ -208,7 +208,7 @@ MovementModel.warmup = 0
 ## Map based movement -movement model specific settings
 MapBasedMovement.nrofMapFiles = 1
 
-MapBasedMovement.mapFile1 = data/custom/bursa-map-10taxi-month1-day1.osm.wkt
+MapBasedMovement.mapFile1 = data/custom/bursa-map-10taxi-month1-day1-withoutmod.osm.wkt
 ##MapBasedMovement.mapFile2 = data/main_roads.wkt
 #MapBasedMovement.mapFile3 = data/pedestrian_paths.wkt
 #MapBasedMovement.mapFile4 = data/shops.wkt
