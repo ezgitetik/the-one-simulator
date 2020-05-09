@@ -661,16 +661,19 @@ public class DTNHost implements Comparable<DTNHost> {
         if (this.destination==null){
             this.destinationPointIndex = 0;
         }else{
-            this.destinationPointIndex = this.getIndexFromAllArffPoints(this.destination.getxRoute(),this.destination.getyRoute());
+            this.destinationPointIndex = this.getIndexFromAllArffPoints(this.destination.getxRoute(),this.destination.getyRoute(),this.destinationPointIndex);
         }
 
         if (this.previousDestination==null){
             this.previousDestinationPointIndex=0;
         }else{
-            this.previousDestinationPointIndex=this.getIndexFromAllArffPoints(this.previousDestination.getxRoute(),this.previousDestination.getyRoute());
+            this.previousDestinationPointIndex=this.getIndexFromAllArffPoints(this.previousDestination.getxRoute(),this.previousDestination.getyRoute(),this.previousDestinationPointIndex);
         }
 
-        System.out.println("previous Index:"+this.previousDestinationPointIndex+", nextIndex: "+this.destinationPointIndex+", previous x:"+this.previousDestination.getxRoute()+" y:"+ this.previousDestination.getyRoute()+", taxi:"+this.name);
+        System.out.println("previous Index:"+this.previousDestinationPointIndex
+                +", nextIndex: "+this.destinationPointIndex
+                +", previous x:"+this.previousDestination.getxRoute()+" "+ this.previousDestination.getyRoute()
+                +", next x:"+this.destination.getxRoute()+" "+ this.destination.getyRoute()+", taxi:"+this.name);
 
         for (int i = this.previousDestinationPointIndex; i <= this.destinationPointIndex; i++) {
             hypo =  Point2D.distance(this.location.getxRoute(), this.location.getyRoute(),
@@ -717,7 +720,7 @@ public class DTNHost implements Comparable<DTNHost> {
         return cursor;
     }
 
-    private int getIndexFromAllArffPoints(double xRoute, double yRoute){
+    private int getIndexFromAllArffPoints(double xRoute, double yRoute, int startIndex){
         /*AtomicInteger pointIndex = new AtomicInteger();
          IntStream.range(0,this.allRegions.size()).forEach(index -> {
             if(this.allRegions.get(index).getxPoint().equals(xRoute)
@@ -727,14 +730,13 @@ public class DTNHost implements Comparable<DTNHost> {
             }
         });
          return pointIndex.get();*/
-       int pointIndex = 0;
-       for (int i = this.previousDestinationPointIndex; i < this.allRegions.size(); i++){
-           if(this.allRegions.get(i).getxPoint() == xRoute
-                   && this.allRegions.get(i).getyPoint()==yRoute){
-               pointIndex=i;
-               break;
-           }
-       }
+        int pointIndex = 0;
+        for (int i = startIndex; i < this.allRegions.size(); i++) {
+            if (this.allRegions.get(i).getxPoint() == xRoute && this.allRegions.get(i).getyPoint() == yRoute) {
+                pointIndex = i;
+                break;
+            }
+        }
        return pointIndex;
     }
 
