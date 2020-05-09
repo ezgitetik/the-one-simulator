@@ -5,6 +5,7 @@
 package core;
 
 import java.awt.geom.Point2D;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -730,9 +731,13 @@ public class DTNHost implements Comparable<DTNHost> {
             }
         });
          return pointIndex.get();*/
+
+        DecimalFormat df = new DecimalFormat("#.###");
+
         int pointIndex = 0;
         for (int i = startIndex; i < this.allRegions.size(); i++) {
-            if (this.allRegions.get(i).getxPoint() == xRoute && this.allRegions.get(i).getyPoint() == yRoute) {
+            if (df.format(this.allRegions.get(i).getxPoint()).equals(df.format(xRoute))
+                    && df.format(this.allRegions.get(i).getyPoint()).equals(df.format(yRoute))) {
                 pointIndex = i;
                 break;
             }
