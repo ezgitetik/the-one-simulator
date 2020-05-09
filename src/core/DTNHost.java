@@ -177,7 +177,7 @@ public class DTNHost implements Comparable<DTNHost> {
         if (this.name.startsWith("taxi-")) {
             try {
                 this.allRegions = ArffReader.getArffRegionListByFileName(this.name + ".wkt");
-                if(this.getName().equalsIgnoreCase("taxi-797")){
+                if(this.getName().equalsIgnoreCase("taxi-528")){
                     System.out.print(this.allRegions.stream().map(ArffRegion::getRegion).collect(Collectors.joining(",")));
                     System.out.println("");
                 }
@@ -534,7 +534,7 @@ public class DTNHost implements Comparable<DTNHost> {
         this.currentPoint = this.getCurrentPointFromAllRegions();
         this.currentCluster = this.currentPoint.getRegion();
 
-        if(this.getName().equalsIgnoreCase("taxi-797")){
+        if(this.getName().equalsIgnoreCase("taxi-528")){
             if(this.passedRegions.size() == 0){
                 this.passedRegions.add(this.currentCluster);
                 System.out.println(this.currentCluster);
@@ -640,20 +640,25 @@ public class DTNHost implements Comparable<DTNHost> {
         // TODO: cursor + 1
         int cursor = getCursor();
         double hypo;
-        for (int i = cursor; i < cursor+10; i++) {
+
+        for (int i = cursor; i <= cursor+5 && i<this.allRegions.size(); i++) {
             hypo = Math.hypot(this.location.getxRoute() - this.allRegions.get(i).getxPoint()
                     , this.location.getyRoute() - this.allRegions.get(i).getyPoint());
             hypotenuseDistances.put(hypo, new ArffRegionIndex(i, this.allRegions.get(i)));
         }
+
         OptionalDouble key = hypotenuseDistances.keySet().stream().mapToDouble(v -> v).min();
         this.currentPointIndex = hypotenuseDistances.get(key.getAsDouble()).getIndex();
+        if(this.getName().equalsIgnoreCase("taxi-528")){
+            System.out.println("Current point index: "+ this.currentPointIndex);
+        }
         return hypotenuseDistances.get(key.getAsDouble()).getArffRegion();
     }
 
     private void setTaxisDirection() {
         if (this.currentPointIndex == this.allRegions.size() - 1) {
             if (!this.isTaxiOnReturnPath) {
-                //System.out.println("it is on return path, going on end to start...");
+                System.out.println("it is on return path, going on end to start...");
             }
             this.isTaxiOnReturnPath = true;
         } else if (this.currentPointIndex == 0) {
@@ -671,7 +676,8 @@ public class DTNHost implements Comparable<DTNHost> {
     private int getCursor() {
         int cursor;
         if (this.isTaxiOnReturnPath) {
-            cursor = this.currentPointIndex - 1;
+            cursor = this.currentPointIndex - 5;
+            if(cursor<0) cursor=0;
         } else {
             cursor = this.currentPointIndex;
         }

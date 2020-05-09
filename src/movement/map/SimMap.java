@@ -155,7 +155,7 @@ public class SimMap implements Serializable {
             n.getLocation().translate(dx, dy);
         }*/
 
-        ForkJoinPool forkJoinPool = new ForkJoinPool(60);
+        ForkJoinPool forkJoinPool = new ForkJoinPool(12);
         forkJoinPool.submit(() -> nodes.parallelStream().forEach(node -> {
             node.getLocation().translate(dx, dy);
         })).join();
