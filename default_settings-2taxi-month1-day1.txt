@@ -4,7 +4,7 @@
 
 ## Training settings
 ARFF_WITHOUT_MOD = custom/taxidata/2taxi-month1/2taxi-month1-weka.arff
-TAXI_WITHOUT_MOD = custom/taxidata/2taxi-month1/2taxi-month1-training-day1/
+TAXI_WITHOUT_MOD = custom/taxidata/2taxi-month1/2taxi-month1-simulation/
 TAXI_SIMULATION = custom/taxidata/2taxi-month1/2taxi-month1-simulation/
 
 ## prediction method (akom, tdag, cpt)
@@ -90,7 +90,6 @@ Group2.movementModel = MapRouteMovement
 Group2.routeFile = data/custom/taxidata/2taxi-month1/2taxi-month1-simulation/taxi-815.wkt
 Group2.routeType = 1
 Group2.routeFirstStop = 0
-
 
 
 ## Message creation parameters
