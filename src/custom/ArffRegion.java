@@ -6,12 +6,19 @@ public class ArffRegion {
     private Double yPoint;
     private String region;
     private String taxiName;
-    private double timeInSecond;
+    private int timeInSecond;
 
     public ArffRegion(Double xPoint, Double yPoint, String region) {
         this.xPoint = xPoint;
         this.yPoint = yPoint;
         this.region = region;
+    }
+
+    public ArffRegion(Double xPoint, Double yPoint, String region, int timeInSecond) {
+        this.xPoint = xPoint;
+        this.yPoint = yPoint;
+        this.region = region;
+        this.timeInSecond = timeInSecond;
     }
 
     public Double getxPoint() {
@@ -46,11 +53,11 @@ public class ArffRegion {
         this.taxiName = taxiName;
     }
 
-    public double getTimeInSecond() {
+    public int getTimeInSecond() {
         return timeInSecond;
     }
 
-    public void setTimeInSecond(double timeInSecond) {
+    public void setTimeInSecond(Integer timeInSecond) {
         this.timeInSecond = timeInSecond;
     }
 }
