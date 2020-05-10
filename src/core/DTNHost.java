@@ -181,9 +181,7 @@ public class DTNHost implements Comparable<DTNHost> {
 
         if (this.name.startsWith("taxi-")) {
             try {
-                this.allRegions = ArffReader.getArffRegionListByFileName(this.name + ".wkt").stream()
-                        .sorted(Comparator.comparing(ArffRegion::getTimeInSecond))
-                        .collect(Collectors.toList());
+                this.allRegions = ArffReader.getArffRegionListByFileName(this.name + "-second.wkt");
                 if(this.getName().equalsIgnoreCase("taxi-528")){
                     System.out.print(this.allRegions.stream().map(ArffRegion::getRegion).collect(Collectors.joining(",")));
                     System.out.println("");
@@ -624,9 +622,11 @@ public class DTNHost implements Comparable<DTNHost> {
 
 
 
-        if (!isMovementActive() && !moveToNextPoint()) {
+        if (!isMovementActive()) {
             return;
         }
+
+        if(!moveToNextPoint())return;
 
         Coord coord=new Coord();
         coord.setxRoute(this.allRegions.get(this.currentPointIndex).getxPoint());
@@ -696,11 +696,14 @@ public class DTNHost implements Comparable<DTNHost> {
                 break;
             }
         }
-        if (pointIndex != this.currentPointIndex) {
+        /*if (pointIndex != this.currentPointIndex) {
             this.currentPointIndex = pointIndex;
             moveToNextPoint = true;
         }
-        return moveToNextPoint;
+        return moveToNextPoint;*/
+
+        this.currentPointIndex = pointIndex;
+        return true;
     }
 
     private void likelihoodConUpdate() {
