@@ -19,8 +19,12 @@ public class Coord implements Cloneable, Comparable<Coord> {
 //    private static final double yOffset = 83045.508;
 
     // 10 taxi, 2 taxi, month 1 day1 xOffset = 3145.603, yOffset = 43632.5
-    private static final double xOffset = 3145.603;
-    private static final double yOffset = 43632.5;
+    public static final double xOffset = 3145.603;
+    public static final double yOffset = 43632.5;
+
+
+    public Coord() {
+    }
 
     /**
      * Constructor.
@@ -191,5 +195,13 @@ public class Coord implements Cloneable, Comparable<Coord> {
         } else {
             return 0;
         }
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
     }
 }

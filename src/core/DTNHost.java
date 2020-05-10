@@ -39,7 +39,7 @@ public class DTNHost implements Comparable<DTNHost> {
     private MovementModel movement;
     private Path path;
     private double speed;
-    private double nextTimeToMove;
+    private double nextTimeToMove=200;
     private String name;
     private List<MessageListener> msgListeners;
     private List<MovementListener> movListeners;
@@ -498,6 +498,8 @@ public class DTNHost implements Comparable<DTNHost> {
      */
     public void move(double timeIncrement) {
         double possibleMovement;
+
+
         double distance;
         double dx, dy;
 
@@ -505,16 +507,22 @@ public class DTNHost implements Comparable<DTNHost> {
         Logger LOGGER_STDOUT = Logger.getLogger("stdout");
 
 
+
         if (!isMovementActive() || SimClock.getTime() < this.nextTimeToMove) {
             return;
         }
+
+        if(this.getName().equalsIgnoreCase("taxi-528")){
+            System.out.print("");
+        }
+
         if (this.destination == null) {
             if (!setNextWaypoint()) {
                 return;
             }
         }
 
-        possibleMovement = timeIncrement * speed;
+       /* possibleMovement = timeIncrement * speed;
         distance = this.location.distance(this.destination);
 
         while (possibleMovement >= distance) {
@@ -533,17 +541,25 @@ public class DTNHost implements Comparable<DTNHost> {
                 this.location.getX());
         dy = (possibleMovement / distance) * (this.destination.getY() -
                 this.location.getY());
-        this.location.translate(dx, dy);
+        this.location.translate(dx, dy);*/
 
-        if(this.getName().equalsIgnoreCase("taxi-815")){
-            //System.out.println("previous Index:"+this.previousDestinationPointIndex+", nextIndex: "+this.destinationPointIndex);
-        }
 
-        //this.destinationPointIndex = this.getIndexFromAllArffPoints(this.destination.getxRoute(),this.destination.getyRoute());
-        this.currentPoint = this.getCurrentPointFromAllRegions();
+
+
+        Coord coord=new Coord();
+        coord.setxRoute(this.allRegions.get(this.currentPointIndex).getxPoint());
+        coord.setyRoute(this.allRegions.get(this.currentPointIndex).getyPoint());
+        coord.setX(coord.getxRoute()-Coord.xOffset);
+        coord.setY(Coord.yOffset-coord.getyRoute());
+        this.destination = coord;
+        this.location=this.destination;
+        this.currentPoint = this.allRegions.get(this.currentPointIndex);
         this.currentCluster = this.currentPoint.getRegion();
+        this.currentPointIndex++;
+        this.nextTimeToMove+=this.nextTimeToMove;
+        //this.currentPoint = this.getCurrentPointFromAllRegions();
 
-        if(this.getName().equalsIgnoreCase("taxi-815")){
+       /* if(this.getName().equalsIgnoreCase("taxi-815")){
             if(this.passedRegions.size() == 0){
                 this.passedRegions.add(this.currentCluster);
                 //System.out.println(this.currentCluster);
@@ -561,7 +577,7 @@ public class DTNHost implements Comparable<DTNHost> {
             System.out.print(" current cluster: "+this.currentCluster);
             System.out.println(" current pointIndex: "+this.currentPointIndex);
 
-        }
+        }*/
 
         if (isTaxiOnReturnPath) {
             if ((this.currentPointIndex == this.allRegions.size() - 1 && !this.isTaxiStillOnEndPoint)
@@ -733,15 +749,27 @@ public class DTNHost implements Comparable<DTNHost> {
          return pointIndex.get();*/
 
         DecimalFormat df = new DecimalFormat("#.###");
-
         int pointIndex = 0;
-        for (int i = startIndex; i < this.allRegions.size(); i++) {
-            if (df.format(this.allRegions.get(i).getxPoint()).equals(df.format(xRoute))
-                    && df.format(this.allRegions.get(i).getyPoint()).equals(df.format(yRoute))) {
-                pointIndex = i;
-                break;
+        if (this.isTaxiOnReturnPath){
+            for (int i = startIndex; i >= 0; i--) {
+                if (df.format(this.allRegions.get(i).getxPoint()).equals(df.format(xRoute))
+                        && df.format(this.allRegions.get(i).getyPoint()).equals(df.format(yRoute))) {
+                    pointIndex = i;
+                    break;
+                }
             }
         }
+        else{
+            for (int i = startIndex; i < this.allRegions.size(); i++) {
+                if (df.format(this.allRegions.get(i).getxPoint()).equals(df.format(xRoute))
+                        && df.format(this.allRegions.get(i).getyPoint()).equals(df.format(yRoute))) {
+                    pointIndex = i;
+                    break;
+                }
+            }
+        }
+
+
        return pointIndex;
     }
 
