@@ -181,7 +181,9 @@ public class DTNHost implements Comparable<DTNHost> {
 
         if (this.name.startsWith("taxi-")) {
             try {
-                this.allRegions = ArffReader.getArffRegionListByFileName(this.name + ".wkt");
+                this.allRegions = ArffReader.getArffRegionListByFileName(this.name + ".wkt").stream()
+                        .sorted(Comparator.comparing(ArffRegion::getTimeInSecond))
+                        .collect(Collectors.toList());
                 if(this.getName().equalsIgnoreCase("taxi-528")){
                     System.out.print(this.allRegions.stream().map(ArffRegion::getRegion).collect(Collectors.joining(",")));
                     System.out.println("");
@@ -622,7 +624,7 @@ public class DTNHost implements Comparable<DTNHost> {
 
 
 
-        if (!isMovementActive() || SimClock.getTime() < this.nextTimeToMove) {
+        if (!isMovementActive() && !moveToNextPoint()) {
             return;
         }
 
@@ -635,8 +637,6 @@ public class DTNHost implements Comparable<DTNHost> {
         this.location=this.destination;
         this.currentPoint = this.allRegions.get(this.currentPointIndex);
         this.currentCluster = this.currentPoint.getRegion();
-        this.currentPointIndex++;
-        this.nextTimeToMove+=this.nextTimeToMove;
 
         if (isTaxiOnReturnPath) {
             if ((this.currentPointIndex == this.allRegions.size() - 1 && !this.isTaxiStillOnEndPoint)
@@ -644,7 +644,6 @@ public class DTNHost implements Comparable<DTNHost> {
                 int count = getFutureRegionCount();
                 this.futureRegionIndex = this.currentPointIndex - count;
                 setTaxiStillOnEndPoint();
-
             }
 
         } else {
@@ -685,6 +684,23 @@ public class DTNHost implements Comparable<DTNHost> {
             });
 
         }
+    }
+
+    private boolean moveToNextPoint() {
+        boolean moveToNextPoint = false;
+        int pointIndex = this.currentPointIndex;
+        for (int i = this.currentPointIndex; i < this.allRegions.size(); i++) {
+            if (SimClock.getTime() >= this.allRegions.get(i).getTimeInSecond()) {
+                pointIndex = i;
+            } else {
+                break;
+            }
+        }
+        if (pointIndex != this.currentPointIndex) {
+            this.currentPointIndex = pointIndex;
+            moveToNextPoint = true;
+        }
+        return moveToNextPoint;
     }
 
     private void likelihoodConUpdate() {

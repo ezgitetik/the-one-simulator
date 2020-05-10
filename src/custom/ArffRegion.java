@@ -6,6 +6,7 @@ public class ArffRegion {
     private Double yPoint;
     private String region;
     private String taxiName;
+    private Long timeInSecond;
 
     public ArffRegion(Double xPoint, Double yPoint, String region) {
         this.xPoint = xPoint;
@@ -43,5 +44,13 @@ public class ArffRegion {
 
     public void setTaxiName(String taxiName) {
         this.taxiName = taxiName;
+    }
+
+    public Long getTimeInSecond() {
+        return timeInSecond;
+    }
+
+    public void setTimeInSecond(Long timeInSecond) {
+        this.timeInSecond = timeInSecond;
     }
 }
