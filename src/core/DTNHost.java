@@ -628,6 +628,9 @@ public class DTNHost implements Comparable<DTNHost> {
 
         if(!moveToNextPoint())return;
 
+        if(this.name.equalsIgnoreCase("taxi-815")){
+            System.out.println("");
+        }
         Coord coord=new Coord();
         coord.setxRoute(this.allRegions.get(this.currentPointIndex).getxPoint());
         coord.setyRoute(this.allRegions.get(this.currentPointIndex).getyPoint());
@@ -688,6 +691,9 @@ public class DTNHost implements Comparable<DTNHost> {
 
     private boolean moveToNextPoint() {
         boolean moveToNextPoint = false;
+        if(this.name.equalsIgnoreCase("taxi-815")){
+            System.out.println("");
+        }
         int pointIndex = this.currentPointIndex;
         for (int i = this.currentPointIndex; i < this.allRegions.size(); i++) {
             if (SimClock.getTime() >= this.allRegions.get(i).getTimeInSecond()) {
