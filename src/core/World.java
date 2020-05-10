@@ -216,7 +216,8 @@ public class World {
 	private void moveHosts(double timeIncrement) {
 		for (int i=0,n = hosts.size(); i<n; i++) {
 			DTNHost host = hosts.get(i);
-			host.move(timeIncrement);
+			//host.move(timeIncrement);
+			host.move();
 		}
 	}
 
