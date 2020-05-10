@@ -141,7 +141,7 @@ public class ArffReader {
             Landmark landmark=new Landmark();
             landmark.setX(Double.parseDouble(data[0].toString()));
             landmark.setY(Double.parseDouble(data[1].toString()));
-            landmark.setTimeInSecond(Long.parseLong(data[2].toString()));
+            landmark.setTimeInSecond(Double.parseDouble(data[2].toString()));
             landmarks.add(landmark);
         }
 
