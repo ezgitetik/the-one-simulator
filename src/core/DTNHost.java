@@ -5,6 +5,7 @@
 package core;
 
 import java.awt.geom.Point2D;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -626,7 +627,17 @@ public class DTNHost implements Comparable<DTNHost> {
             return;
         }
 
-        if(!moveToNextPoint())return;
+        int pointIndex = this.currentPointIndex;
+        for (int i = this.currentPointIndex; i < this.allRegions.size(); i++) {
+            BigDecimal clock=new BigDecimal(SimClock.getTime());
+            BigDecimal taxiClock=new BigDecimal(this.allRegions.get(i).getTimeInSecond());
+            if (clock.compareTo(taxiClock)>=0) {
+                pointIndex = i;
+            } else {
+                break;
+            }
+        }
+        this.currentPointIndex = pointIndex;
 
         if(this.name.equalsIgnoreCase("taxi-815")){
             System.out.println("");
@@ -640,6 +651,8 @@ public class DTNHost implements Comparable<DTNHost> {
         this.location=this.destination;
         this.currentPoint = this.allRegions.get(this.currentPointIndex);
         this.currentCluster = this.currentPoint.getRegion();
+
+        System.out.println("second:"+SimClock.getTime()+", taxi time:"+this.allRegions.get(this.currentPointIndex).getTimeInSecond()+", taxi:"+this.name+", point:"+coord.getxRoute()+" "+coord.getyRoute());
 
         if (isTaxiOnReturnPath) {
             if ((this.currentPointIndex == this.allRegions.size() - 1 && !this.isTaxiStillOnEndPoint)
