@@ -6,7 +6,7 @@ public class Landmark {
     double longitude = 0;
     double x = 0;
     double y = 0;
-    private Long timeInSecond;
+    private double timeInSecond;
 
     public long getId() {
         return id;
@@ -48,11 +48,11 @@ public class Landmark {
         this.y = y;
     }
 
-    public Long getTimeInSecond() {
+    public double getTimeInSecond() {
         return timeInSecond;
     }
 
-    public void setTimeInSecond(Long timeInSecond) {
+    public void setTimeInSecond(double timeInSecond) {
         this.timeInSecond = timeInSecond;
     }
 
