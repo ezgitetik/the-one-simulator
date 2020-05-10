@@ -117,7 +117,7 @@ public class ArffReader {
 
 
     public static List<ArffRegion> getArffRegionListByFileName(String fileName) throws IOException {
-        InputStream stream = ArffReader.class.getClassLoader().getResourceAsStream(TAXI_SIMULATION + fileName);
+        /*InputStream stream = ArffReader.class.getClassLoader().getResourceAsStream(TAXI_SIMULATION + fileName);
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         String line = reader.readLine();
         String lineStringLine = "";
@@ -131,6 +131,22 @@ public class ArffReader {
 
         List<ArffRegion> regions = new ArrayList<>();
         for (Landmark landmark : lineStringReader.getLandmarks()) {
+            regions.add(ArffReader.getArffRegionByPoints(landmark.getX(), landmark.getY(), fileName));
+        }
+        return regions;*/
+        List<String> allLines = Files.readAllLines(Paths.get(ArffReader.class.getClassLoader().getResource(TAXI_SIMULATION + fileName).getPath()));
+        List<Landmark> landmarks = new ArrayList<>();
+        for (String line : allLines) {
+            Object[] data=line.split(",");
+            Landmark landmark=new Landmark();
+            landmark.setX((double)data[0]);
+            landmark.setY((double)data[1]);
+            landmark.setTimeInSecond((long)data[2]);
+            landmarks.add(landmark);
+        }
+
+        List<ArffRegion> regions = new ArrayList<>();
+        for (Landmark landmark : landmarks) {
             regions.add(ArffReader.getArffRegionByPoints(landmark.getX(), landmark.getY(), fileName));
         }
         return regions;
