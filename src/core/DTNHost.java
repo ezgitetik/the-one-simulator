@@ -5,7 +5,6 @@
 package core;
 
 import java.awt.geom.Point2D;
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -629,9 +628,10 @@ public class DTNHost implements Comparable<DTNHost> {
 
         int pointIndex = this.currentPointIndex;
         for (int i = this.currentPointIndex; i < this.allRegions.size(); i++) {
-            BigDecimal clock=new BigDecimal(SimClock.getTime());
-            BigDecimal taxiClock=new BigDecimal(this.allRegions.get(i).getTimeInSecond());
-            if (clock.compareTo(taxiClock)>=0) {
+            double clock=SimClock.getTime();
+            double taxiClock=this.allRegions.get(i).getTimeInSecond();
+
+            if (clock >= taxiClock) {
                 pointIndex = i;
             } else {
                 break;

@@ -141,13 +141,15 @@ public class ArffReader {
             Landmark landmark=new Landmark();
             landmark.setX(Double.parseDouble(data[0].toString()));
             landmark.setY(Double.parseDouble(data[1].toString()));
-            landmark.setTimeInSecond(Double.parseDouble(data[2].toString()));
+            landmark.setTimeInSecond(Integer.parseInt(data[2].toString()));
             landmarks.add(landmark);
         }
 
         List<ArffRegion> regions = new ArrayList<>();
         for (Landmark landmark : landmarks) {
-            ArffRegion region=ArffReader.getArffRegionByPoints(landmark.getX(), landmark.getY(), fileName);
+            String cluster=ArffReader.getArffRegionByPoints(landmark.getX(), landmark.getY(), fileName).getRegion();
+            ArffRegion region=new ArffRegion(landmark.getX(), landmark.getY(), cluster,landmark.getTimeInSecond());
+
             region.setTimeInSecond(landmark.getTimeInSecond());
             regions.add(region);
         }
