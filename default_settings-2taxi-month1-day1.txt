@@ -4,8 +4,8 @@
 
 ## Training settings
 ARFF_WITHOUT_MOD = custom/taxidata/2taxi-month1/2taxi-month1-weka.arff
-TAXI_WITHOUT_MOD = custom/taxidata/2taxi-month1/2taxi-month1-simulation/
 TAXI_SIMULATION = custom/taxidata/2taxi-month1/2taxi-month1-simulation/
+TAXI_SECOND = custom/taxidata/2taxi-month1/2taxi-month1-second/
 
 ## prediction method (akom, tdag, cpt)
 prediction = akom

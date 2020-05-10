@@ -16,10 +16,10 @@ public class ArffReader {
     private static final String ARFF_WITHOUT_MOD = s.getSetting("ARFF_WITHOUT_MOD");
     private static final String ARFF_PATH = ARFF_WITHOUT_MOD;
 
-    private static final String TAXI_WITHOUT_MOD = s.getSetting("TAXI_WITHOUT_MOD");
     private static final String TAXI_SIMULATION = s.getSetting("TAXI_SIMULATION");
+    private static final String TAXI_SECOND = s.getSetting("TAXI_SECOND");
 
-    private static final String TAXI_PATH = TAXI_WITHOUT_MOD;
+    private static final String TAXI_PATH = TAXI_SIMULATION;
 
     //private static List<ArffRegion> ARFF_REGIONS = null;
 
@@ -134,20 +134,22 @@ public class ArffReader {
             regions.add(ArffReader.getArffRegionByPoints(landmark.getX(), landmark.getY(), fileName));
         }
         return regions;*/
-        List<String> allLines = Files.readAllLines(Paths.get(ArffReader.class.getClassLoader().getResource(TAXI_SIMULATION + fileName).getPath()));
+        List<String> allLines = Files.readAllLines(Paths.get(ArffReader.class.getClassLoader().getResource(TAXI_SECOND + fileName).getPath()));
         List<Landmark> landmarks = new ArrayList<>();
         for (String line : allLines) {
             Object[] data=line.split(",");
             Landmark landmark=new Landmark();
-            landmark.setX((double)data[0]);
-            landmark.setY((double)data[1]);
-            landmark.setTimeInSecond((long)data[2]);
+            landmark.setX(Double.parseDouble(data[0].toString()));
+            landmark.setY(Double.parseDouble(data[1].toString()));
+            landmark.setTimeInSecond(Long.parseLong(data[2].toString()));
             landmarks.add(landmark);
         }
 
         List<ArffRegion> regions = new ArrayList<>();
         for (Landmark landmark : landmarks) {
-            regions.add(ArffReader.getArffRegionByPoints(landmark.getX(), landmark.getY(), fileName));
+            ArffRegion region=ArffReader.getArffRegionByPoints(landmark.getX(), landmark.getY(), fileName);
+            region.setTimeInSecond(landmark.getTimeInSecond());
+            regions.add(region);
         }
         return regions;
     }
@@ -157,7 +159,7 @@ public class ArffReader {
             if (arffRegion.getxPoint().equals(xPoint) && arffRegion.getyPoint().equals(yPoint)) return arffRegion;
         }
         return new ArffRegion(0.0, 0.0, "");*/
-        ArffRegion region = pointsAndClusters.get(fileName).get(xPoint + "#" + yPoint);
+        ArffRegion region = pointsAndClusters.get(fileName.replace("-second","")).get(xPoint + "#" + yPoint);
         return region != null
                 ? region
                 : new ArffRegion(0.0, 0.0, "");
