@@ -522,7 +522,7 @@ public class DTNHost implements Comparable<DTNHost> {
             }
         }
 
-       /* possibleMovement = timeIncrement * speed;
+        possibleMovement = timeIncrement * speed;
         distance = this.location.distance(this.destination);
 
         while (possibleMovement >= distance) {
@@ -541,23 +541,10 @@ public class DTNHost implements Comparable<DTNHost> {
                 this.location.getX());
         dy = (possibleMovement / distance) * (this.destination.getY() -
                 this.location.getY());
-        this.location.translate(dx, dy);*/
+        this.location.translate(dx, dy);
 
-
-
-
-        Coord coord=new Coord();
-        coord.setxRoute(this.allRegions.get(this.currentPointIndex).getxPoint());
-        coord.setyRoute(this.allRegions.get(this.currentPointIndex).getyPoint());
-        coord.setX(coord.getxRoute()-Coord.xOffset);
-        coord.setY(Coord.yOffset-coord.getyRoute());
-        this.destination = coord;
-        this.location=this.destination;
-        this.currentPoint = this.allRegions.get(this.currentPointIndex);
-        this.currentCluster = this.currentPoint.getRegion();
-        this.currentPointIndex++;
-        this.nextTimeToMove+=this.nextTimeToMove;
-        //this.currentPoint = this.getCurrentPointFromAllRegions();
+        this.currentPoint = this.getCurrentPointFromAllRegions();
+        this.currentCluster=this.currentPoint.getRegion();
 
        /* if(this.getName().equalsIgnoreCase("taxi-815")){
             if(this.passedRegions.size() == 0){
@@ -578,6 +565,78 @@ public class DTNHost implements Comparable<DTNHost> {
             System.out.println(" current pointIndex: "+this.currentPointIndex);
 
         }*/
+
+        if (isTaxiOnReturnPath) {
+            if ((this.currentPointIndex == this.allRegions.size() - 1 && !this.isTaxiStillOnEndPoint)
+                    || this.currentPointIndex <= this.futureRegionIndex) {
+                int count = getFutureRegionCount();
+                this.futureRegionIndex = this.currentPointIndex - count;
+                setTaxiStillOnEndPoint();
+
+            }
+
+        } else {
+            if ((this.currentPointIndex == 0 && !this.isTaxiStillOnStartPoint)
+                    || this.futureRegionIndex == 0
+                    || this.currentPointIndex >= this.futureRegionIndex) {
+                int count = getFutureRegionCount();
+                this.futureRegionIndex = count + this.currentPointIndex;
+                setTaxiStillOnStartPoint();
+            }
+        }
+
+
+
+        if (!this.currentPoint.getRegion().equalsIgnoreCase(this.currentCluster)) {
+            likelihoodConUpdate();
+        }
+        if (this.getMessageCollection().stream().map(Message::isWatched).collect(Collectors.toList()).contains(true)) {
+            String cluster = this.currentPoint.getRegion();
+            List<Message> watchedMessages = this.getMessageCollection().stream().filter(Message::isWatched).collect(Collectors.toList());
+            watchedMessages.forEach(watchedMessage -> {
+                List<String> toGoRegions = watchedMessage.getToGoRegions();
+                if (toGoRegions.get(toGoRegions.size() - 1).equalsIgnoreCase(cluster)) {
+                    watchedMessage.setDeliveredTime(SimClock.getTime());
+                    LOGGER.info(SimClock.getTimeString()+" "
+                            + InfoMessage.MESSAGE_ARRIVED
+                            + "', messageId: '" + watchedMessage.getId()
+                            + "', toGoRegions: '" + watchedMessage.getToGoRegions().stream().collect(Collectors.joining(","))
+                            + "', totalTime: "+ watchedMessage.getElapsedTimeAsMinutes() + " minutes.");
+                    //this.deleteMessage(watchedMessage.getId(), true);
+                    watchedMessage.setTtl(1);
+                    if(!loggedMessages.contains(watchedMessage.getId())){
+                        LOGGER_ADMIN.info(watchedMessage.getId() + "," + watchedMessage.getElapsedTimeAsMinutes());
+                        //LOGGER_STDOUT.info(watchedMessage.getId() + "," + watchedMessage.getElapsedTimeAsMinutes());
+                    }
+                    loggedMessages.add(watchedMessage.getId());
+                }
+            });
+
+        }
+    }
+
+    public void move() {
+
+        Logger LOGGER_ADMIN = Logger.getLogger("admin");;
+        Logger LOGGER_STDOUT = Logger.getLogger("stdout");
+
+
+
+        if (!isMovementActive() || SimClock.getTime() < this.nextTimeToMove) {
+            return;
+        }
+
+        Coord coord=new Coord();
+        coord.setxRoute(this.allRegions.get(this.currentPointIndex).getxPoint());
+        coord.setyRoute(this.allRegions.get(this.currentPointIndex).getyPoint());
+        coord.setX(coord.getxRoute()-Coord.xOffset);
+        coord.setY(Coord.yOffset-coord.getyRoute());
+        this.destination = coord;
+        this.location=this.destination;
+        this.currentPoint = this.allRegions.get(this.currentPointIndex);
+        this.currentCluster = this.currentPoint.getRegion();
+        this.currentPointIndex++;
+        this.nextTimeToMove+=this.nextTimeToMove;
 
         if (isTaxiOnReturnPath) {
             if ((this.currentPointIndex == this.allRegions.size() - 1 && !this.isTaxiStillOnEndPoint)
