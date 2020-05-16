@@ -189,11 +189,13 @@ public class MapRoute {
                     orig.translate(-xOffset, -yOffset);
                     orig.setLocation(orig.getX(), -orig.getY());
 
-                    throw new SettingsError("MapRoute in file " + routeFile +
+                    /*throw new SettingsError("MapRoute in file " + routeFile +
                             " contained invalid coordinate " + c + " orig: " +
-                            orig);
+                            orig);*/
+                }else{
+                    nodes.add(node);
                 }
-                nodes.add(node);
+
             }
 
             routes.add(new MapRoute(type, nodes));
