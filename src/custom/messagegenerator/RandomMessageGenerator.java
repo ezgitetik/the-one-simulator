@@ -26,11 +26,11 @@ public class RandomMessageGenerator {
     private static double LAST_MESSAGE_CREATE_TIME = 0;
     private static final Logger LOGGER = Logger.getLogger("file");
 
-    private static final List<String> farClusters = Arrays.asList("cluster2", "cluster10");
-    private static final List<String> centralClusters = Arrays.asList("cluster6", "cluster19");
-    private static final List<String> centralAndFarClusters = Arrays.asList("cluster26", "cluster29");
+    private static final List<String> farClusters = Arrays.asList("cluster22", "cluster13");
+    private static final List<String> centralClusters = Arrays.asList("cluster1", "cluster12");
+    private static final List<String> centralAndFarClusters = Arrays.asList("cluster22", "cluster30");
 
-    private static final MessageGenerationType MESSAGE_GENERATION_TYPE = MessageGenerationType.UNIFORM;
+    private static final MessageGenerationType MESSAGE_GENERATION_TYPE = MessageGenerationType.BETWEEN_TWO_CENTRAL_CLUSTERS;
     private static final MessageGenerationFrequency MESSAGE_GENERATION_FREQUENCY = MessageGenerationFrequency.ONE_MESSAGE_PER_MINUTE;
 
     public static Message generateMessage(DTNHost fromHost) {

@@ -28,13 +28,14 @@ public class LineStringReader {
     public void parse() {
         String coordinatesString = this.lineStringLine.substring(12, this.lineStringLine.length() - 1);
         List<String> coordinates = Arrays.asList(coordinatesString.split(","));
-        coordinates.forEach(coordinate->{
+
+        for (String coordinate:coordinates){
             if (coordinate.contains(" ")){
                 Landmark landmark = new Landmark();
                 landmark.setY(Double.parseDouble(coordinate.trim().split(" ")[1].trim()));
                 landmark.setX(Double.parseDouble(coordinate.trim().split(" ")[0].trim()));
                 this.landmarks.add(landmark);
             }
-        });
+        }
     }
 }

@@ -29,6 +29,10 @@ public class ExternalEvent implements Comparable<ExternalEvent>, Serializable {
 		// this is just a dummy event
 	}
 
+	public void processEvent(World world, String messageCreatorTaxi) {
+		// this is just a dummy event
+	}
+
 	/**
 	 * Returns the time when this event should happen.
 	 * @return Event's time

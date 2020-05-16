@@ -109,16 +109,22 @@ public class RoutingStrategy {
     public static Double calculateLikelihood(DTNHost node, Message message) {
         AtomicReference<Double> likelihood = new AtomicReference<>();
         likelihood.set(-1.0);
-        List<String> nodeClusters = node.getFutureRegions()
+        /*List<String> nodeClusters = node.getFutureRegions()
                 .stream()
                 .map(ArffRegion::getRegion)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList());*/
 
-        IntStream.range(0, message.getToGoRegions().size()).forEach(index -> {
-            if (nodeClusters.contains(message.getToGoRegions().get(index))) {
-                likelihood.set((1 + ((double) (index + 1) / (double) message.getToGoRegions().size())));
+        List<String> futureRegions = new ArrayList<>();
+        for (ArffRegion arffRegion:node.getFutureRegions()){
+            futureRegions.add(arffRegion.getRegion());
+        }
+
+
+        for (int i=0; i<message.getToGoRegions().size(); i++){
+            if (futureRegions.contains(message.getToGoRegions().get(i))) {
+                likelihood.set((1 + ((double) (i + 1) / (double) message.getToGoRegions().size())));
             }
-        });
+        }
 
         return likelihood.get();
     }
@@ -126,13 +132,13 @@ public class RoutingStrategy {
     public static Double calculatePredictedLikelihood(DTNHost node, Message message) {
         AtomicReference<Double> likelihood = new AtomicReference<>();
         likelihood.set(-1.0);
-        String nextCluster = predictNextCluster(node);
-        if (nextCluster != null) {
-            IntStream.range(0, message.getToGoRegions().size()).forEach(index -> {
-                if (message.getToGoRegions().get(index).equals(nextCluster)) {
-                    likelihood.set((1 + ((double) (index+1) / (double) message.getToGoRegions().size())));
+        String predictedNextCluster = predictNextCluster(node);
+        if (predictedNextCluster != null) {
+            for (int i=0; i<message.getToGoRegions().size(); i++){
+                if (message.getToGoRegions().get(i).equals(predictedNextCluster)) {
+                    likelihood.set((1 + ((double) (i+1) / (double) message.getToGoRegions().size())));
                 }
-            });
+            }
         }
 
         return likelihood.get();

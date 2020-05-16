@@ -15,8 +15,8 @@ public class CustomerProbabilityDistribution {
     /**
      * We calculated it with using month1 and day1 data...
      */
-    private static final double MEAN_GPS_LOG_COUNT_WITH_CUSTOMER = (MEAN_LOG_COUNT_PER_100_TAXI_MONTH1_DAY1_MOD10 / 24D) / 60D * CUSTOMER_TIME_MINUTES;
-    private static final double MEAN_GPS_LOG_COUNT_WITH_NO_CUSTOMER = (MEAN_LOG_COUNT_PER_100_TAXI_MONTH1_DAY1_MOD10 / 24D) / 60D * NO_CUSTOMER_TIME_MINUTES;
+    private static final double MEAN_GPS_LOG_COUNT_WITH_CUSTOMER = (MEAN_LOG_COUNT_PER_100_TAXI_MONTH1_DAY1 / 24D) / 60D * CUSTOMER_TIME_MINUTES;
+    private static final double MEAN_GPS_LOG_COUNT_WITH_NO_CUSTOMER = (MEAN_LOG_COUNT_PER_100_TAXI_MONTH1_DAY1 / 24D) / 60D * NO_CUSTOMER_TIME_MINUTES;
 
     private static double calculateNegativeExponential(double meanLogCount) {
         double random = Math.random();
