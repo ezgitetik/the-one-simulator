@@ -91,14 +91,8 @@ public class SimMap implements Serializable {
 
         if (needsRehash) { // some coordinates have changed after creating hash
             nodesMap.clear();
-            //mapNodes.clear();
-            /*ForkJoinPool pooly = new ForkJoinPool(5);
-            pooly.submit(() -> getNodes().parallelStream().forEach(node -> {
-                nodesMap.put(node.getLocation(), node); // re-hash
-            })).join();*/
 			for (MapNode node : getNodes()) {
 				nodesMap.put(node.getLocation(), node); // re-hash
-                //mapNodes.put(node.getLocation().getX()+"#"+node.getLocation().getY(), node);
 			}
         }
 
@@ -156,7 +150,7 @@ public class SimMap implements Serializable {
         }*/
 
         ForkJoinPool forkJoinPool = new ForkJoinPool(12);
-        forkJoinPool.submit(() -> nodes.parallelStream().forEach(node -> {
+        forkJoinPool.submit(() -> nodes.forEach(node -> {
             node.getLocation().translate(dx, dy);
         })).join();
 

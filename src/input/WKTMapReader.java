@@ -126,7 +126,7 @@ public class WKTMapReader extends WKTReader {
 
         ForkJoinPool forkJoinPool = new ForkJoinPool();
 
-        forkJoinPool.submit(() -> allLines.parallelStream().forEach(aLine -> {
+        forkJoinPool.submit(() -> allLines.forEach(aLine -> {
                     try {
                         updateMap(parseLineString(readNestedContents(aLine)));
                     } catch (IOException e) {

@@ -13,9 +13,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import custom.ArffReader;
 import custom.ArffRegion;
-import custom.LikelihoodComparator;
 import custom.RoutingStrategy;
 import routing.util.EnergyModel;
 import routing.util.MessageTransferAcceptPolicy;
