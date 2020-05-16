@@ -62,6 +62,8 @@ public class DTNHost implements Comparable<DTNHost> {
     //TODO it should be changed when cluster count has changed.
     private static final int CLUSTER_COUNT = 40;
 
+    private  int oldPointIndex=-1;
+
     private static final Logger LOGGER=Logger.getLogger("file");
 
     private List<String> passedRegions = new ArrayList<>();
@@ -542,7 +544,7 @@ public class DTNHost implements Comparable<DTNHost> {
         this.currentPoint = this.getCurrentPointFromAllRegions();
         this.currentCluster=this.currentPoint.getRegion();
 
-       /* if(this.getName().equalsIgnoreCase("taxi-815")){
+        if(this.getName().equalsIgnoreCase("taxi-815")){
             if(this.passedRegions.size() == 0){
                 this.passedRegions.add(this.currentCluster);
                 //System.out.println(this.currentCluster);
@@ -560,7 +562,7 @@ public class DTNHost implements Comparable<DTNHost> {
             System.out.print(" current cluster: "+this.currentCluster);
             System.out.println(" current pointIndex: "+this.currentPointIndex);
 
-        }*/
+        }
 
         if (isTaxiOnReturnPath) {
             if ((this.currentPointIndex == this.allRegions.size() - 1 && !this.isTaxiStillOnEndPoint)
@@ -614,7 +616,6 @@ public class DTNHost implements Comparable<DTNHost> {
     public void move() {
 
         Logger LOGGER_ADMIN = Logger.getLogger("admin");;
-        Logger LOGGER_STDOUT = Logger.getLogger("stdout");
 
 
 
@@ -622,7 +623,12 @@ public class DTNHost implements Comparable<DTNHost> {
             return;
         }
 
-        int oldPointIndex = this.currentPointIndex;
+        if (this.oldPointIndex == -1){
+            this.currentPoint = this.allRegions.get(this.currentPointIndex);
+            likelihoodConUpdate();
+        }
+
+        this.oldPointIndex = this.currentPointIndex;
         int pointIndex = this.currentPointIndex;
         for (int i = this.currentPointIndex; i < this.allRegions.size(); i++) {
             double clock=SimClock.getTime();
@@ -645,7 +651,6 @@ public class DTNHost implements Comparable<DTNHost> {
         this.location=this.destination;
         this.currentPoint = this.allRegions.get(this.currentPointIndex);
         this.currentCluster = this.currentPoint.getRegion();
-
 
         if (!this.allRegions.get(oldPointIndex).getRegion().equalsIgnoreCase(this.currentCluster)) {
             likelihoodConUpdate();

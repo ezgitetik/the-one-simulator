@@ -20,14 +20,14 @@ public class RandomMessageGenerator {
     private static final int MESSAGE_SIZE = 977273;
     private static final int CLUSTER_COUNT = 40;
     private static final int FINAL_HOUR = 60 * 60 * 22;
-    private static final int START_HOUR = 60 * 60 * 6;
+    private static final int START_HOUR = 0;//60 * 60 * 6;
 
     private static final Random random = new Random();
     private static double LAST_MESSAGE_CREATE_TIME = 0;
     private static final Logger LOGGER = Logger.getLogger("file");
 
     private static final List<String> farClusters = Arrays.asList("cluster22", "cluster13");
-    private static final List<String> centralClusters = Arrays.asList("cluster1", "cluster12");
+    private static final List<String> centralClusters = Arrays.asList("cluster14", "cluster12");
     private static final List<String> centralAndFarClusters = Arrays.asList("cluster22", "cluster30");
 
     private static final MessageGenerationType MESSAGE_GENERATION_TYPE = MessageGenerationType.BETWEEN_TWO_CENTRAL_CLUSTERS;
@@ -96,7 +96,7 @@ public class RandomMessageGenerator {
                 + ", messageId: '" + message.getId()
                 + "', carrier taxiName: '" + fromHost.getName()
                 + "', cluster: '" + fromHost.getCurrentCluster()
-                + "', toGoClusters: '" + shortestPath.stream().collect(Collectors.joining(",")) + "'");
+                + "', toGoClusters: '" + String.join(",", shortestPath) + "'");
 
         return message;
     }
