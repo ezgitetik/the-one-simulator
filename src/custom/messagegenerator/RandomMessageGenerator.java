@@ -120,7 +120,7 @@ public class RandomMessageGenerator {
         int randomClusterId = random.nextInt(CLUSTER_COUNT);
         String randomClusterName = "cluster" + randomClusterId;
         if (randomClusterName.equalsIgnoreCase(sourceCluster)) {
-            pickRandomDestinationCluster(sourceCluster);
+            return pickRandomDestinationCluster(sourceCluster);
         }
         return randomClusterName;
     }
