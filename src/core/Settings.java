@@ -36,7 +36,7 @@ public class Settings {
 	/** properties object where the setting files are read into */
 	protected static Properties props;
 	/** file name of the default settings file ({@value}) */
-	public static final String DEF_SETTINGS_FILE ="default_settings-100taxi-month1-day1-40.txt";
+	public static final String DEF_SETTINGS_FILE ="default_settings-100taxi-month1-day1-30.txt";
 
 	/**
 	 * Setting to define the file name where all read settings are written

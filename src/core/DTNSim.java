@@ -37,6 +37,7 @@ public class DTNSim {
 		Settings s = new Settings(); // don't use any namespace
 		System.setProperty("prediction", s.getSetting("prediction"));
 		System.setProperty("nrofHostGroups", s.getSetting("Scenario.nrofHostGroups"));
+		System.setProperty("clusterCount", s.getSetting("CLUSTER_COUNT"));
 	}
 
 	/**
