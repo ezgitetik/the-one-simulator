@@ -10,6 +10,11 @@ START_HOUR = 0
 ## 6 hours warm up
 ##START_HOUR = 21600
 
+CLUSTER_COUNT = 40
+FAR_CLUSTERS = cluster19,cluster13
+CENTRAL_CLUSTERS = cluster12,cluster35
+CENTRAL_AND_FAR_CLUSTERS = cluster12,cluster19
+
 ## prediction method (akom, tdag, cpt)
 prediction = akom
 

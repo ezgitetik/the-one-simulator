@@ -60,7 +60,8 @@ public class DTNHost implements Comparable<DTNHost> {
     private int previousDestinationPointIndex=0;
     private Map<String, Double> contactHistoryMap = new HashMap<>();
     //TODO it should be changed when cluster count has changed.
-    private static final int CLUSTER_COUNT = 40;
+    private static final Settings s = new Settings(); // don't use any namespace
+    private static final int CLUSTER_COUNT = Integer.parseInt(s.getSetting("CLUSTER_COUNT"));
 
     private  int oldPointIndex=-1;
 

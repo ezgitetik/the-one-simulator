@@ -18,7 +18,7 @@ public class RandomMessageGenerator {
 
     private static int MESSAGE_COUNT = 0;
     private static final int MESSAGE_SIZE = 977273;
-    private static final int CLUSTER_COUNT = 40;
+    private static final int CLUSTER_COUNT = Integer.parseInt(s.getSetting("CLUSTER_COUNT"));
     private static final int FINAL_HOUR = 60 * 60 * 22;
     //private static final int START_HOUR = 60 * 60 * 6;
 
@@ -26,9 +26,9 @@ public class RandomMessageGenerator {
     private static double LAST_MESSAGE_CREATE_TIME = 0;
     private static final Logger LOGGER = Logger.getLogger("file");
 
-    private static final List<String> farClusters = Arrays.asList("cluster22", "cluster13");
-    private static final List<String> centralClusters = Arrays.asList("cluster14", "cluster12");
-    private static final List<String> centralAndFarClusters = Arrays.asList("cluster22", "cluster30");
+    private static final List<String> farClusters = Arrays.asList(s.getSetting("FAR_CLUSTERS").split(","));
+    private static final List<String> centralClusters = Arrays.asList(s.getSetting("CENTRAL_CLUSTERS").split(","));
+    private static final List<String> centralAndFarClusters = Arrays.asList(s.getSetting("CENTRAL_AND_FAR_CLUSTERS").split(","));
 
     private static final MessageGenerationType MESSAGE_GENERATION_TYPE = MessageGenerationType.UNIFORM;
     private static final MessageGenerationFrequency MESSAGE_GENERATION_FREQUENCY = MessageGenerationFrequency.ONE_MESSAGE_PER_MINUTE;
