@@ -23,7 +23,7 @@ the-one.iml
 *.DS_Store
 
 /resources/
-/data/custom/taxidata/100taxi-month1/100taxi-month1-weka.arff
+/data/custom/taxidata/100taxi-month1/100taxi-month1-weka-40.arff
 /data/custom/taxidata/60taxi-month1/60taxi-month1-weka.arff
 
 "C:\\log4j-application.log"

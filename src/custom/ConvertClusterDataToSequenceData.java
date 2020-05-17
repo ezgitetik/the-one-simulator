@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 public class ConvertClusterDataToSequenceData {
 
-    private static final String ARFF_PATH = "custom/taxidata/100taxi-month1/100taxi-month1-weka.arff";
+    private static final String ARFF_PATH = "custom/taxidata/100taxi-month1/100taxi-month1-weka-40.arff";
     private static final String TAXI_PATH = "custom/taxidata/100taxi-month1/100taxi-month1-training/";
 
     public static void main(String[] args) throws IOException {
@@ -108,7 +108,7 @@ public class ConvertClusterDataToSequenceData {
     }
 
     private static void writeToFile(String content) throws IOException {
-        Files.write(Paths.get(ConvertClusterDataToSequenceData.class.getClassLoader().getResource("training-data-100taxi-son1.txt").getPath()),
+        Files.write(Paths.get(ConvertClusterDataToSequenceData.class.getClassLoader().getResource("training-data-100taxi-40.txt").getPath()),
                 content.getBytes(), StandardOpenOption.WRITE);
         System.out.println("finished successfully.");
     }

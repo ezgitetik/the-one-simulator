@@ -20,8 +20,13 @@ import core.Settings;
 import core.SettingsError;
 import core.SimClock;
 import core.SimError;
+import custom.InfoMessage;
+import org.apache.log4j.Logger;
 import routing.util.RoutingInfo;
 import util.Tuple;
+
+import static custom.messagegenerator.RandomMessageGenerator.createMessageId;
+import static custom.messagegenerator.RandomMessageGenerator.incrementMessageCount;
 
 /**
  * Superclass for message routers.
@@ -33,6 +38,7 @@ public abstract class MessageRouter {
 	 * Message TTL -setting id ({@value}). Value is in minutes and must be
 	 * an integer.
 	 */
+	private static final Logger LOGGER = Logger.getLogger("file");
 	public static final String MSG_TTL_S = "msgTtl";
 	/**
 	 * Message/fragment sending queue type -setting id ({@value}).
@@ -381,11 +387,22 @@ public abstract class MessageRouter {
 
 		Message aMessage = (outgoing==null)?(incoming):(outgoing);
 		if (aMessage.isWatched()){
-			aMessage.setFrom(this.host);
-			aMessage.setTo(null);
-			//aMessage.setTtl(-1);
-			//aMessage.setTtl(120);
-			aMessage.setOnTheRoad(false);
+			Message newMessage = aMessage.replicate();
+			newMessage.setFrom(this.host);
+			newMessage.setTo(null);
+			newMessage.setOnTheRoad(false);
+			incrementMessageCount();
+			String messageId = createMessageId();
+			newMessage.setId(messageId);
+
+			LOGGER.info(SimClock.getTimeString() + " " + InfoMessage.MESSAGE_CREATED + " DUPLICATE of " + aMessage.getId()
+					+ ", messageId: '" + newMessage.getId()
+					+ "', carrier taxiName: '" + newMessage.getFrom().getName()
+					+ "', cluster: '" + newMessage.getFrom().getCurrentCluster()
+					+ "', toGoClusters: '" + String.join(",", newMessage.getToGoRegions()) + "'");
+
+			aMessage = newMessage;
+
 			//System.out.println("Message transfer completed to: " + aMessage.getFrom().getName());
 		}
 		// If the application re-targets the message (changes 'to')

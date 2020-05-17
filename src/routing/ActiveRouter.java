@@ -663,8 +663,11 @@ public abstract class ActiveRouter extends MessageRouter {
                     if (con.getMsgOnFly().isWatched()) {
                         if ((con.getMsgOnFly().getFrom() == con.getFromNode() && con.getMsgOnFly().getTo() == con.getToNode() ||
                                 con.getMsgOnFly().getTo() == con.getFromNode() && con.getMsgOnFly().getFrom() == con.getToNode())) {
-                            this.deleteMessage(con.getMsgOnFly().getId(), false);
-                            con.finalizeTransfer();
+                            Double likelihood = RoutingStrategy.likelihoodMobUpdate(con.getMsgOnFly().getFrom(), con.getMsgOnFly());
+                            if(likelihood < 0){
+                                this.deleteMessage(con.getMsgOnFly().getId(), false);
+                                con.finalizeTransfer();
+                            }
                         }
                     } else {
                         con.finalizeTransfer();

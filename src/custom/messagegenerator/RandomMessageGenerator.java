@@ -20,7 +20,7 @@ public class RandomMessageGenerator {
     private static final int MESSAGE_SIZE = 977273;
     private static final int CLUSTER_COUNT = 40;
     private static final int FINAL_HOUR = 60 * 60 * 22;
-    private static final int START_HOUR = 0;//60 * 60 * 6;
+    private static final int START_HOUR = 60 * 60 * 6;
 
     private static final Random random = new Random();
     private static double LAST_MESSAGE_CREATE_TIME = 0;
@@ -30,7 +30,7 @@ public class RandomMessageGenerator {
     private static final List<String> centralClusters = Arrays.asList("cluster14", "cluster12");
     private static final List<String> centralAndFarClusters = Arrays.asList("cluster22", "cluster30");
 
-    private static final MessageGenerationType MESSAGE_GENERATION_TYPE = MessageGenerationType.BETWEEN_TWO_CENTRAL_CLUSTERS;
+    private static final MessageGenerationType MESSAGE_GENERATION_TYPE = MessageGenerationType.UNIFORM;
     private static final MessageGenerationFrequency MESSAGE_GENERATION_FREQUENCY = MessageGenerationFrequency.ONE_MESSAGE_PER_MINUTE;
 
     public static Message generateMessage(DTNHost fromHost) {
@@ -125,11 +125,11 @@ public class RandomMessageGenerator {
         return randomClusterName;
     }
 
-    private static String createMessageId() {
+    public static String createMessageId() {
         return "WM_" + MESSAGE_COUNT;
     }
 
-    private static void incrementMessageCount() {
+    public static void incrementMessageCount() {
         MESSAGE_COUNT++;
     }
 

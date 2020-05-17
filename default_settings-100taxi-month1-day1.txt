@@ -3,12 +3,12 @@
 #
 
 ## Training settings
-ARFF_WITHOUT_MOD = custom/taxidata/100taxi-month1/100taxi-month1-weka.arff
+ARFF_WITHOUT_MOD = custom/taxidata/100taxi-month1/100taxi-month1-weka-40.arff
 TAXI_SIMULATION = custom/taxidata/100taxi-month1/100taxi-month1-simulation/
 TAXI_SECOND = custom/taxidata/100taxi-month1/100taxi-month1-second/
 
 ## prediction method (akom, tdag, cpt)
-prediction = cpt
+prediction = akom
 
 ## Scenario settings
 Scenario.name = default_scenario
@@ -26,8 +26,8 @@ Scenario.endTime = 86400
 
 # "Bluetooth" interface for all nodes
 btInterface.type = SimpleBroadcastInterface
-# Transmit speed of 2 Mbps = 250kBps
-btInterface.transmitSpeed = 250k
+# Transmit speed of 2 Mbps = 250kBps, 6 Mbps = 750k
+btInterface.transmitSpeed = 750k
 btInterface.transmitRange = 1000
 
 # High speed, long range, interface for group 4

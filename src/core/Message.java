@@ -105,6 +105,9 @@ public class Message implements Comparable<Message> {
         this.toGoRegions.addAll(toGoRegions);
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
     /**
      * if a response to this message is required, this is the size of the
      * response message (or 0 if no response is requested)
