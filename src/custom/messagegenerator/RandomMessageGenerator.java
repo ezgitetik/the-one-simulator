@@ -33,9 +33,22 @@ public class RandomMessageGenerator {
     private static final MessageGenerationType MESSAGE_GENERATION_TYPE = MessageGenerationType.UNIFORM;
     private static final MessageGenerationFrequency MESSAGE_GENERATION_FREQUENCY = MessageGenerationFrequency.ONE_MESSAGE_PER_MINUTE;
 
+
+    private static List<String> messageCreatedTaxi = new ArrayList<>();
+
     public static Message generateMessage(DTNHost fromHost) {
         Message message = null;
         if (SimClock.getTime() > START_HOUR && SimClock.getTime() > elapsedTimeAfterLastMessageGeneration() && SimClock.getTime() < FINAL_HOUR) {
+
+            if (messageCreatedTaxi.contains(fromHost.getName())) {
+                return null;
+            } else {
+                messageCreatedTaxi.add(fromHost.getName());
+                if (messageCreatedTaxi.size() == Integer.parseInt(s.getSetting("Scenario.nrofHostGroups"))) {
+                    messageCreatedTaxi = new ArrayList<>();
+                }
+            }
+
             if (MESSAGE_GENERATION_TYPE == MessageGenerationType.UNIFORM) {
                 String sourceCluster = getSourceCluster(fromHost);
                 String destinationCluster = pickRandomDestinationCluster(sourceCluster);
@@ -120,7 +133,7 @@ public class RandomMessageGenerator {
         int randomClusterId = random.nextInt(CLUSTER_COUNT);
         String randomClusterName = "cluster" + randomClusterId;
         if (randomClusterName.equalsIgnoreCase(sourceCluster)) {
-            pickRandomDestinationCluster(sourceCluster);
+            return pickRandomDestinationCluster(sourceCluster);
         }
         return randomClusterName;
     }

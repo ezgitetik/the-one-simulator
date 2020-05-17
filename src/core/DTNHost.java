@@ -16,6 +16,7 @@ import custom.ArffReader;
 import custom.ArffRegion;
 import custom.CustomerProbabilityDistribution;
 import custom.InfoMessage;
+import custom.messagegenerator.RandomMessageGenerator;
 import movement.MovementModel;
 import movement.Path;
 import org.apache.log4j.Logger;
@@ -595,16 +596,23 @@ public class DTNHost implements Comparable<DTNHost> {
                 List<String> toGoRegions = watchedMessage.getToGoRegions();
                 if (toGoRegions.get(toGoRegions.size() - 1).equalsIgnoreCase(cluster)) {
                     watchedMessage.setDeliveredTime(SimClock.getTime());
-                    LOGGER.info(SimClock.getTimeString()+" "
-                            + InfoMessage.MESSAGE_ARRIVED
-                            + "', messageId: '" + watchedMessage.getId()
-                            + "', toGoRegions: '" + watchedMessage.getToGoRegions().stream().collect(Collectors.joining(","))
-                            + "', totalTime: "+ watchedMessage.getElapsedTimeAsMinutes() + " minutes.");
-                    //this.deleteMessage(watchedMessage.getId(), true);
+
                     watchedMessage.setTtl(1);
                     if(!loggedMessages.contains(watchedMessage.getId())){
                         LOGGER_ADMIN.info(watchedMessage.getId() + "," + watchedMessage.getElapsedTimeAsMinutes());
-                        //LOGGER_STDOUT.info(watchedMessage.getId() + "," + watchedMessage.getElapsedTimeAsMinutes());
+
+                        LOGGER.info(SimClock.getTimeString()+" "
+                                + InfoMessage.MESSAGE_ARRIVED
+                                + "', messageId: '" + watchedMessage.getId()
+                                + "', toGoRegions: '" + watchedMessage.getToGoRegions().stream().collect(Collectors.joining(","))
+                                + "', totalTime: "+ watchedMessage.getElapsedTimeAsMinutes() + " minutes.");
+
+                        LOGGER.info(SimClock.getTimeString()+" "
+                                + "MESSAGE_ARRIVED_BY_TAXI"
+                                + "', messageId: '" + watchedMessage.getId()
+                                + "', taxiIds: '" + watchedMessage.getHops().stream().map(DTNHost::getName).collect(Collectors.joining(","))
+                                + "', totalTime: "+ watchedMessage.getElapsedTimeAsMinutes() + " minutes.");
+
                     }
                     loggedMessages.add(watchedMessage.getId());
                 }
@@ -676,6 +684,10 @@ public class DTNHost implements Comparable<DTNHost> {
             }
         }
 
+        Message randomMessage = RandomMessageGenerator.generateMessage(this);
+        if (randomMessage != null) {
+            this.createNewMessage(randomMessage);
+        }
 
         if (this.getMessageCollection().stream().map(Message::isWatched).collect(Collectors.toList()).contains(true)) {
             String cluster = this.currentPoint.getRegion();
