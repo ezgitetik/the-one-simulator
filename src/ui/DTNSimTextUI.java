@@ -5,6 +5,10 @@
 package ui;
 
 import core.SimClock;
+import custom.messagegenerator.RandomMessageGenerator;
+import org.apache.log4j.Logger;
+
+import java.util.stream.DoubleStream;
 
 /**
  * Simple text-based user interface.
@@ -14,6 +18,8 @@ public class DTNSimTextUI extends DTNSimUI {
 	private long startTime; // simulation start time
 	/** How often the UI view is updated (milliseconds) */
 	public static final long UI_UP_INTERVAL = 60000;
+
+	Logger LOGGER_DETAIL = Logger.getLogger("file");;
 
 	protected void runSim() {
 		double simTime = SimClock.getTime();
@@ -41,6 +47,15 @@ public class DTNSimTextUI extends DTNSimUI {
 		simDone = true;
 		done();
 		this.update(true); // force final UI update
+
+		int totalDeliveredMessage= world.getHosts().stream().mapToInt(host -> host.getLoggedMessages().size()).sum();
+		LOGGER_DETAIL.info("TOTAL_MESSAGE_COUNT: "+ RandomMessageGenerator.MESSAGE_COUNT);
+		LOGGER_DETAIL.info("DELIVERED_MESSAGE_COUNT: "+totalDeliveredMessage);
+		LOGGER_DETAIL.info("DELIVERY_RATIO: %"+ (totalDeliveredMessage / RandomMessageGenerator.MESSAGE_COUNT * 100));
+
+		double totalDelayTimeAsSeconds = world.getHosts().stream().flatMapToDouble(host -> (DoubleStream) host.getLoggedMessages().values()).sum();
+		double meanDelayTimeAsSeconds = totalDelayTimeAsSeconds/totalDeliveredMessage;
+		LOGGER_DETAIL.info("DELAY_TIME_MINUTES: %"+ String.format("%.2f", (meanDelayTimeAsSeconds/60)));
 
 		print("Simulation done in " + String.format("%.2f", duration) + "s");
 

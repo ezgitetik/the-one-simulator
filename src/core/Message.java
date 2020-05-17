@@ -469,8 +469,12 @@ public class Message implements Comparable<Message> {
         this.appID = appID;
     }
 
-    public String getElapsedTimeAsMinutes(){
+    public String getElapsedTimeAsMinutesString(){
         double elapsedMinutes= (this.getDeliveredTime() - this.getCreatedTime()) / 60;
         return  String.format("%.2f", elapsedMinutes);
+    }
+
+    public Double getElapsedTimeAsSeconds() {
+        return this.getDeliveredTime() - this.getCreatedTime();
     }
 }

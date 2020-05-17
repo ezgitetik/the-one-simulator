@@ -7,7 +7,6 @@ package core;
 import java.awt.geom.Point2D;
 import java.text.DecimalFormat;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -47,7 +46,7 @@ public class DTNHost implements Comparable<DTNHost> {
     private List<NetworkInterface> net;
     private ModuleCommunicationBus comBus;
 
-    private List<String> loggedMessages = new ArrayList<>();
+    private Map<String,Double> loggedMessages = new HashMap<>();
     private String currentCluster;
     private List<ArffRegion> allRegions;
     private ArffRegion currentPoint;
@@ -84,6 +83,10 @@ public class DTNHost implements Comparable<DTNHost> {
 
     public int getCurrentPointIndex() {
         return currentPointIndex;
+    }
+
+    public Map<String,Double> getLoggedMessages() {
+        return loggedMessages;
     }
 
     static {
@@ -599,23 +602,23 @@ public class DTNHost implements Comparable<DTNHost> {
                     watchedMessage.setDeliveredTime(SimClock.getTime());
 
                     watchedMessage.setTtl(1);
-                    if(!loggedMessages.contains(watchedMessage.getId())){
-                        LOGGER_ADMIN.info(watchedMessage.getId() + "," + watchedMessage.getElapsedTimeAsMinutes());
+                    if(!loggedMessages.keySet().contains(watchedMessage.getId())){
+                        LOGGER_ADMIN.info(watchedMessage.getId() + "," + watchedMessage.getElapsedTimeAsMinutesString());
 
                         LOGGER.info(SimClock.getTimeString()+" "
                                 + InfoMessage.MESSAGE_ARRIVED
                                 + "', messageId: '" + watchedMessage.getId()
                                 + "', toGoRegions: '" + watchedMessage.getToGoRegions().stream().collect(Collectors.joining(","))
-                                + "', totalTime: "+ watchedMessage.getElapsedTimeAsMinutes() + " minutes.");
+                                + "', totalTime: "+ watchedMessage.getElapsedTimeAsMinutesString() + " minutes.");
 
                         LOGGER.info(SimClock.getTimeString()+" "
                                 + "MESSAGE_ARRIVED_BY_TAXI"
                                 + "', messageId: '" + watchedMessage.getId()
                                 + "', taxiIds: '" + watchedMessage.getHops().stream().map(DTNHost::getName).collect(Collectors.joining(","))
-                                + "', totalTime: "+ watchedMessage.getElapsedTimeAsMinutes() + " minutes.");
+                                + "', totalTime: "+ watchedMessage.getElapsedTimeAsMinutesString() + " minutes.");
 
                     }
-                    loggedMessages.add(watchedMessage.getId());
+                    loggedMessages.put(watchedMessage.getId(),watchedMessage.getElapsedTimeAsMinutes());
                 }
             });
 
@@ -697,18 +700,17 @@ public class DTNHost implements Comparable<DTNHost> {
                 List<String> toGoRegions = watchedMessage.getToGoRegions();
                 if (toGoRegions.get(toGoRegions.size() - 1).equalsIgnoreCase(cluster)) {
                     watchedMessage.setDeliveredTime(SimClock.getTime());
-                    LOGGER.info(SimClock.getTimeString()+" "
-                            + InfoMessage.MESSAGE_ARRIVED
-                            + "', messageId: '" + watchedMessage.getId()
-                            + "', toGoRegions: '" + watchedMessage.getToGoRegions().stream().collect(Collectors.joining(","))
-                            + "', totalTime: "+ watchedMessage.getElapsedTimeAsMinutes() + " minutes.");
-                    //this.deleteMessage(watchedMessage.getId(), true);
                     watchedMessage.setTtl(1);
-                    if(!loggedMessages.contains(watchedMessage.getId())){
-                        LOGGER_ADMIN.info(watchedMessage.getId() + "," + watchedMessage.getElapsedTimeAsMinutes());
-                        //LOGGER_STDOUT.info(watchedMessage.getId() + "," + watchedMessage.getElapsedTimeAsMinutes());
+                    if(!loggedMessages.keySet().contains(watchedMessage.getId())){
+                        LOGGER_ADMIN.info(watchedMessage.getId() + "," + watchedMessage.getElapsedTimeAsMinutesString());
+                        LOGGER.info(SimClock.getTimeString()+" "
+                                + InfoMessage.MESSAGE_ARRIVED
+                                + "', messageId: '" + watchedMessage.getId()
+                                + "', toGoRegions: '" + watchedMessage.getToGoRegions().stream().collect(Collectors.joining(","))
+                                + "', totalTime: "+ watchedMessage.getElapsedTimeAsMinutesString() + " minutes.");
+                        loggedMessages.put(watchedMessage.getId(),watchedMessage.getElapsedTimeAsMinutes());
                     }
-                    loggedMessages.add(watchedMessage.getId());
+
                 }
             });
 

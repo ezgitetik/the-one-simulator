@@ -16,7 +16,7 @@ public class RandomMessageGenerator {
     private static final Settings s = new Settings(); // don't use any namespace
     private static final Integer START_HOUR = Integer.parseInt(s.getSetting("START_HOUR"));
 
-    private static int MESSAGE_COUNT = 0;
+    public static int MESSAGE_COUNT = 0;
     private static final int MESSAGE_SIZE = 977273;
     private static final int CLUSTER_COUNT = Integer.parseInt(s.getSetting("CLUSTER_COUNT"));
     private static final int FINAL_HOUR = 60 * 60 * 22;
