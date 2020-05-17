@@ -6,6 +6,9 @@
 ARFF_WITHOUT_MOD = custom/taxidata/100taxi-month1/100taxi-month1-weka-40.arff
 TAXI_SIMULATION = custom/taxidata/100taxi-month1/100taxi-month1-simulation/
 TAXI_SECOND = custom/taxidata/100taxi-month1/100taxi-month1-second/
+START_HOUR = 0
+## 6 hours warm up
+##START_HOUR = 21600
 
 ## prediction method (akom, tdag, cpt)
 prediction = akom
