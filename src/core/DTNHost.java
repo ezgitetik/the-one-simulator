@@ -618,7 +618,7 @@ public class DTNHost implements Comparable<DTNHost> {
                                 + "', totalTime: "+ watchedMessage.getElapsedTimeAsMinutesString() + " minutes.");
 
                     }
-                    loggedMessages.put(watchedMessage.getId(),watchedMessage.getElapsedTimeAsMinutes());
+                    loggedMessages.put(watchedMessage.getId(),watchedMessage.getElapsedTimeAsSeconds());
                 }
             });
 
@@ -708,7 +708,7 @@ public class DTNHost implements Comparable<DTNHost> {
                                 + "', messageId: '" + watchedMessage.getId()
                                 + "', toGoRegions: '" + watchedMessage.getToGoRegions().stream().collect(Collectors.joining(","))
                                 + "', totalTime: "+ watchedMessage.getElapsedTimeAsMinutesString() + " minutes.");
-                        loggedMessages.put(watchedMessage.getId(),watchedMessage.getElapsedTimeAsMinutes());
+                        loggedMessages.put(watchedMessage.getId(),watchedMessage.getElapsedTimeAsSeconds());
                     }
 
                 }

@@ -4,6 +4,7 @@
  */
 package gui;
 
+import custom.messagegenerator.RandomMessageGenerator;
 import gui.playfield.PlayField;
 
 import java.awt.event.MouseAdapter;
@@ -12,12 +13,15 @@ import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.InvocationTargetException;
+import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 import movement.Path;
+import org.apache.log4j.Logger;
 import ui.DTNSimUI;
 import core.Coord;
 import core.DTNHost;
@@ -32,7 +36,7 @@ public class DTNSimGUI extends DTNSimUI {
 	private GUIControls guiControls;
 	private EventLogPanel eventLogPanel;
 	private InfoPanel infoPanel;
-
+	Logger LOGGER_DETAIL = Logger.getLogger("file");;
 	private void startGUI() {
 		try {
 			SwingUtilities.invokeAndWait(new Runnable() {
@@ -123,6 +127,15 @@ public class DTNSimGUI extends DTNSimUI {
 		simDone = true;
 		done();
 		this.update(true); // force final GUI update
+
+		int totalDeliveredMessage= world.getHosts().stream().mapToInt(host -> host.getLoggedMessages().size()).sum();
+		LOGGER_DETAIL.info("TOTAL_MESSAGE_COUNT: "+ RandomMessageGenerator.MESSAGE_COUNT);
+		LOGGER_DETAIL.info("DELIVERED_MESSAGE_COUNT: "+totalDeliveredMessage);
+		LOGGER_DETAIL.info("DELIVERY_RATIO: "+ String.format("%.2f", (((double)totalDeliveredMessage / (double)RandomMessageGenerator.MESSAGE_COUNT) * 100))+ "%");
+
+		double totalDelayTimeAsSeconds= world.getHosts().stream().mapToDouble(host -> host.getLoggedMessages().values().stream().mapToDouble(Double::doubleValue).sum()).sum();
+		double meanDelayTimeAsSeconds = totalDelayTimeAsSeconds/totalDeliveredMessage;
+		LOGGER_DETAIL.info("DELAY_TIME_MINUTES: "+ String.format("%.2f", (meanDelayTimeAsSeconds/60)) + "%");
 
 		if (!simCancelled) { // NOT cancelled -> leave the GUI running
 			JOptionPane.showMessageDialog(getParentFrame(),
