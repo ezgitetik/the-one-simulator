@@ -18,6 +18,7 @@ public class ArffReader {
 
     private static final String TAXI_SIMULATION = s.getSetting("TAXI_SIMULATION");
     private static final String TAXI_SECOND = s.getSetting("TAXI_SECOND");
+    private static final String TAXI_SEQUENCE = s.getSetting("TAXI_SEQUENCE");
 
     private static final String TAXI_PATH = TAXI_SIMULATION;
 
@@ -165,6 +166,25 @@ public class ArffReader {
         return region != null
                 ? region
                 : new ArffRegion(0.0, 0.0, "");
+    }
+
+    public static List<List<Integer>> getSequenceByTaxi(String fileName) {
+        List<String> allLines = null;
+        try {
+            allLines = Files.readAllLines(Paths.get(ArffReader.class.getClassLoader().getResource(TAXI_SEQUENCE + fileName).getPath()));
+            List<List<Integer>> sequenceList = new ArrayList<>();
+            for (String line:allLines){
+                String[] sequenceLine = line.split(" ");
+                List<Integer> sequenceIntLine = new ArrayList<>();
+                for (String value : sequenceLine) {
+                    sequenceIntLine.add(Integer.valueOf(value));
+                }
+                sequenceList.add(sequenceIntLine);
+            }
+            return sequenceList;
+        } catch (IOException e) {
+            return null;
+        }
     }
 
 }

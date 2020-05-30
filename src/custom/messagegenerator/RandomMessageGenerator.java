@@ -30,7 +30,7 @@ public class RandomMessageGenerator {
     private static final List<String> centralClusters = Arrays.asList(s.getSetting("CENTRAL_CLUSTERS").split(","));
     private static final List<String> centralAndFarClusters = Arrays.asList(s.getSetting("CENTRAL_AND_FAR_CLUSTERS").split(","));
 
-    private static final MessageGenerationType MESSAGE_GENERATION_TYPE = MessageGenerationType.UNIFORM;
+    private static final MessageGenerationType MESSAGE_GENERATION_TYPE = MessageGenerationType.valueOf(s.getSetting("MESSAGE_GENERATION_TYPE"));
     private static final MessageGenerationFrequency MESSAGE_GENERATION_FREQUENCY = MessageGenerationFrequency.ONE_MESSAGE_PER_MINUTE;
 
 

@@ -49,6 +49,7 @@ public class DTNHost implements Comparable<DTNHost> {
     private Map<String,Double> loggedMessages = new HashMap<>();
     private String currentCluster;
     private List<ArffRegion> allRegions;
+    private List<List<Integer>> sequence;
     private ArffRegion currentPoint;
     private int currentPointIndex = 0;
     private boolean isTaxiOnReturnPath = false;
@@ -190,12 +191,17 @@ public class DTNHost implements Comparable<DTNHost> {
             try {
                 this.allRegions = ArffReader.getArffRegionListByFileName(this.name + "-second.wkt");
                 IntStream.range(0, CLUSTER_COUNT).forEach(cluster -> this.contactHistoryMap.put("cluster" + cluster, 0D));
+                this.sequence = ArffReader.getSequenceByTaxi(this.name + ".wkt");
                 //  this.nextTimeToMove = 0;
             }
             catch (Exception e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    public List<List<Integer>> getSequence() {
+        return sequence;
     }
 
     /**

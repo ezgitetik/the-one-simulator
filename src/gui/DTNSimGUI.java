@@ -4,6 +4,7 @@
  */
 package gui;
 
+import core.Settings;
 import custom.messagegenerator.RandomMessageGenerator;
 import gui.playfield.PlayField;
 
@@ -31,6 +32,16 @@ import core.SimClock;
  * Graphical User Interface for simulator
  */
 public class DTNSimGUI extends DTNSimUI {
+
+
+
+	private static final Settings s = new Settings(); // don't use any namespace
+	private static final String msgTtl = s.getSetting("Group.msgTtl");
+	private static final String transmitSpeed = s.getSetting("btInterface.transmitSpeed");
+	private static final String transmitRange = s.getSetting("btInterface.transmitRange");
+	private static final String messageGenerationType = s.getSetting("MESSAGE_GENERATION_TYPE");
+	private static final String geomobcon = s.getSetting("GEOMOBCON");
+
 	private MainWindow main;
 	private PlayField field;
 	private GUIControls guiControls;
@@ -136,6 +147,15 @@ public class DTNSimGUI extends DTNSimUI {
 		double totalDelayTimeAsSeconds= world.getHosts().stream().mapToDouble(host -> host.getLoggedMessages().values().stream().mapToDouble(Double::doubleValue).sum()).sum();
 		double meanDelayTimeAsSeconds = totalDelayTimeAsSeconds/totalDeliveredMessage;
 		LOGGER_DETAIL.info("DELAY_TIME_MINUTES: "+ String.format("%.2f", (meanDelayTimeAsSeconds/60)) + "%");
+		LOGGER_DETAIL.info("TTL: "+ msgTtl);
+		LOGGER_DETAIL.info("TRANSMIT_RANGE: "+ transmitRange);
+		LOGGER_DETAIL.info("TRANSMIT_SPEED: "+ transmitSpeed);
+		LOGGER_DETAIL.info("MESSAGE_GENERATION_TYPE: "+ messageGenerationType);
+		if (geomobcon.equals("true")){
+			LOGGER_DETAIL.info("PREDICTION : GEOMOBCON");
+		} else{
+			LOGGER_DETAIL.info("PREDICTION : Sequence Prediction");
+		}
 
 		if (!simCancelled) { // NOT cancelled -> leave the GUI running
 			JOptionPane.showMessageDialog(getParentFrame(),

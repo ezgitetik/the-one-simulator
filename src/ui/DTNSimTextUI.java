@@ -4,6 +4,7 @@
  */
 package ui;
 
+import core.Settings;
 import core.SimClock;
 import custom.messagegenerator.RandomMessageGenerator;
 import org.apache.log4j.Logger;
@@ -14,6 +15,15 @@ import java.util.stream.DoubleStream;
  * Simple text-based user interface.
  */
 public class DTNSimTextUI extends DTNSimUI {
+
+	private static final Settings s = new Settings(); // don't use any namespace
+	private static final String msgTtl = s.getSetting("Group.msgTtl");
+	private static final String transmitSpeed = s.getSetting("btInterface.transmitSpeed");
+	private static final String transmitRange = s.getSetting("btInterface.transmitRange");
+	private static final String messageGenerationType = s.getSetting("MESSAGE_GENERATION_TYPE");
+	private static final String geomobcon = s.getSetting("GEOMOBCON");
+
+
 	private long lastUpdateRt;	// real time of last ui update
 	private long startTime; // simulation start time
 	/** How often the UI view is updated (milliseconds) */
@@ -55,7 +65,17 @@ public class DTNSimTextUI extends DTNSimUI {
 
 		double totalDelayTimeAsSeconds= world.getHosts().stream().mapToDouble(host -> host.getLoggedMessages().values().stream().mapToDouble(Double::doubleValue).sum()).sum();
 		double meanDelayTimeAsSeconds = totalDelayTimeAsSeconds/totalDeliveredMessage;
-		LOGGER_DETAIL.info("DELAY_TIME_MINUTES: "+ String.format("%.2f", (meanDelayTimeAsSeconds/60)) + "%");
+		LOGGER_DETAIL.info("DELAY_TIME_MINUTES: "+ String.format("%.2f", (meanDelayTimeAsSeconds/60)));
+		LOGGER_DETAIL.info("TTL: "+ msgTtl);
+		LOGGER_DETAIL.info("TRANSMIT_RANGE: "+ transmitRange);
+		LOGGER_DETAIL.info("TRANSMIT_SPEED: "+ transmitSpeed);
+		LOGGER_DETAIL.info("MESSAGE_GENERATION_TYPE: "+ messageGenerationType);
+
+		if (geomobcon.equals("true")){
+			LOGGER_DETAIL.info("PREDICTION : GEOMOBCON");
+		} else{
+			LOGGER_DETAIL.info("PREDICTION : Sequence Prediction");
+		}
 
 		print("Simulation done in " + String.format("%.2f", duration) + "s");
 

@@ -24,6 +24,7 @@ public class RoutingStrategy {
 
     private static final Settings s = new Settings();
     private static final String PREDICTION_MOD = s.getSetting("prediction");
+    private static final String GEOMOBCON = s.getSetting("GEOMOBCON");
 
     private static BasePredictionClient akomPredictionClient = new AkomPredictionClient();
     private static BasePredictionClient cptPlusPredictionClient = new CPTPlusPredictionClient();
@@ -102,8 +103,47 @@ public class RoutingStrategy {
             return calculateLikelihood(node, message);
         } else {
             //return -1d;
+            if (GEOMOBCON.equals("true")) return nthOrderPrediction(node, message);
             return calculatePredictedLikelihood(node, message);
         }
+    }
+
+    private static Double nthOrderPrediction(DTNHost node, Message message) {
+        if (node.getSequence() == null) return -1d;
+        List<Integer> lastClusters = getPreviousClusterIds(node);
+
+        double result = -1d;
+        int count;
+        int N = Math.min(lastClusters.size(), 4);
+        for (int i = 0; i < N - 1; i++) {
+            List<Integer> lastClustersSubList = lastClusters.subList(i, N);
+            count = nthOrderCount(node, lastClustersSubList);
+            if (count != 0) {
+                for(int k=0; k<message.getToGoRegions().size(); k++){
+                    String toGoRegion = message.getToGoRegions().get(k);
+                    int toGoRegionId = Integer.parseInt(toGoRegion.replace("cluster",""));
+                    List<Integer> lastClustersWithToGo = new ArrayList<>(lastClustersSubList);
+                    if(k==0 && toGoRegionId == lastClustersWithToGo.get(lastClustersWithToGo.size()-1)) continue;
+
+                    lastClustersWithToGo.add(toGoRegionId);
+                    double tempResult = (double) nthOrderCount(node, lastClustersWithToGo) / (double) count;
+                    if(tempResult>result) result=tempResult;
+                }
+                break;
+            }
+        }
+        return result;
+    }
+
+    private static int nthOrderCount(DTNHost node, List<Integer> lastClusters) {
+        List<List<Integer>> sequence = node.getSequence();
+        int count = 0;
+        for (List<Integer> sequenceLine : sequence) {
+            if (Collections.indexOfSubList(sequenceLine, lastClusters) == 0) {
+                count++;
+            }
+        }
+        return count;
     }
 
     public static Double calculateLikelihood(DTNHost node, Message message) {
@@ -115,12 +155,12 @@ public class RoutingStrategy {
                 .collect(Collectors.toList());*/
 
         List<String> futureRegions = new ArrayList<>();
-        for (ArffRegion arffRegion:node.getFutureRegions()){
+        for (ArffRegion arffRegion : node.getFutureRegions()) {
             futureRegions.add(arffRegion.getRegion());
         }
 
 
-        for (int i=0; i<message.getToGoRegions().size(); i++){
+        for (int i = 0; i < message.getToGoRegions().size(); i++) {
             if (futureRegions.contains(message.getToGoRegions().get(i))) {
                 likelihood.set((1 + ((double) (i + 1) / (double) message.getToGoRegions().size())));
             }
@@ -134,9 +174,9 @@ public class RoutingStrategy {
         likelihood.set(-1.0);
         String predictedNextCluster = predictNextCluster(node);
         if (predictedNextCluster != null) {
-            for (int i=0; i<message.getToGoRegions().size(); i++){
+            for (int i = 0; i < message.getToGoRegions().size(); i++) {
                 if (message.getToGoRegions().get(i).equals(predictedNextCluster)) {
-                    likelihood.set((1 + ((double) (i+1) / (double) message.getToGoRegions().size())));
+                    likelihood.set((1 + ((double) (i + 1) / (double) message.getToGoRegions().size())));
                 }
             }
         }
@@ -190,9 +230,9 @@ public class RoutingStrategy {
     }
 
     private static BasePredictionClient getPredictionClient() {
-        if(PREDICTION_MOD.equals("akom")) return akomPredictionClient;
-        if(PREDICTION_MOD.equals("tdag")) return tdagPredictionClient;
-        if(PREDICTION_MOD.equals("cpt")) return cptPlusPredictionClient;
+        if (PREDICTION_MOD.equals("akom")) return akomPredictionClient;
+        if (PREDICTION_MOD.equals("tdag")) return tdagPredictionClient;
+        if (PREDICTION_MOD.equals("cpt")) return cptPlusPredictionClient;
 
         // default akomPredictionClient
         return akomPredictionClient;

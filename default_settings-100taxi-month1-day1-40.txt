@@ -6,17 +6,22 @@
 ARFF_WITHOUT_MOD = custom/taxidata/100taxi-month1/100taxi-month1-weka-40.arff
 TAXI_SIMULATION = custom/taxidata/100taxi-month1/100taxi-month1-simulation/
 TAXI_SECOND = custom/taxidata/100taxi-month1/100taxi-month1-second/
-START_HOUR = 0
+
+## START_HOUR = 0
 ## 6 hours warm up
-##START_HOUR = 21600
+START_HOUR = 21600
 
 CLUSTER_COUNT = 40
+
+##     UNIFORM, BETWEEN_TWO_FAR_DISTANCE_CLUSTERS,BETWEEN_TWO_CENTRAL_CLUSTERS,BETWEEN_CENTRAL_AND_FAR_DISTANCE_CLUSTERS
+MESSAGE_GENERATION_TYPE = BETWEEN_TWO_FAR_DISTANCE_CLUSTERS
+
 FAR_CLUSTERS = cluster19,cluster13
 CENTRAL_CLUSTERS = cluster12,cluster35
 CENTRAL_AND_FAR_CLUSTERS = cluster12,cluster19
 
 ## prediction method (akom, tdag, cpt)
-prediction = akom
+prediction = cpt
 
 ## Scenario settings
 Scenario.name = default_scenario
