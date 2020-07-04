@@ -25,6 +25,8 @@ the-one.iml
 /resources/
 /data/custom/taxidata/100taxi-month1/100taxi-month1-weka-40.arff
 /data/custom/taxidata/100taxi-month2/100taxi-month2-weka-40.arff
+/data/custom/taxidata/100taxi-month2/100taxi-month2-weka-30.arff
+/data/custom/taxidata/100taxi-month2/100taxi-month2-weka-20.arff
 /data/custom/taxidata/100taxi-month1/100taxi-month1-weka-30.arff
 /data/custom/taxidata/100taxi-month1/100taxi-month1-weka-20.arff
 /data/custom/taxidata/60taxi-month1/60taxi-month1-weka.arff
