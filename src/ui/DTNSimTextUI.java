@@ -61,15 +61,20 @@ public class DTNSimTextUI extends DTNSimUI {
 		int totalDeliveredMessage= world.getHosts().stream().mapToInt(host -> host.getLoggedMessages().size()).sum();
 		LOGGER_DETAIL.info("TOTAL_MESSAGE_COUNT: "+ RandomMessageGenerator.MESSAGE_COUNT);
 		LOGGER_DETAIL.info("DELIVERED_MESSAGE_COUNT: "+totalDeliveredMessage);
-		LOGGER_DETAIL.info("DELIVERY_RATIO: "+ String.format("%.2f", (((double)totalDeliveredMessage / (double)RandomMessageGenerator.MESSAGE_COUNT) * 100))+ "%");
+		LOGGER_DETAIL.info("DELIVERY_RATIO: "+ String.format("%.2f", (((double)totalDeliveredMessage / (double)RandomMessageGenerator.MESSAGE_COUNT) * 100)).replace(".",","));
 
 		double totalDelayTimeAsSeconds= world.getHosts().stream().mapToDouble(host -> host.getLoggedMessages().values().stream().mapToDouble(Double::doubleValue).sum()).sum();
 		double meanDelayTimeAsSeconds = totalDelayTimeAsSeconds/totalDeliveredMessage;
-		LOGGER_DETAIL.info("DELAY_TIME_MINUTES: "+ String.format("%.2f", (meanDelayTimeAsSeconds/60)));
+		LOGGER_DETAIL.info("DELAY_TIME_MINUTES: "+ String.format("%.2f", (meanDelayTimeAsSeconds/60)).replace(".",","));
 		LOGGER_DETAIL.info("TTL: "+ msgTtl);
 		LOGGER_DETAIL.info("TRANSMIT_RANGE: "+ transmitRange);
 		LOGGER_DETAIL.info("TRANSMIT_SPEED: "+ transmitSpeed);
 		LOGGER_DETAIL.info("MESSAGE_GENERATION_TYPE: "+ messageGenerationType);
+
+		int totalHopCount= world.getHosts().stream().mapToInt(host -> host.getMessagePathMap().values().stream().mapToInt(Integer::intValue).sum()).sum();
+		LOGGER_DETAIL.info("TOTAL_HOP_COUNT: "+ totalHopCount);
+		LOGGER_DETAIL.info("AVERAGE_HOP_COUNT: " + String.format("%.2f",((double)totalHopCount/(double)totalDeliveredMessage)).replace(".",","));
+
 
 		if (geomobcon.equals("true")){
 			LOGGER_DETAIL.info("PREDICTION : GEOMOBCON");

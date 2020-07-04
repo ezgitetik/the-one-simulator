@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 public class ConvertClusterDataToSequenceData {
 
-    private static final String ARFF_PATH = "custom/taxidata/100taxi-month2/100taxi-month2-weka-40.arff";
+    private static final String ARFF_PATH = "custom/taxidata/100taxi-month2/100taxi-month2-weka-20.arff";
     private static final String TAXI_PATH = "custom/taxidata/100taxi-month1/100taxi-month1-training/";
 
     public static void main(String[] args) throws IOException {
@@ -109,7 +109,7 @@ public class ConvertClusterDataToSequenceData {
     }
 
     private static void writeToFile(String content) throws IOException {
-        Files.write(Paths.get(ConvertClusterDataToSequenceData.class.getClassLoader().getResource("training-data-100taxi-20.txt").getPath()),
+        Files.write(Paths.get(ConvertClusterDataToSequenceData.class.getClassLoader().getResource("100taxi-month2-20.txt").getPath()),
                 content.getBytes(), StandardOpenOption.WRITE);
         System.out.println("finished successfully.");
     }

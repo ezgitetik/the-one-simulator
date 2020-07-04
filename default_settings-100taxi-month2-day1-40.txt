@@ -6,7 +6,7 @@
 ARFF_WITHOUT_MOD = custom/taxidata/100taxi-month2/100taxi-month2-weka-40.arff
 TAXI_SIMULATION = custom/taxidata/100taxi-month2/100taxi-month2-simulation/
 TAXI_SECOND = custom/taxidata/100taxi-month2/100taxi-month2-second/
-TAXI_SEQUENCE = custom/taxidata/100taxi-month2/100taxi-month2-sequence/
+TAXI_SEQUENCE = custom/taxidata/100taxi-month2/100taxi-month2-sequence-40/
 
 START_HOUR = 0
 ## 6 hours warm up
@@ -14,14 +14,15 @@ START_HOUR = 0
 
 CLUSTER_COUNT = 40
 
-##     UNIFORM, BETWEEN_TWO_FAR_DISTANCE_CLUSTERS,BETWEEN_TWO_CENTRAL_CLUSTERS,BETWEEN_CENTRAL_AND_FAR_DISTANCE_CLUSTERS
-MESSAGE_GENERATION_TYPE = BETWEEN_TWO_FAR_DISTANCE_CLUSTERS
+## UNIFORM, BETWEEN_TWO_FAR_DISTANCE_CLUSTERS,BETWEEN_TWO_CENTRAL_CLUSTERS,BETWEEN_CENTRAL_AND_FAR_DISTANCE_CLUSTERS
+MESSAGE_GENERATION_TYPE = UNIFORM
 
 FAR_CLUSTERS = cluster20,cluster24
 CENTRAL_CLUSTERS = cluster2,cluster24
-CENTRAL_AND_FAR_CLUSTERS = cluster24,cluster7
+CENTRAL_AND_FAR_CLUSTERS = cluster11,cluster7
 
 GEOMOBCON = true
+SP_CONTACT_HISTORY=false
 ## prediction method (akom, tdag, cpt)
 prediction = akom
 

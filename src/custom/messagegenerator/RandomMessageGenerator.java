@@ -88,7 +88,10 @@ public class RandomMessageGenerator {
     private static double elapsedTimeAfterLastMessageGeneration() {
         if (MESSAGE_GENERATION_FREQUENCY == MessageGenerationFrequency.ONE_MESSAGE_PER_MINUTE) {
             return RandomMessageGenerator.LAST_MESSAGE_CREATE_TIME + (60);
-        } else {
+        } else if(MESSAGE_GENERATION_FREQUENCY == MessageGenerationFrequency.ONE_MESSAGE_PER_HOUR) {
+            return RandomMessageGenerator.LAST_MESSAGE_CREATE_TIME + (60 * 15);
+        }
+        else {
             return RandomMessageGenerator.LAST_MESSAGE_CREATE_TIME + (2 * 60);
         }
     }
@@ -101,6 +104,7 @@ public class RandomMessageGenerator {
         message.addToGoRegions(shortestPath);
         message.setWatched(true);
         message.setCreatedTime(SimClock.getTime());
+        message.getHostHistory().add(fromHost.getName());
         // message.setTtl(120); //120 minutes
 
         LAST_MESSAGE_CREATE_TIME = SimClock.getTime();

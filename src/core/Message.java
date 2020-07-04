@@ -130,6 +130,16 @@ public class Message implements Comparable<Message> {
      */
     private String appID;
 
+    private List<String> hostHistory = new ArrayList<>();
+
+    public void setHostHistory(List<String> hostHistory) {
+        this.hostHistory = hostHistory;
+    }
+
+    public List<String> getHostHistory() {
+        return hostHistory;
+    }
+
     static {
         reset();
         DTNSim.registerForReset(Message.class.getCanonicalName());
@@ -367,6 +377,7 @@ public class Message implements Comparable<Message> {
         this.toGoRegions = m.toGoRegions;
         this.createdTime = m.createdTime;
         this.deliveredTime = m.deliveredTime;
+        this.hostHistory = m.hostHistory;
         if (m.properties != null) {
             Set<String> keys = m.properties.keySet();
             for (String key : keys) {

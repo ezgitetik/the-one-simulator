@@ -14,7 +14,9 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import custom.ArffRegion;
+import custom.InfoMessage;
 import custom.RoutingStrategy;
+import org.apache.log4j.Logger;
 import routing.util.EnergyModel;
 import routing.util.MessageTransferAcceptPolicy;
 import routing.util.RoutingInfo;
@@ -45,7 +47,7 @@ public abstract class ActiveRouter extends MessageRouter {
      * from message buffer
      */
     protected boolean deleteDelivered;
-
+    private static final Logger LOGGER = Logger.getLogger("file");
     /**
      * prefix of all response message IDs
      */
@@ -171,6 +173,7 @@ public abstract class ActiveRouter extends MessageRouter {
             Message res = new Message(this.getHost(), m.getFrom(),
                     RESPONSE_PREFIX + m.getId(), m.getResponseSize());
             res.setWatched(m.isWatched());
+            res.setHostHistory(m.getHostHistory());
             this.createNewMessage(res);
             this.getMessage(RESPONSE_PREFIX + m.getId()).setRequest(m);
         }
@@ -211,10 +214,10 @@ public abstract class ActiveRouter extends MessageRouter {
         if (m.isWatched() && m.getTo() == null && !m.isOnTheRoad()) {
             if (m.getFrom() == con.getFromNode()){
                 //LikelihoodComparator.compare(m, con.getFromNode(), con.getToNode());
-                RoutingStrategy.compare(m, con.getFromNode(), con.getToNode());
+                m = RoutingStrategy.compare(m, con.getFromNode(), con.getToNode());
             }else if (m.getFrom() == con.getToNode()){
                // LikelihoodComparator.compare(m, con.getToNode(), con.getFromNode());
-                RoutingStrategy.compare(m, con.getToNode(), con.getFromNode());
+                m = RoutingStrategy.compare(m, con.getToNode(), con.getFromNode());
             }
         }
 
@@ -237,22 +240,6 @@ public abstract class ActiveRouter extends MessageRouter {
         return retVal;
     }
 
-    private Double likelihoodMobUpdate(DTNHost node, Message message) {
-        AtomicReference<Double> likelihood = new AtomicReference<>();
-        likelihood.set(-1.0);
-        List<String> nodeClusters = node.getFutureRegions()
-                .stream()
-                .map(ArffRegion::getRegion)
-                .collect(Collectors.toList());
-
-        IntStream.range(0, message.getToGoRegions().size()).forEach(index -> {
-            if (nodeClusters.contains(message.getToGoRegions().get(index))) {
-                likelihood.set((1 + ((double) index / (double) message.getToGoRegions().size())));
-            }
-        });
-
-        return likelihood.get();
-    }
 
     /**
      * Makes rudimentary checks (that we have at least one message and one
@@ -665,9 +652,14 @@ public abstract class ActiveRouter extends MessageRouter {
                                 con.getMsgOnFly().getTo() == con.getFromNode() && con.getMsgOnFly().getFrom() == con.getToNode())) {
                             Double likelihood = RoutingStrategy.likelihoodMobUpdate(con.getMsgOnFly().getFrom(), con.getMsgOnFly());
                             if(likelihood < 0){
+                                LOGGER.info(SimClock.getTimeString() + " "
+                                        + InfoMessage.MESSAGE_DELETED
+                                        + ", messageId: '" + con.getMsgOnFly().getId());
                                 this.deleteMessage(con.getMsgOnFly().getId(), false);
-                                con.finalizeTransfer();
+                            }else{
+                                con.getMsgOnFly().setTo(null);
                             }
+                            con.finalizeTransfer();
                         }
                     } else {
                         con.finalizeTransfer();

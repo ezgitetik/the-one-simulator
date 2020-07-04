@@ -47,6 +47,7 @@ public class DTNHost implements Comparable<DTNHost> {
     private ModuleCommunicationBus comBus;
 
     private Map<String,Double> loggedMessages = new HashMap<>();
+    private Map<String,Integer> messagePathMap = new HashMap<>();
     private String currentCluster;
     private List<ArffRegion> allRegions;
     private List<List<Integer>> sequence;
@@ -63,6 +64,11 @@ public class DTNHost implements Comparable<DTNHost> {
     //TODO it should be changed when cluster count has changed.
     private static final Settings s = new Settings(); // don't use any namespace
     private static final int CLUSTER_COUNT = Integer.parseInt(s.getSetting("CLUSTER_COUNT"));
+
+
+    public Map<String, Integer> getMessagePathMap() {
+        return messagePathMap;
+    }
 
     private  int oldPointIndex=-1;
 
@@ -614,6 +620,7 @@ public class DTNHost implements Comparable<DTNHost> {
                         LOGGER.info(SimClock.getTimeString()+" "
                                 + InfoMessage.MESSAGE_ARRIVED
                                 + "', messageId: '" + watchedMessage.getId()
+                                + "', cluster: '" + this.currentCluster
                                 + "', toGoRegions: '" + watchedMessage.getToGoRegions().stream().collect(Collectors.joining(","))
                                 + "', totalTime: "+ watchedMessage.getElapsedTimeAsMinutesString() + " minutes.");
 
@@ -631,6 +638,7 @@ public class DTNHost implements Comparable<DTNHost> {
         }
     }
 
+    // yeni move
     public void move() {
 
         Logger LOGGER_ADMIN = Logger.getLogger("admin");;
@@ -712,9 +720,11 @@ public class DTNHost implements Comparable<DTNHost> {
                         LOGGER.info(SimClock.getTimeString()+" "
                                 + InfoMessage.MESSAGE_ARRIVED
                                 + "', messageId: '" + watchedMessage.getId()
+                                + "', taxi: '" + this.getName()
                                 + "', toGoRegions: '" + watchedMessage.getToGoRegions().stream().collect(Collectors.joining(","))
-                                + "', totalTime: "+ watchedMessage.getElapsedTimeAsMinutesString() + " minutes.");
+                                + "', totalTime: "+ watchedMessage.getElapsedTimeAsMinutesString() + " minutes. Hop: " + (watchedMessage.getHostHistory().size()-1));
                         loggedMessages.put(watchedMessage.getId(),watchedMessage.getElapsedTimeAsSeconds());
+                        messagePathMap.put(watchedMessage.getId(), watchedMessage.getHostHistory().size()-1);
                     }
 
                 }

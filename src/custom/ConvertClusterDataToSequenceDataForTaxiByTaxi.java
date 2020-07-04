@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 public class ConvertClusterDataToSequenceDataForTaxiByTaxi {
 
-    private static final String ARFF_PATH = "custom/taxidata/100taxi-month2/100taxi-month2-weka-40.arff";
+    private static final String ARFF_PATH = "custom/taxidata/100taxi-month2/100taxi-month2-weka-20.arff";
     private static final String TAXI_PATH = "custom/taxidata/100taxi-month1/100taxi-month1-training/";
     private static final String SIMULATION_PATH = "custom/taxidata/100taxi-month2/100taxi-month2-simulation/";
 
@@ -139,7 +139,7 @@ public class ConvertClusterDataToSequenceDataForTaxiByTaxi {
 
     private static void writeToFile(String content, String file) throws IOException {
 
-        String resourceFolderPath = String.valueOf(Paths.get(ConvertClusterDataToSequenceDataForTaxiByTaxi.class.getClassLoader().getResource("sequence").getPath()));
+        String resourceFolderPath = String.valueOf(Paths.get(ConvertClusterDataToSequenceDataForTaxiByTaxi.class.getClassLoader().getResource("sequence-20").getPath()));
 
         File myFile = new File(resourceFolderPath + "/"+file);
 
@@ -147,7 +147,7 @@ public class ConvertClusterDataToSequenceDataForTaxiByTaxi {
             Files.createFile(myFile.toPath());
         }
 
-        Files.write(Paths.get(ConvertClusterDataToSequenceDataForTaxiByTaxi.class.getClassLoader().getResource("sequence/"+file).getPath()),
+        Files.write(Paths.get(ConvertClusterDataToSequenceDataForTaxiByTaxi.class.getClassLoader().getResource("sequence-20/"+file).getPath()),
                 content.getBytes(), StandardOpenOption.WRITE);
 
     }

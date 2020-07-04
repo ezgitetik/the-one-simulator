@@ -25,6 +25,7 @@ public class RoutingStrategy {
     private static final Settings s = new Settings();
     private static final String PREDICTION_MOD = s.getSetting("prediction");
     private static final String GEOMOBCON = s.getSetting("GEOMOBCON");
+    private static final String SPContactHistory = s.getSetting("SP_CONTACT_HISTORY");
 
     private static BasePredictionClient akomPredictionClient = new AkomPredictionClient();
     private static BasePredictionClient cptPlusPredictionClient = new CPTPlusPredictionClient();
@@ -38,11 +39,16 @@ public class RoutingStrategy {
         Double fromLikelihood = likelihoodMobUpdate(fromNode, message);
         Double toLikelihood = likelihoodMobUpdate(toNode, message);
 
-        Double fromConHistory = likelihoodConUpdate(fromNode, destinationCluster);
-        //Double fromConHistory = calculatePredictedLikelihood(fromNode, message);
+        Double fromConHistory = null;
+        Double toConHistory = null;
 
-        Double toConHistory = likelihoodConUpdate(toNode, destinationCluster);
-        //Double toConHistory = calculatePredictedLikelihood(toNode, message);
+        if(SPContactHistory.equals("true")){
+            fromConHistory = calculatePredictedLikelihood(fromNode, message);
+            toConHistory = calculatePredictedLikelihood(toNode, message);
+        } else {
+            fromConHistory = likelihoodConUpdate(fromNode, destinationCluster);
+            toConHistory = likelihoodConUpdate(toNode, destinationCluster);
+        }
 
         boolean forwardMessage = false;
 
@@ -73,10 +79,15 @@ public class RoutingStrategy {
         if (forwardMessage) {
             message.setTo(toNode);
             message.setOnTheRoad(true);
-           /* System.out.println("message: " + message.getId()
-                    + ", has transferred. From: " + fromNode.getName()
-                    + ", To: " + toNode.getName());*/
+            message.getHostHistory().add(toNode.getName());
+
             LOGGER.info(SimClock.getTimeString() + " "
+                            + "likelihood is found bigger at to node"
+                            + ", messageId: '" + message.getId()
+                            + "', from taxiName: '" + fromNode.getName()
+                            + "', to taxiName: '" + toNode.getName() +"'");
+
+            /*LOGGER.info(SimClock.getTimeString() + " "
                     + InfoMessage.MESSAGE_TRANSFERRED_TO_ANOTHER_TAXI
                     + ", messageId: '" + message.getId()
                     + ", cluster: '" + fromNode.getCurrentCluster()
@@ -87,7 +98,7 @@ public class RoutingStrategy {
                     + "', fromTaxi LikeliHood: '" + fromLikelihood
                     + "', toTaxi LikeliHood: '" + toLikelihood
                     + "', fromTaxi conLikeliHood: '" + fromConHistory
-                    + "', toTaxi conLikeliHood: '" + toConHistory + "'");
+                    + "', toTaxi conLikeliHood: '" + toConHistory + "'");*/
         }
 
         return message;
@@ -102,9 +113,10 @@ public class RoutingStrategy {
         if (node.isHasTaxiCustomer()) {
             return calculateLikelihood(node, message);
         } else {
-            //return -1d;
-            if (GEOMOBCON.equals("true")) return nthOrderPrediction(node, message);
+
+            if (GEOMOBCON.equals("true") || SPContactHistory.equals("true")) return nthOrderPrediction(node, message);
             return calculatePredictedLikelihood(node, message);
+            //    return nthOrderPrediction(node, message);
         }
     }
 
@@ -119,15 +131,15 @@ public class RoutingStrategy {
             List<Integer> lastClustersSubList = lastClusters.subList(i, N);
             count = nthOrderCount(node, lastClustersSubList);
             if (count != 0) {
-                for(int k=0; k<message.getToGoRegions().size(); k++){
+                for (int k = 0; k < message.getToGoRegions().size(); k++) {
                     String toGoRegion = message.getToGoRegions().get(k);
-                    int toGoRegionId = Integer.parseInt(toGoRegion.replace("cluster",""));
+                    int toGoRegionId = Integer.parseInt(toGoRegion.replace("cluster", ""));
                     List<Integer> lastClustersWithToGo = new ArrayList<>(lastClustersSubList);
-                    if(k==0 && toGoRegionId == lastClustersWithToGo.get(lastClustersWithToGo.size()-1)) continue;
+                    if (k == 0 && toGoRegionId == lastClustersWithToGo.get(lastClustersWithToGo.size() - 1)) continue;
 
                     lastClustersWithToGo.add(toGoRegionId);
                     double tempResult = (double) nthOrderCount(node, lastClustersWithToGo) / (double) count;
-                    if(tempResult>result) result=tempResult;
+                    if (tempResult > result) result = tempResult;
                 }
                 break;
             }
@@ -172,7 +184,8 @@ public class RoutingStrategy {
     public static Double calculatePredictedLikelihood(DTNHost node, Message message) {
         AtomicReference<Double> likelihood = new AtomicReference<>();
         likelihood.set(-1.0);
-        String predictedNextCluster = predictNextCluster(node);
+        List<Integer> lastClusters = getPreviousClusterIds(node);
+        String predictedNextCluster = predictNextCluster(lastClusters);
         if (predictedNextCluster != null) {
             for (int i = 0; i < message.getToGoRegions().size(); i++) {
                 if (message.getToGoRegions().get(i).equals(predictedNextCluster)) {
@@ -184,9 +197,66 @@ public class RoutingStrategy {
         return likelihood.get();
     }
 
-    private static String predictNextCluster(DTNHost node) {
+    // for nth order
+//    public static Double calculatePredictedLikelihood(DTNHost node, Message message) {
+//        AtomicReference<Double> likelihood = new AtomicReference<>();
+//        likelihood.set(-1.0);
+//        List<Integer> lastClusters = getPreviousClusterIds(node);
+//        int N = Math.min(lastClusters.size(), 4);
+//        for(int k=0; k<N-1 ; k++) {
+//            List<Integer> lastClustersSubList = lastClusters.subList(k, N);
+//            String predictedNextCluster = predictNextCluster(lastClustersSubList);
+//            if (predictedNextCluster != null) {
+//                for (int i = 0; i < message.getToGoRegions().size(); i++) {
+//                    if (message.getToGoRegions().get(i).equals(predictedNextCluster)) {
+//                        likelihood.set((1 + ((double) (i + 1) / (double) message.getToGoRegions().size())));
+//                    }
+//                }
+//            }
+//
+//            if(likelihood.get() > 0) break;
+//        }
+//        return likelihood.get();
+//    }
+
+    // for predict next 3 clusters
+//    public static Double calculatePredictedLikelihood(DTNHost node, Message message) {
+//        AtomicReference<Double> likelihood = new AtomicReference<>();
+//        likelihood.set(-1.0);
+//        List<Integer> lastClusters = getPreviousClusterIds(node);
+//        if (lastClusters.size() < 2) return likelihood.get();
+//        List<String> futureRegions = new ArrayList<>();
+//
+//        List<List<Integer>> lastClustersSubListList = new ArrayList<>();
+//        lastClustersSubListList.add(lastClusters);
+//
+//        for (int k = 0; k < 3; k++) {
+//            List<Integer> lastClustersSubList = lastClustersSubListList.get(k);
+//            String predictedNextCluster = predictNextCluster(lastClustersSubList);
+//            if (predictedNextCluster != null && !predictedNextCluster.equals("")) {
+//                futureRegions.add(predictedNextCluster);
+//                List<Integer> deneme = new ArrayList<>();
+//                if (lastClustersSubListList.get(k).size() != 1) {
+//                    deneme = new ArrayList<>(lastClustersSubListList.get(k).subList(1, lastClustersSubListList.get(k).size()));
+//                }
+//                deneme.add(Integer.parseInt(predictedNextCluster.replace("cluster", "")));
+//                lastClustersSubListList.add(deneme);
+//            }else {
+//                break;
+//            }
+//        }
+//
+//        for (int i = 0; i < message.getToGoRegions().size(); i++) {
+//            if (futureRegions.contains(message.getToGoRegions().get(i))) {
+//                likelihood.set((1 + ((double) (i + 1) / (double) message.getToGoRegions().size())));
+//            }
+//        }
+//
+//        return likelihood.get();
+//    }
+
+    private static String predictNextCluster(List<Integer> lastClusters) {
         BasePredictionClient predictionClient = getPredictionClient();
-        List<Integer> lastClusters = getPreviousClusterIds(node);
         String nextCluster = null;
         try {
             if (lastClusters.size() > 0) {
@@ -194,7 +264,7 @@ public class RoutingStrategy {
                     nextCluster = "cluster" + predictionResults.get(lastClusters);
                 } else {
                     String nextClusterNumber = predictionClient.getPrediction(lastClusters);
-                    if (nextClusterNumber != null) {
+                    if (nextClusterNumber != null && !nextClusterNumber.equals("")) {
                         nextCluster = "cluster" + nextClusterNumber;
                         predictionResults.put(lastClusters, nextClusterNumber);
                     }

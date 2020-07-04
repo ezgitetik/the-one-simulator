@@ -27,7 +27,7 @@ public class CptPlusPerformanceTest {
         // performance with 5 combination
         URL url = CptPlus.class.getClassLoader().getResource("");
         Evaluator evaluator = new Evaluator(url.getPath());
-        evaluator.addDataset("taxi100_month1_week1_cpt_5transactions_combination.txt", 5000);
+        evaluator.addDataset("100taxi-month2-40.txt", 5000);
         evaluator.addPredictor(new DGPredictor("DG", "lookahead:4"));
         evaluator.addPredictor(new TDAGPredictor());
         evaluator.addPredictor(new CPTPlusPredictor("CPT+", "CCF:true CBS:true CCFmin:1 CCFmax:6"));

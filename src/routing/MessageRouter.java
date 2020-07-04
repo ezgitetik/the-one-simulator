@@ -128,10 +128,10 @@ public abstract class MessageRouter {
 
 		if (s.contains(MSG_TTL_S)) {
 			this.msgTtl = s.getInt(MSG_TTL_S);
-			
+
 			if (this.msgTtl > MAX_TTL_VALUE){
-				throw new SettingsError("Invalid value for " + 
-						s.getFullPropertyName(MSG_TTL_S) + 
+				throw new SettingsError("Invalid value for " +
+						s.getFullPropertyName(MSG_TTL_S) +
 								". Max value is limited to "+MAX_TTL_VALUE);
 			}
 		}
@@ -365,6 +365,17 @@ public abstract class MessageRouter {
 	 */
 	public Message messageTransferred(String id, DTNHost from) {
 		Message incoming = removeFromIncomingBuffer(id, from);
+		if(incoming!=null && incoming.isWatched()){
+			LOGGER.info(SimClock.getTimeString() + " "
+					+ InfoMessage.MESSAGE_TRANSFERRED_TO_ANOTHER_TAXI
+					+ ", messageId: '" + incoming.getId()
+					+ ", cluster: '" + from.getCurrentCluster()
+					+ "', from taxiName: '" + from.getName()
+					+ "', to taxiName: '" + this.host.getName()
+					+ "', fromTaxiHasCustomer: '" + from.isHasTaxiCustomer()
+					+ "', toTaxiHasCustomer: '" + this.host.isHasTaxiCustomer());
+		}
+
 		boolean isFinalRecipient;
 		boolean isFirstDelivery; // is this first delivered instance of the msg
 
@@ -391,6 +402,8 @@ public abstract class MessageRouter {
 			newMessage.setFrom(this.host);
 			newMessage.setTo(null);
 			newMessage.setOnTheRoad(false);
+			newMessage.setHostHistory(aMessage.getHostHistory());
+			//newMessage.getHostHistory().add(this.host.getName());
 			incrementMessageCount();
 			String messageId = createMessageId();
 			newMessage.setId(messageId);
@@ -400,9 +413,10 @@ public abstract class MessageRouter {
 					+ "', carrier taxiName: '" + newMessage.getFrom().getName()
 					+ "', cluster: '" + newMessage.getFrom().getCurrentCluster()
 					+ "', toGoClusters: '" + String.join(",", newMessage.getToGoRegions()) + "'");
+			addToMessages(newMessage, false);
 
-			aMessage = newMessage;
-
+//		 	aMessage.setTo(null);
+//		 	return aMessage;
 			//System.out.println("Message transfer completed to: " + aMessage.getFrom().getName());
 		}
 		// If the application re-targets the message (changes 'to')
@@ -424,8 +438,7 @@ public abstract class MessageRouter {
 		}
 
 		for (MessageListener ml : this.mListeners) {
-			ml.messageTransferred(aMessage, from, this.host,
-					isFirstDelivery);
+			ml.messageTransferred(aMessage, from, this.host, isFirstDelivery);
 		}
 
 		return aMessage;

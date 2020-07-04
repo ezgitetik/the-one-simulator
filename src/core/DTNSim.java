@@ -35,7 +35,18 @@ public class DTNSim {
 
 
 		Settings s = new Settings(); // don't use any namespace
-		System.setProperty("prediction", s.getSetting("prediction"));
+
+		if(s.getSetting("SP_CONTACT_HISTORY").equals("true")) {
+			System.setProperty("spcontact", "spcontact");
+		} else {
+			System.setProperty("spcontact", "");
+		}
+
+		if( s.getSetting("GEOMOBCON").equals("true")) {
+			System.setProperty("prediction", "geomobcon");
+		} else {
+			System.setProperty("prediction", s.getSetting("prediction"));
+		}
 		System.setProperty("nrofHostGroups", s.getSetting("Scenario.nrofHostGroups"));
 		System.setProperty("clusterCount", s.getSetting("CLUSTER_COUNT"));
 	}
