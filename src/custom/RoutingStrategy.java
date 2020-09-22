@@ -26,6 +26,7 @@ public class RoutingStrategy {
     private static final String PREDICTION_MOD = s.getSetting("prediction");
     private static final String GEOMOBCON = s.getSetting("GEOMOBCON");
     private static final String SPContactHistory = s.getSetting("SP_CONTACT_HISTORY");
+    private static final String SPrediction = s.getSetting("SP_PREDICTION");
 
     private static BasePredictionClient akomPredictionClient = new AkomPredictionClient();
     private static BasePredictionClient cptPlusPredictionClient = new CPTPlusPredictionClient();
@@ -80,25 +81,14 @@ public class RoutingStrategy {
             message.setTo(toNode);
             message.setOnTheRoad(true);
             message.getHostHistory().add(toNode.getName());
+            double elapsedMinutes= (SimClock.getTime() - message.getCreatedTime()) / 60;
 
             LOGGER.info(SimClock.getTimeString() + " "
                             + "likelihood is found bigger at to node"
                             + ", messageId: '" + message.getId()
                             + "', from taxiName: '" + fromNode.getName()
-                            + "', to taxiName: '" + toNode.getName() +"'");
+                            + "', to taxiName: '" + toNode.getName() +"'" + " elapsedMinutes time: '" + elapsedMinutes +"'" );
 
-            /*LOGGER.info(SimClock.getTimeString() + " "
-                    + InfoMessage.MESSAGE_TRANSFERRED_TO_ANOTHER_TAXI
-                    + ", messageId: '" + message.getId()
-                    + ", cluster: '" + fromNode.getCurrentCluster()
-                    + "', from taxiName: '" + fromNode.getName()
-                    + "', to taxiName: '" + toNode.getName()
-                    + "', fromTaxiHasCustomer: '" + fromNode.isHasTaxiCustomer()
-                    + "', toTaxiHasCustomer: '" + toNode.isHasTaxiCustomer()
-                    + "', fromTaxi LikeliHood: '" + fromLikelihood
-                    + "', toTaxi LikeliHood: '" + toLikelihood
-                    + "', fromTaxi conLikeliHood: '" + fromConHistory
-                    + "', toTaxi conLikeliHood: '" + toConHistory + "'");*/
         }
 
         return message;
@@ -115,10 +105,40 @@ public class RoutingStrategy {
         } else {
 
             if (GEOMOBCON.equals("true") || SPContactHistory.equals("true")) return nthOrderPrediction(node, message);
+            if (SPrediction.equals("true")) return calculatePredictedLikelihood(node, message);
             return calculatePredictedLikelihood(node, message);
             //    return nthOrderPrediction(node, message);
         }
     }
+
+//    private static Double nthOrderPrediction(DTNHost node, Message message) {
+//        if (node.getSequence() == null) return -1d;
+//        List<Integer> lastClusters = getPreviousClusterIds(node);
+//
+//        double result = -1d;
+//        int count;
+//        int N = Math.min(lastClusters.size(), 5);
+//        List<String> sublistOfToGoRegions = getSublistOfToGoRegions(message);
+//
+//        for (int i = 0; i < N - 1; i++) {
+//            List<Integer> lastClustersSubList = lastClusters.subList(i, N);
+//            count = nthOrderCount(node, lastClustersSubList);
+//            if (count != 0) {
+//                for (int k = 0; k < sublistOfToGoRegions.size(); k++) {
+//                    String toGoRegion = sublistOfToGoRegions.get(k);
+//                    int toGoRegionId = Integer.parseInt(toGoRegion.replace("cluster", ""));
+//                    List<Integer> lastClustersWithToGo = new ArrayList<>(lastClustersSubList);
+//                    if (k == 0 && toGoRegionId == lastClustersWithToGo.get(lastClustersWithToGo.size() - 1)) continue;
+//
+//                    lastClustersWithToGo.add(toGoRegionId);
+//                    double tempResult = (double) nthOrderCount(node, lastClustersWithToGo) / (double) count;
+//                    if (tempResult > result) result = tempResult;
+//                }
+//                break;
+//            }
+//        }
+//        return result;
+//    }
 
     private static Double nthOrderPrediction(DTNHost node, Message message) {
         if (node.getSequence() == null) return -1d;
@@ -127,19 +147,29 @@ public class RoutingStrategy {
         double result = -1d;
         int count;
         int N = Math.min(lastClusters.size(), 4);
+        List<String> sublistOfToGoRegions = getSublistOfToGoRegions(message);
+        List<Integer> lastClustersSubList = new ArrayList<>();
+
         for (int i = 0; i < N - 1; i++) {
-            List<Integer> lastClustersSubList = lastClusters.subList(i, N);
+            if(lastClusters.size()>4){
+                lastClustersSubList = lastClusters.subList(i + 1 , N + 1);
+            } else {
+                lastClustersSubList = lastClusters.subList(i, N);
+            }
             count = nthOrderCount(node, lastClustersSubList);
+
             if (count != 0) {
-                for (int k = 0; k < message.getToGoRegions().size(); k++) {
-                    String toGoRegion = message.getToGoRegions().get(k);
-                    int toGoRegionId = Integer.parseInt(toGoRegion.replace("cluster", ""));
+                for (int k = 0; k < sublistOfToGoRegions.size(); k++) {
+
+                    int toGoRegionId = Integer.parseInt(sublistOfToGoRegions.get(k).replace("cluster", ""));
+
                     List<Integer> lastClustersWithToGo = new ArrayList<>(lastClustersSubList);
+
                     if (k == 0 && toGoRegionId == lastClustersWithToGo.get(lastClustersWithToGo.size() - 1)) continue;
 
                     lastClustersWithToGo.add(toGoRegionId);
-                    double tempResult = (double) nthOrderCount(node, lastClustersWithToGo) / (double) count;
-                    if (tempResult > result) result = tempResult;
+                    result = (double) nthOrderCount(node, lastClustersWithToGo) / (double) count;
+                    break;
                 }
                 break;
             }
@@ -171,30 +201,43 @@ public class RoutingStrategy {
             futureRegions.add(arffRegion.getRegion());
         }
 
-
-        for (int i = 0; i < message.getToGoRegions().size(); i++) {
-            if (futureRegions.contains(message.getToGoRegions().get(i))) {
-                likelihood.set((1 + ((double) (i + 1) / (double) message.getToGoRegions().size())));
+        List<String> sublistOfToGoRegions = getSublistOfToGoRegions(message);
+        for (int i = 0; i < sublistOfToGoRegions.size(); i++) {
+            if (futureRegions.contains(sublistOfToGoRegions.get(i))) {
+                likelihood.set((1 + ((double) (i + 1) / (double) sublistOfToGoRegions.size())));
             }
         }
 
         return likelihood.get();
     }
 
+//    private static int getLatestToGoIndex(Message message){
+//        for (int i = 0; i < message.getToGoRegions().size(); i++) {
+//            for (int j = 0; j < message.getToGoRegions().size(); j++) {
+//
+//            }
+//        }
+//    }
+
     public static Double calculatePredictedLikelihood(DTNHost node, Message message) {
         AtomicReference<Double> likelihood = new AtomicReference<>();
         likelihood.set(-1.0);
         List<Integer> lastClusters = getPreviousClusterIds(node);
         String predictedNextCluster = predictNextCluster(lastClusters);
+        List<String> sublistOfToGoRegions = getSublistOfToGoRegions(message);
         if (predictedNextCluster != null) {
-            for (int i = 0; i < message.getToGoRegions().size(); i++) {
-                if (message.getToGoRegions().get(i).equals(predictedNextCluster)) {
-                    likelihood.set((1 + ((double) (i + 1) / (double) message.getToGoRegions().size())));
+            for (int i = 0; i < sublistOfToGoRegions.size(); i++) {
+                if (sublistOfToGoRegions.get(i).equals(predictedNextCluster)) {
+                    likelihood.set((1 + ((double) (i + 1) / (double) (sublistOfToGoRegions.size()))));
                 }
             }
         }
 
         return likelihood.get();
+    }
+
+    private static List<String> getSublistOfToGoRegions (Message message) {
+        return message.getToGoRegions().subList(message.getLatestIndexOfPassedRegionInToGo(), message.getToGoRegions().size());
     }
 
     // for nth order
@@ -283,7 +326,7 @@ public class RoutingStrategy {
                 Integer clusterId = Integer.parseInt(node.getAllRegions().get(i).getRegion().replace("cluster", ""));
                 if (!previousClusterIds.contains(clusterId)) {
                     previousClusterIds.add(clusterId);
-                    if (previousClusterIds.size() == 4) break;
+                    if (previousClusterIds.size() == 5) break;
                 }
             }
         } else {
@@ -291,7 +334,7 @@ public class RoutingStrategy {
                 Integer clusterId = Integer.parseInt(node.getAllRegions().get(i).getRegion().replace("cluster", ""));
                 if (!previousClusterIds.contains(clusterId)) {
                     previousClusterIds.add(clusterId);
-                    if (previousClusterIds.size() == 4) break;
+                    if (previousClusterIds.size() == 5) break;
                 }
             }
         }

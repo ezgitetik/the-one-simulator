@@ -8,9 +8,9 @@ TAXI_SIMULATION = custom/taxidata/100taxi-month2/100taxi-month2-simulation/
 TAXI_SECOND = custom/taxidata/100taxi-month2/100taxi-month2-second/
 TAXI_SEQUENCE = custom/taxidata/100taxi-month2/100taxi-month2-sequence-20/
 
-START_HOUR = 0
+##START_HOUR = 0
 ## 6 hours warm up
-##START_HOUR = 21600
+START_HOUR = 21600
 
 CLUSTER_COUNT = 20
 
@@ -22,10 +22,10 @@ CENTRAL_CLUSTERS = cluster2,cluster24
 CENTRAL_AND_FAR_CLUSTERS = cluster11,cluster7
 
 GEOMOBCON = false
-SP_CONTACT_HISTORY=true
+SP_CONTACT_HISTORY=false
+SP_PREDICTION = true
 ## prediction method (akom, tdag, cpt)
-prediction = tdag
-
+prediction = akom
 
 ## Scenario settings
 Scenario.name = default_scenario
@@ -73,7 +73,7 @@ highspeedInterface.transmitRange = 1000
 
 # Common settings for all groups
 Group.movementModel = MapRouteMovement
-Group.router = EpidemicRouter
+Group.router = DirectDeliveryRouter
 #Group.bufferSize = 5M
 Group.waitTime = 0, 120
 # All nodes have the bluetooth interface

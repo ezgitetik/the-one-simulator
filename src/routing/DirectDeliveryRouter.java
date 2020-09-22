@@ -22,9 +22,13 @@ public class DirectDeliveryRouter extends ActiveRouter {
 	@Override
 	public void update() {
 		super.update();
-		if (isTransferring() || !canStartTransfer()) {
+//		if (isTransferring() || !canStartTransfer()) {
+//			return; // can't start a new transfer
+//		}
+		if (!canStartTransfer()) {
 			return; // can't start a new transfer
 		}
+
 
 		// Try only the messages that can be delivered to final recipient
 		if (exchangeDeliverableMessages() != null) {

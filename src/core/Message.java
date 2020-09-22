@@ -51,6 +51,46 @@ public class Message implements Comparable<Message> {
     private double createdTime;
     private double deliveredTime;
 
+    private String mainMessageId;
+
+    public List<String> getPassedClusters() {
+        return passedClusters;
+    }
+
+    public void setPassedClusters(List<String> passedClusters) {
+        this.passedClusters = passedClusters;
+    }
+
+    private List<String> passedClusters = new ArrayList<>();
+
+    public String getLatestCluster() {
+        return latestCluster;
+    }
+
+    public void setLatestCluster(String latestCluster) {
+        this.latestCluster = latestCluster;
+    }
+
+    private String latestCluster = "";
+
+    private int latestIndexOfPassedRegionInToGo = 0;
+
+    public int getLatestIndexOfPassedRegionInToGo() {
+        return latestIndexOfPassedRegionInToGo;
+    }
+
+    public void setLatestIndexOfPassedRegionInToGo(int latestIndexOfPassedRegionInToGo) {
+        this.latestIndexOfPassedRegionInToGo = latestIndexOfPassedRegionInToGo;
+    }
+
+    public String getMainMessageId() {
+        return mainMessageId;
+    }
+
+    public void setMainMessageId(String mainMessageId) {
+        this.mainMessageId = mainMessageId;
+    }
+
     public double getCreatedTime() {
         return createdTime;
     }
@@ -374,6 +414,7 @@ public class Message implements Comparable<Message> {
         this.initTtl = m.initTtl;
         this.appID = m.appID;
         this.isWatched = m.isWatched;
+        this.mainMessageId = m.mainMessageId;
         this.toGoRegions = m.toGoRegions;
         this.createdTime = m.createdTime;
         this.deliveredTime = m.deliveredTime;

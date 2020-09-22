@@ -123,9 +123,9 @@ public abstract class ActiveRouter extends MessageRouter {
 
     @Override
     public boolean requestDeliverableMessages(Connection con) {
-        if (isTransferring()) {
-            return false;
-        }
+//        if (isTransferring()) {
+//            return false;
+//        }
 
         DTNHost other = con.getOtherNode(getHost());
         /* do a copy to avoid concurrent modification exceptions
@@ -202,9 +202,9 @@ public abstract class ActiveRouter extends MessageRouter {
     protected int startTransfer(Message m, Connection con) {
         int retVal;
 
-        if (!con.isReadyForTransfer()) {
-            return TRY_LATER_BUSY;
-        }
+//        if (!con.isReadyForTransfer()) {
+//            return TRY_LATER_BUSY;
+//        }
 
         if (!policy.acceptSending(getHost(),
                 con.getOtherNode(getHost()), con, m)) {
@@ -272,9 +272,9 @@ public abstract class ActiveRouter extends MessageRouter {
      * does not fit into buffer
      */
     protected int checkReceiving(Message m, DTNHost from) {
-        if (isTransferring()) {
-            return TRY_LATER_BUSY; // only one connection at a time
-        }
+//        if (isTransferring()) {
+//            return TRY_LATER_BUSY; // only one connection at a time
+//        }
 
         if (hasMessage(m.getId()) || isDeliveredMessage(m) ||
                 super.isBlacklistedMessage(m.getId())) {
@@ -654,7 +654,7 @@ public abstract class ActiveRouter extends MessageRouter {
                             if(likelihood < 0){
                                 LOGGER.info(SimClock.getTimeString() + " "
                                         + InfoMessage.MESSAGE_DELETED
-                                        + ", messageId: '" + con.getMsgOnFly().getId());
+                                        + ", messageId: '" + con.getMsgOnFly().getId() + ", host: " + con.getMsgOnFly().getFrom() + ", likelihood: " + likelihood);
                                 this.deleteMessage(con.getMsgOnFly().getId(), false);
                             }else{
                                 con.getMsgOnFly().setTo(null);

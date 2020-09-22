@@ -403,6 +403,7 @@ public abstract class MessageRouter {
 			newMessage.setTo(null);
 			newMessage.setOnTheRoad(false);
 			newMessage.setHostHistory(aMessage.getHostHistory());
+			newMessage.setMainMessageId(aMessage.getMainMessageId());
 			//newMessage.getHostHistory().add(this.host.getName());
 			incrementMessageCount();
 			String messageId = createMessageId();

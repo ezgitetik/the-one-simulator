@@ -4,11 +4,14 @@
  */
 package ui;
 
+import core.DTNHost;
 import core.Settings;
 import core.SimClock;
 import custom.messagegenerator.RandomMessageGenerator;
 import org.apache.log4j.Logger;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.DoubleStream;
 
 /**
@@ -76,6 +79,19 @@ public class DTNSimTextUI extends DTNSimUI {
 		LOGGER_DETAIL.info("AVERAGE_HOP_COUNT: " + String.format("%.2f",((double)totalHopCount/(double)totalDeliveredMessage)).replace(".",","));
 
 
+		uniqueDeliveredMessage();
+		int totalDeliveredMainMessages = uniqueDeliveredMessages.size();
+		int totalMainMessageCount = RandomMessageGenerator.MAIN_MESSAGE_COUNT;
+		LOGGER_DETAIL.info("TOTAL_MAIN_MESSAGE_COUNT: "+ totalMainMessageCount);
+		LOGGER_DETAIL.info("TOTAL_DELIVERED_MAIN_MESSAGE_COUNT: "+ totalDeliveredMainMessages);
+		LOGGER_DETAIL.info("DELIVERY_RATIO: "+ String.format("%.2f", (((double)totalDeliveredMainMessages / (double)totalMainMessageCount) * 100)).replace(".",","));
+
+		double totalMainMessageDelayTimeAsSeconds = uniqueDeliveredMessages.values().stream().mapToDouble(Double::doubleValue).sum();
+		double meanMessageDelayTimeAsSeconds = totalMainMessageDelayTimeAsSeconds/totalDeliveredMainMessages;
+
+		LOGGER_DETAIL.info("MAIN_MESSAGE_DELAY_TIME_MINUTES: "+ String.format("%.2f", (meanMessageDelayTimeAsSeconds/60)).replace(".",","));
+
+
 		if (geomobcon.equals("true")){
 			LOGGER_DETAIL.info("PREDICTION : GEOMOBCON");
 		} else{
@@ -84,6 +100,21 @@ public class DTNSimTextUI extends DTNSimUI {
 
 		print("Simulation done in " + String.format("%.2f", duration) + "s");
 
+	}
+
+	private Map<String, Double> uniqueDeliveredMessages = new HashMap<>();
+
+	private void uniqueDeliveredMessage(){
+		for (DTNHost host : world.getHosts()) {
+			host.getDeliveredMainMessages().forEach((mainMessageId, elapsedTime)->{
+				if (uniqueDeliveredMessages.containsKey(mainMessageId)
+						&& uniqueDeliveredMessages.get(mainMessageId) > elapsedTime) {
+					uniqueDeliveredMessages.put(mainMessageId, elapsedTime);
+				} else if (!uniqueDeliveredMessages.containsKey(mainMessageId)) {
+					uniqueDeliveredMessages.put(mainMessageId, elapsedTime);
+				}
+			});
+		}
 	}
 
 	/**

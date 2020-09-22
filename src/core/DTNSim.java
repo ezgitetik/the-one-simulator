@@ -38,6 +38,8 @@ public class DTNSim {
 
 		if(s.getSetting("SP_CONTACT_HISTORY").equals("true")) {
 			System.setProperty("spcontact", "spcontact");
+		} else if(s.getSetting("SP_PREDICTION").equals("true")) {
+			System.setProperty("spcontact", "sprediction");
 		} else {
 			System.setProperty("spcontact", "");
 		}

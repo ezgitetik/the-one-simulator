@@ -17,6 +17,7 @@ public class RandomMessageGenerator {
     private static final Integer START_HOUR = Integer.parseInt(s.getSetting("START_HOUR"));
 
     public static int MESSAGE_COUNT = 0;
+    public static int MAIN_MESSAGE_COUNT = 0;
     private static final int MESSAGE_SIZE = 977273;
     private static final int CLUSTER_COUNT = Integer.parseInt(s.getSetting("CLUSTER_COUNT"));
     private static final int FINAL_HOUR = 60 * 60 * 22;
@@ -33,6 +34,7 @@ public class RandomMessageGenerator {
     private static final MessageGenerationType MESSAGE_GENERATION_TYPE = MessageGenerationType.valueOf(s.getSetting("MESSAGE_GENERATION_TYPE"));
     private static final MessageGenerationFrequency MESSAGE_GENERATION_FREQUENCY = MessageGenerationFrequency.ONE_MESSAGE_PER_MINUTE;
 
+    private static final List<Integer> blockedClusters = Arrays.asList(5,10,12,19,28,33,38,39,8,22,25,26,29,31);
 
     private static List<String> messageCreatedTaxi = new ArrayList<>();
 
@@ -98,6 +100,7 @@ public class RandomMessageGenerator {
 
     private static Message buildMessage(DTNHost fromHost, String sourceCluster, String destinationCluster) {
         incrementMessageCount();
+        incrementMainMessageCount();
         List<String> shortestPath = getMessageShortestPath(sourceCluster, destinationCluster);
         String messageId = createMessageId();
         Message message = new Message(fromHost, null, messageId, MESSAGE_SIZE);
@@ -105,6 +108,7 @@ public class RandomMessageGenerator {
         message.setWatched(true);
         message.setCreatedTime(SimClock.getTime());
         message.getHostHistory().add(fromHost.getName());
+        message.setMainMessageId(messageId);
         // message.setTtl(120); //120 minutes
 
         LAST_MESSAGE_CREATE_TIME = SimClock.getTime();
@@ -148,6 +152,10 @@ public class RandomMessageGenerator {
 
     public static void incrementMessageCount() {
         MESSAGE_COUNT++;
+    }
+
+    public static void incrementMainMessageCount() {
+        MAIN_MESSAGE_COUNT++;
     }
 
     private static List<String> getMessageShortestPath(String sourceCluster, String destinationCluster) {
