@@ -21,9 +21,11 @@ FAR_CLUSTERS = cluster20,cluster24
 CENTRAL_CLUSTERS = cluster2,cluster24
 CENTRAL_AND_FAR_CLUSTERS = cluster11,cluster7
 
+DIRECT_DELIVERY = false
+FIRST_CONTACT = true
 GEOMOBCON = false
 SP_CONTACT_HISTORY=false
-SP_PREDICTION = true
+SP_PREDICTION = false
 ## prediction method (akom, tdag, cpt)
 prediction = akom
 
@@ -73,7 +75,7 @@ highspeedInterface.transmitRange = 1000
 
 # Common settings for all groups
 Group.movementModel = MapRouteMovement
-Group.router = DirectDeliveryRouter
+Group.router = FirstContactRouter
 #Group.bufferSize = 5M
 Group.waitTime = 0, 120
 # All nodes have the bluetooth interface

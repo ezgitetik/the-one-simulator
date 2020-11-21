@@ -46,7 +46,11 @@ public class DTNSim {
 
 		if( s.getSetting("GEOMOBCON").equals("true")) {
 			System.setProperty("prediction", "geomobcon");
-		} else {
+		} else if( s.getSetting("DIRECT_DELIVERY").equals("true")) {
+			System.setProperty("prediction", "directDelivery");
+		} else if( s.getSetting("FIRST_CONTACT").equals("true")) {
+			System.setProperty("prediction", "firstContact");
+		}  else {
 			System.setProperty("prediction", s.getSetting("prediction"));
 		}
 		System.setProperty("nrofHostGroups", s.getSetting("Scenario.nrofHostGroups"));

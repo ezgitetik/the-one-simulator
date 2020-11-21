@@ -213,11 +213,15 @@ public abstract class ActiveRouter extends MessageRouter {
 
         if (m.isWatched() && m.getTo() == null && !m.isOnTheRoad()) {
             if (m.getFrom() == con.getFromNode()){
-                //LikelihoodComparator.compare(m, con.getFromNode(), con.getToNode());
-                m = RoutingStrategy.compare(m, con.getFromNode(), con.getToNode());
+                //m = RoutingStrategy.compare(m, con.getFromNode(), con.getToNode());
+                m.setTo(con.getToNode());
+                m.setOnTheRoad(true);
+                m.getHostHistory().add(con.getToNode().getName());
             }else if (m.getFrom() == con.getToNode()){
-               // LikelihoodComparator.compare(m, con.getToNode(), con.getFromNode());
-                m = RoutingStrategy.compare(m, con.getToNode(), con.getFromNode());
+                //m = RoutingStrategy.compare(m, con.getToNode(), con.getFromNode());
+                m.setTo(con.getFromNode());
+                m.setOnTheRoad(true);
+                m.getHostHistory().add(con.getFromNode().getName());
             }
         }
 
@@ -650,15 +654,7 @@ public abstract class ActiveRouter extends MessageRouter {
                     if (con.getMsgOnFly().isWatched()) {
                         if ((con.getMsgOnFly().getFrom() == con.getFromNode() && con.getMsgOnFly().getTo() == con.getToNode() ||
                                 con.getMsgOnFly().getTo() == con.getFromNode() && con.getMsgOnFly().getFrom() == con.getToNode())) {
-                            Double likelihood = RoutingStrategy.likelihoodMobUpdate(con.getMsgOnFly().getFrom(), con.getMsgOnFly());
-                            if(likelihood < 0){
-                                LOGGER.info(SimClock.getTimeString() + " "
-                                        + InfoMessage.MESSAGE_DELETED
-                                        + ", messageId: '" + con.getMsgOnFly().getId() + ", host: " + con.getMsgOnFly().getFrom() + ", likelihood: " + likelihood);
-                                this.deleteMessage(con.getMsgOnFly().getId(), false);
-                            }else{
-                                con.getMsgOnFly().setTo(null);
-                            }
+                            this.deleteMessage(con.getMsgOnFly().getId(), false);
                             con.finalizeTransfer();
                         }
                     } else {

@@ -49,9 +49,9 @@ public class FirstContactRouter extends ActiveRouter {
 	@Override
 	public void update() {
 		super.update();
-		if (isTransferring() || !canStartTransfer()) {
-			return;
-		}
+//		if (isTransferring() || !canStartTransfer()) {
+//			return;
+//		}
 
 		if (exchangeDeliverableMessages() != null) {
 			return;
