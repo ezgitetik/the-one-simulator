@@ -22,7 +22,7 @@ CENTRAL_CLUSTERS = cluster2,cluster24
 CENTRAL_AND_FAR_CLUSTERS = cluster11,cluster7
 
 GEOMOBCON = true
-SP_CONTACT_HISTORY=false
+
 SP_PREDICTION = false
 ## prediction method (akom, tdag, cpt)
 prediction = akom
