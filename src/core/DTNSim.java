@@ -36,9 +36,7 @@ public class DTNSim {
 
 		Settings s = new Settings(); // don't use any namespace
 
-		if(s.getSetting("SP_CONTACT_HISTORY").equals("true")) {
-			System.setProperty("spcontact", "spcontact");
-		} else if(s.getSetting("SP_PREDICTION").equals("true")) {
+		if(s.getSetting("SP_PREDICTION").equals("true")) {
 			System.setProperty("spcontact", "sprediction");
 		} else {
 			System.setProperty("spcontact", "");
